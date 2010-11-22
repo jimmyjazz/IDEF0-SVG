@@ -6,14 +6,13 @@ module IDEF0
 
   class Process
 
-    attr_reader :x, :y
-    attr_reader :inputs, :outputs
+    attr_reader :name, :x1, :y1, :inputs, :outputs
 
     def initialize(name)
       @name = name
       @inputs = Set.new
       @outputs = Set.new
-      @x = @y = 0
+      @x1 = @y1 = @x1 = @y1 = 0
     end
 
     def receives(input)
@@ -25,8 +24,16 @@ module IDEF0
     end
 
     def move_to(x, y)
-      @x = x
-      @y = y
+      @x1 = x
+      @y1 = y
+    end
+
+    def x2
+      x1 + width
+    end
+
+    def y2
+      y1 + height
     end
 
     def width
@@ -39,8 +46,8 @@ module IDEF0
 
     def to_svg
       <<-XML
-<rect x='#{x}' y='#{y}' width='#{width}' height='#{height}' fill='none' stroke='black' />
-<text text-anchor='middle' x='#{x + (width / 2)}' y='#{y + (height / 2)}'>#{@name}</text>
+<rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
+<text text-anchor='middle' x='#{x1 + (width / 2)}' y='#{y1 + (height / 2)}'>#{name}</text>
 XML
     end
 
@@ -61,7 +68,7 @@ XML
 
     def to_svg
       <<-XML
-<line x1='0' y1='#{target.y}' x2='#{target.x}' y2='#{target.y}' stroke='black' />
+<line x1='0' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />
 XML
     end
 
@@ -71,7 +78,7 @@ XML
 
     def to_svg
       <<-XML
-<line x1='#{source.x + source.width}' y1='#{source.y}' x2='1024' y2='#{source.y}' stroke='black' />
+<line x1='#{source.x2}' y1='#{source.y1}' x2='1024' y2='#{source.y1}' stroke='black' />
 XML
     end
 
@@ -108,6 +115,14 @@ XML
       @outputs.include?(output)
     end
 
+    def width
+      @processes.reduce(0) { |width, process| [width, process.x2].max }
+    end
+
+    def height
+      @processes.reduce(0) { |width, process| [width, process.y2].max }
+    end
+
     def connect
       @lines = Set.new
       @processes.each do |process|
@@ -131,8 +146,8 @@ XML
 
       @processes.each do |process|
         process.move_to(x, y)
-        x += process.width + 20
-        y += process.height + 20
+        x = process.x2 + 20
+        y = process.y2 + 20
       end
     end
 
@@ -143,7 +158,7 @@ XML
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
  <!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
 ]>
-<svg width='1024pt' height='768pt'>
+<svg width='#{width}pt' height='#{height}pt'>
   <g>
     #{generate_processes}
     #{generate_lines}
