@@ -7,7 +7,7 @@ module IDEF0
   class Process
 
     attr_reader :x, :y
-    attr_reader :inputs
+    attr_reader :inputs, :outputs
 
     def initialize(name)
       @name = name
@@ -48,7 +48,7 @@ XML
 
   class Line
 
-    attr_reader :target
+    attr_reader :source, :target
 
     def initialize(source, target)
       @source = source
@@ -57,11 +57,21 @@ XML
 
   end
 
-  class ExternalInputlLine < Line
+  class ExternalInputLine < Line
 
     def to_svg
       <<-XML
 <line x1='0' y1='#{target.y}' x2='#{target.x}' y2='#{target.y}' stroke='black' />
+XML
+    end
+
+  end
+
+  class ExternalOutputLine < Line
+
+    def to_svg
+      <<-XML
+<line x1='#{source.x + source.width}' y1='#{source.y}' x2='1024' y2='#{source.y}' stroke='black' />
 XML
     end
 
@@ -94,12 +104,22 @@ XML
       @outputs << output
     end
 
+    def produces?(output)
+      @outputs.include?(output)
+    end
+
     def connect
       @lines = Set.new
       @processes.each do |process|
         process.inputs.each do |input|
           if receives?(input)
-            @lines << ExternalInputlLine.new(input, process)
+            @lines << ExternalInputLine.new(input, process)
+          end
+        end
+
+        process.outputs.each do |output|
+          if produces?(output)
+            @lines << ExternalOutputLine.new(process, output)
           end
         end
       end
