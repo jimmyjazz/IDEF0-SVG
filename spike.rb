@@ -4,7 +4,7 @@ require 'set'
 
 module IDEF0
 
-  class Process
+  class ProcessBox
 
     attr_reader :name, :x1, :y1, :inputs, :outputs
 
@@ -90,7 +90,7 @@ XML
     end
 
     def process(name)
-      p = Process.new(name)
+      p = ProcessBox.new(name)
       yield(p) if block_given?
       @processes << p
     end
