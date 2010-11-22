@@ -7,6 +7,7 @@ module IDEF0
   class Process
 
     attr_reader :x, :y
+    attr_reader :inputs
 
     def initialize(name)
       @name = name
@@ -45,16 +46,63 @@ XML
 
   end
 
+  class Line
+
+    attr_reader :target
+
+    def initialize(source, target)
+      @source = source
+      @target = target
+    end
+
+  end
+
+  class ExternalInputlLine < Line
+
+    def to_svg
+      <<-XML
+<line x1='0' y1='#{target.y}' x2='#{target.x}' y2='#{target.y}' stroke='black' />
+XML
+    end
+
+  end
+
   class Diagram
 
     def initialize
       @processes = []
+      @inputs = Set.new
+      @outputs = Set.new
+      @lines = Set.new
     end
 
     def process(name)
       p = Process.new(name)
       yield(p) if block_given?
       @processes << p
+    end
+
+    def receives(input)
+      @inputs << input
+    end
+
+    def receives?(input)
+      @inputs.include?(input)
+    end
+
+    def produces(output)
+      @outputs << output
+    end
+
+    def connect
+      @lines = Set.new
+      @processes.each do |process|
+        process.inputs.each do |input|
+          if receives?(input)
+            @lines << ExternalInputlLine.new(input, process)
+          end
+        end
+      end
     end
 
     def layout
@@ -87,9 +135,9 @@ XML
     def generate_processes
       @processes.map(&:to_svg).join("\n")
     end
-    
-    def generate_lines
 
+    def generate_lines
+      @lines.map(&:to_svg).join("\n")
     end
 
   end
@@ -97,6 +145,8 @@ XML
 end
 
 d = IDEF0::Diagram.new
+d.receives("Hungry Customer")
+d.produces("Satisfied Customer")
 d.process("Oversee Business Operations")
 d.process("Expand The Business")
 d.process("Manage Local Restaurant")
@@ -105,5 +155,6 @@ d.process("Serve Customers") do |process|
   process.receives("Hungry Customer")
   process.produces("Satisfied Customer")
 end
+d.connect
 d.layout
 puts d.to_svg
