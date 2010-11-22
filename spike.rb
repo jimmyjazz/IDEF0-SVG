@@ -4,6 +4,17 @@ require 'set'
 
 module IDEF0
 
+  class Point
+
+      attr_reader :x, :y
+
+    def initialize(x, y)
+      @x = x
+      @y = y
+    end
+
+  end
+
   module Box
 
     attr_reader :x1, :y1
@@ -52,6 +63,10 @@ module IDEF0
       60
     end
 
+    def input_anchor_for(label)
+      Point.new(x1, y1+height/2)
+    end
+
     def to_svg
       <<-XML
 <rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
@@ -63,19 +78,36 @@ XML
 
   class Line
 
-    attr_reader :source, :target
+    attr_reader :source, :target, :label
 
-    def initialize(source, target)
+    def initialize(source, target, label)
       @source = source
       @target = target
+      @label = label
     end
 
   end
 
   class ExternalInputLine < Line
 
+    def x1
+      source.x1
+    end
+
+    def y1
+      target.input_anchor_for(label).y
+    end
+
+    def x2
+      target.input_anchor_for(label).x
+    end
+
+    def y2
+      y1
+    end
+
     def to_svg
-      "<line x1='#{source.x1}' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />"
+      "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />"
     end
 
   end
@@ -134,11 +166,11 @@ XML
       @lines = Set.new
       @processes.each do |process|
         process.inputs.each do |input|
-          @lines << ExternalInputLine.new(self, process) if receives?(input)
+          @lines << ExternalInputLine.new(self, process, input) if receives?(input)
         end
 
         process.outputs.each do |output|
-          @lines << ExternalOutputLine.new(process, self) if produces?(output)
+          @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
         end
       end
     end
