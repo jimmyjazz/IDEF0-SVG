@@ -123,11 +123,11 @@ XML
     end
 
     def width
-      @processes.map(&:x2).max + 20
+      @processes.map(&:x2).max + 40
     end
 
     def height
-      @processes.map(&:y2).max + 20
+      @processes.map(&:y2).max + 40
     end
 
     def connect
