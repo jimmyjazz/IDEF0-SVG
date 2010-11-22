@@ -67,6 +67,10 @@ module IDEF0
       Point.new(x1, y1+height/2)
     end
 
+    def output_anchor_for(label)
+      Point.new(x2, y1+height/2)
+    end
+
     def to_svg
       <<-XML
 <rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
@@ -114,8 +118,24 @@ XML
 
   class ExternalOutputLine < Line
 
+    def x1
+      source.output_anchor_for(label).x
+    end
+
+    def y1
+      source.output_anchor_for(label).y
+    end
+
+    def x2
+      target.x2
+    end
+
+    def y2
+      y1
+    end
+
     def to_svg
-      "<line x1='#{source.x2}' y1='#{source.y1}' x2='#{target.x2}' y2='#{source.y1}' stroke='black' />"
+      "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />"
     end
 
   end
