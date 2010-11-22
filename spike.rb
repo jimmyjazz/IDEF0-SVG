@@ -93,11 +93,11 @@ XML
     include Box
 
     def initialize
-      @x1 = @y1 = 0
       @processes = []
       @inputs = Set.new
       @outputs = Set.new
       @lines = Set.new
+      @x1 = @y1 = 0
     end
 
     def process(name)
@@ -123,11 +123,11 @@ XML
     end
 
     def width
-      @processes.map(&:x2).max
+      @processes.map(&:x2).max + 20
     end
 
     def height
-      @processes.map(&:y2).max
+      @processes.map(&:y2).max + 20
     end
 
     def connect
@@ -144,8 +144,8 @@ XML
     end
 
     def layout
-      x = x1
-      y = y1
+      x = x1 + 20
+      y = y1 + 20
       @processes.each do |process|
         process.move_to(x, y)
         x = process.x2 + 20
