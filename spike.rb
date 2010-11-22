@@ -67,9 +67,7 @@ XML
   class ExternalInputLine < Line
 
     def to_svg
-      <<-XML
-<line x1='0' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />
-XML
+      "<line x1='0' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />"
     end
 
   end
@@ -77,9 +75,7 @@ XML
   class ExternalOutputLine < Line
 
     def to_svg
-      <<-XML
-<line x1='#{source.x2}' y1='#{source.y1}' x2='1024' y2='#{source.y1}' stroke='black' />
-XML
+      "<line x1='#{source.x2}' y1='#{source.y1}' x2='1024' y2='#{source.y1}' stroke='black' />"
     end
 
   end
