@@ -4,7 +4,21 @@ require 'set'
 
 module IDEF0
 
+  module Box
+
+    def x2
+      x1 + width
+    end
+
+    def y2
+      y1 + height
+    end
+
+  end
+
   class ProcessBox
+
+    include Box
 
     attr_reader :name, :x1, :y1, :inputs, :outputs
 
@@ -12,7 +26,7 @@ module IDEF0
       @name = name
       @inputs = Set.new
       @outputs = Set.new
-      @x1 = @y1 = @x1 = @y1 = 0
+      @x1 = @y1 = 0
     end
 
     def receives(input)
@@ -26,14 +40,6 @@ module IDEF0
     def move_to(x, y)
       @x1 = x
       @y1 = y
-    end
-
-    def x2
-      x1 + width
-    end
-
-    def y2
-      y1 + height
     end
 
     def width
@@ -67,7 +73,7 @@ XML
   class ExternalInputLine < Line
 
     def to_svg
-      "<line x1='0' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />"
+      "<line x1='#{source.x1}' y1='#{target.y1}' x2='#{target.x1}' y2='#{target.y1}' stroke='black' />"
     end
 
   end
@@ -75,12 +81,14 @@ XML
   class ExternalOutputLine < Line
 
     def to_svg
-      "<line x1='#{source.x2}' y1='#{source.y1}' x2='1024' y2='#{source.y1}' stroke='black' />"
+      "<line x1='#{source.x2}' y1='#{source.y1}' x2='#{target.x2}' y2='#{source.y1}' stroke='black' />"
     end
 
   end
 
   class Diagram
+
+    include Box
 
     def initialize
       @processes = []
@@ -111,35 +119,34 @@ XML
       @outputs.include?(output)
     end
 
+    def x1; 0; end
+
+    def y1; 0; end
+
     def width
-      @processes.reduce(0) { |width, process| [width, process.x2].max }
+      @processes.map(&:x2).max
     end
 
     def height
-      @processes.reduce(0) { |width, process| [width, process.y2].max }
+      @processes.map(&:y2).max
     end
 
     def connect
       @lines = Set.new
       @processes.each do |process|
         process.inputs.each do |input|
-          if receives?(input)
-            @lines << ExternalInputLine.new(input, process)
-          end
+          @lines << ExternalInputLine.new(self, process) if receives?(input)
         end
 
         process.outputs.each do |output|
-          if produces?(output)
-            @lines << ExternalOutputLine.new(process, output)
-          end
+          @lines << ExternalOutputLine.new(process, self) if produces?(output)
         end
       end
     end
 
     def layout
-      x = 0
-      y = 0
-
+      x = x1
+      y = y1
       @processes.each do |process|
         process.move_to(x, y)
         x = process.x2 + 20
@@ -154,7 +161,17 @@ XML
  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
  <!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
 ]>
-<svg width='#{width}pt' height='#{height}pt'>
+<svg xmlns='http://www.w3.org/2000/svg'
+  xmlns:xlink='http://www.w3.org/1999/xlink'
+  width='#{width}pt' height='#{height}pt'
+  viewBox='#{x1.to_f} #{y1.to_f} #{x2.to_f} #{y2.to_f}'
+>
+  <style type='text/css'>
+    text {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 12px;
+    }
+  </style>
   <g>
     #{generate_processes}
     #{generate_lines}
