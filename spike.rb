@@ -6,6 +6,8 @@ module IDEF0
 
   module Box
 
+    attr_reader :x1, :y1
+
     def x2
       x1 + width
     end
@@ -20,7 +22,7 @@ module IDEF0
 
     include Box
 
-    attr_reader :name, :x1, :y1, :inputs, :outputs
+    attr_reader :name, :inputs, :outputs
 
     def initialize(name)
       @name = name
@@ -91,6 +93,7 @@ XML
     include Box
 
     def initialize
+      @x1 = @y1 = 0
       @processes = []
       @inputs = Set.new
       @outputs = Set.new
@@ -118,10 +121,6 @@ XML
     def produces?(output)
       @outputs.include?(output)
     end
-
-    def x1; 0; end
-
-    def y1; 0; end
 
     def width
       @processes.map(&:x2).max
