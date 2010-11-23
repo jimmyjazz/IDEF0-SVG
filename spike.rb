@@ -94,6 +94,12 @@ XML
       10 + label.length * 7
     end
 
+    def svg_right_arrow(x,y)
+      <<-XML
+<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />
+XML
+    end
+
   end
 
   class ExternalInputLine < Line
@@ -117,6 +123,7 @@ XML
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
     end
@@ -144,6 +151,7 @@ XML
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_right_arrow(x2, y2)}
 <text text-anchor='end' x='#{x2-5}' y='#{y2-5}'>#{label}</text>
 XML
     end
