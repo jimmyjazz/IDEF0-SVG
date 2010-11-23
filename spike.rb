@@ -163,7 +163,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10} #{y1} L #{x1+10} #{y2} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{y2-10} C #{x1+10} #{y2-5} #{x1+10+5} #{y2} #{x1+10+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
