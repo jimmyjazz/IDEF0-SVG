@@ -171,7 +171,7 @@ XML
 
   end
 
-  class ForwardOutputGuidanceLine < Line
+  class OutputGuidanceLine < Line
 
     def x1
       source.output_anchor_for(label).x
@@ -189,9 +189,25 @@ XML
       target.guidance_anchor_for(label).y
     end
 
+  end
+
+  class ForwardOutputGuidanceLine < OutputGuidanceLine
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x2-10} #{y1} C #{x2-5} #{y1} #{x2} #{y1+5} #{x2} #{y1+10} L #{x2} #{y2}' />
+#{svg_down_arrow(x2, y2)}
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+XML
+    end
+
+  end
+
+  class BackwardOutputGuidanceLine < OutputGuidanceLine
+
+    def to_svg
+      <<-XML
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
@@ -293,6 +309,10 @@ XML
       @processes[@processes.index(process)+1..-1].each(&block)
     end
 
+    def each_process_backward_of(process, &block)
+      @processes.take_while {|p| p != process}.each(&block)
+    end
+
     def width
       @processes.map(&:x2).max + 40
     end
@@ -313,6 +333,9 @@ XML
           each_process_forward_of(process) do |target|
             @lines << ForwardOutputInputLine.new(process, target, output) if target.receives?(output)
             @lines << ForwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
+          end
+          each_process_backward_of(process) do |target|
+            @lines << BackwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
           end
         end
       end
@@ -379,11 +402,13 @@ d.process("Expand The Business") do |process|
 end
 d.process("Manage Local Restaurant") do |process|
   process.respects("Communications to Local Managers")
+  process.respects("Prices and Invoices")
   process.produces("Local Management Communications")
 end
 
 d.process("Provide Supplies") do |process|
   process.produces("Ingredients")
+  process.produces("Prices and Invoices")
 end
 d.process("Serve Customers") do |process|
   process.receives("Hungry Customer")
