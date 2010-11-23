@@ -10,8 +10,8 @@ module IDEF0
 
     include Enumerable
 
-    def initialize
-      @items = []
+    def initialize(items = [])
+      @items = items
     end
 
     def add(item)
@@ -23,6 +23,14 @@ module IDEF0
     def_delegator :@items, :each
     def_delegator :@items, :[]
     def_delegator :@items, :size
+
+    def before(pattern)
+      self.class.new(@items.take_while { |item| item != pattern })
+    end
+
+    def after(pattern)
+      self.class.new(@items.drop_while { |item| item != pattern }[1..-1])
+    end
 
   end
 
@@ -307,14 +315,6 @@ XML
       @processes << p
     end
 
-    def each_process_forward_of(process, &block)
-      @processes[@processes.index(process)+1..-1].each(&block)
-    end
-
-    def each_process_backward_of(process, &block)
-      @processes.take_while {|p| p != process}.each(&block)
-    end
-
     def width
       @processes.map(&:x2).max + 40
     end
@@ -332,11 +332,11 @@ XML
 
         process.outputs.each do |output|
           @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
-          each_process_forward_of(process) do |target|
+          @processes.after(process).each do |target|
             @lines << ForwardOutputInputLine.new(process, target, output) if target.receives?(output)
             @lines << ForwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
           end
-          each_process_backward_of(process) do |target|
+          @processes.before(process).each do |target|
             @lines << BackwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
           end
         end
@@ -392,18 +392,22 @@ XML
 end
 
 d = IDEF0::Diagram.new("Ben's Burgers")
+
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
+
 d.process("Oversee Business Operations") do |process|
   process.receives("Hungry Customer")
   process.respects("Expansion Plans and New Ideas")
   process.produces("Communications to Local Managers")
   process.produces("Approvals and Commentary")
 end
+
 d.process("Expand The Business") do |process|
   process.respects("Approvals and Commentary")
   process.produces("Expansion Plans and New Ideas")
 end
+
 d.process("Manage Local Restaurant") do |process|
   process.respects("Communications to Local Managers")
   process.respects("Status of Local Operations")
