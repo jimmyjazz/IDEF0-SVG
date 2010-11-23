@@ -163,7 +163,7 @@ XML
 
     def to_svg
       <<-XML
-<polyline stroke='black' fill='none' points='#{x1},#{y1} #{x1+10},#{y1} #{x1+10},#{y2} #{x2},#{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10} #{y1} L #{x1+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
