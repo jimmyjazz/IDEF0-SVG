@@ -90,6 +90,10 @@ XML
       @label = label
     end
 
+    def minimum_length
+      10 + label.length * 7
+    end
+
   end
 
   class ExternalInputLine < Line
@@ -103,7 +107,7 @@ XML
     end
 
     def x2
-      target.input_anchor_for(label).x
+      [x1 + minimum_length, target.input_anchor_for(label).x].max
     end
 
     def y2
@@ -120,10 +124,6 @@ XML
   end
 
   class ExternalOutputLine < Line
-
-    def minimum_length
-      10 + label.length * 6
-    end
 
     def x1
       [x2 - minimum_length, source.output_anchor_for(label).x].min
@@ -256,7 +256,9 @@ end
 d = IDEF0::Diagram.new
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
-d.process("Oversee Business Operations")
+d.process("Oversee Business Operations") do |process|
+  process.receives("Hungry Customer")
+end
 d.process("Expand The Business")
 d.process("Manage Local Restaurant")
 d.process("Provide Supplies")
