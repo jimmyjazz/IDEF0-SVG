@@ -46,6 +46,10 @@ module IDEF0
       @inputs << input
     end
 
+    def receives?(input)
+      @inputs.include?(input)
+    end
+
     def produces(output)
       @outputs << output
     end
@@ -97,6 +101,34 @@ XML
     def svg_right_arrow(x,y)
       <<-XML
 <polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />
+XML
+    end
+
+  end
+
+  class ForwardOutputInputLine < Line
+
+    def x1
+      source.output_anchor_for(label).x
+    end
+
+    def y1
+      source.output_anchor_for(label).y
+    end
+
+    def x2
+      target.input_anchor_for(label).x
+    end
+
+    def y2
+      target.input_anchor_for(label).y
+    end
+
+    def to_svg
+      <<-XML
+<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_right_arrow(x2, y2)}
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
     end
 
@@ -192,6 +224,10 @@ XML
       @outputs.include?(output)
     end
 
+    def each_process_forward_of(process, &block)
+      @processes[@processes.index(process)+1..-1].each(&block)
+    end
+
     def width
       @processes.map(&:x2).max + 40
     end
@@ -209,6 +245,9 @@ XML
 
         process.outputs.each do |output|
           @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
+          each_process_forward_of(process) do |receiver|
+            @lines << ForwardOutputInputLine.new(process, receiver, output) if receiver.receives?(output)
+          end
         end
       end
     end
@@ -269,9 +308,12 @@ d.process("Oversee Business Operations") do |process|
 end
 d.process("Expand The Business")
 d.process("Manage Local Restaurant")
-d.process("Provide Supplies")
+d.process("Provide Supplies") do |process|
+  process.produces("Ingredients")
+end
 d.process("Serve Customers") do |process|
   process.receives("Hungry Customer")
+  process.receives("Ingredients")
   process.produces("Satisfied Customer")
 end
 d.connect
