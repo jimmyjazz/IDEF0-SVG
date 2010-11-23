@@ -67,8 +67,14 @@ module IDEF0
       60
     end
 
+    def input_baseline
+      y1+height/2 - 20*(@inputs.size - 1)/2
+    end
+
     def input_anchor_for(label)
-      Point.new(x1, y1+height/2)
+      input_index = @inputs.sort.index(label)
+      y = input_baseline + input_index * 20
+      Point.new(x1, y)
     end
 
     def output_anchor_for(label)
