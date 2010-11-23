@@ -132,7 +132,7 @@ XML
 
     def to_svg
       <<-XML
-<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+<polyline stroke='black' fill='none' points='#{x1},#{y1} #{x1+10},#{y1} #{x1+10},#{y2} #{x2},#{y2}' />
 #{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
@@ -263,8 +263,8 @@ XML
       y = y1 + 20
       @processes.each do |process|
         process.move_to(x, y)
-        x = process.x2 + 20
-        y = process.y2 + 20
+        x = process.x2 + 30
+        y = process.y2 + 30
       end
     end
 
