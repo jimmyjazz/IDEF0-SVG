@@ -121,8 +121,12 @@ XML
 
   class ExternalOutputLine < Line
 
+    def minimum_length
+      10 + label.length * 6
+    end
+
     def x1
-      source.output_anchor_for(label).x
+      [x2 - minimum_length, source.output_anchor_for(label).x].min
     end
 
     def y1
