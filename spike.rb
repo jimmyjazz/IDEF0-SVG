@@ -310,9 +310,9 @@ XML
     end
 
     def process(name)
-      p = ProcessBox.new(name)
-      yield(p) if block_given?
+      p = @processes.find { |p| p.name == name } || ProcessBox.new(name)
       @processes << p
+      yield(p) if block_given?
     end
 
     def width
