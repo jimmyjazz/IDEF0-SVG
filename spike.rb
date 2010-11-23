@@ -201,7 +201,7 @@ XML
 
   end
 
-  class Box
+  class ProcessBox
 
     attr_reader :name, :x1, :y1, :inputs, :outputs, :guidances
 
@@ -247,7 +247,7 @@ XML
 
   end
 
-  class ProcessBox < Box
+  class ChildProcessBox < ProcessBox
 
     def move_to(x, y)
       @x1 = x
@@ -301,7 +301,7 @@ XML
 
   end
 
-  class Diagram < Box
+  class Diagram < ProcessBox
 
     def initialize(name)
       super
@@ -310,7 +310,7 @@ XML
     end
 
     def process(name)
-      p = @processes.find { |p| p.name == name } || ProcessBox.new(name)
+      p = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
       @processes << p
       yield(p) if block_given?
     end
