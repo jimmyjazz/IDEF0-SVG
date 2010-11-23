@@ -1,12 +1,34 @@
 #!/usr/bin/env ruby
 
-require 'set'
+require 'forwardable'
 
 module IDEF0
 
+  class OrderedSet
+
+    extend Forwardable
+
+    include Enumerable
+
+    def initialize
+      @items = []
+    end
+
+    def add(item)
+      @items << item unless include?(item)
+    end
+    def_delegator :self, :add, :<<
+
+    def_delegator :@items, :index
+    def_delegator :@items, :each
+    def_delegator :@items, :[]
+    def_delegator :@items, :size
+
+  end
+
   class Point
 
-      attr_reader :x, :y
+    attr_reader :x, :y
 
     def initialize(x, y)
       @x = x
@@ -15,118 +37,18 @@ module IDEF0
 
   end
 
-  module Box
-
-    attr_reader :x1, :y1
-
-    def x2
-      x1 + width
-    end
-
-    def y2
-      y1 + height
-    end
-
-  end
-
-  class ProcessBox
-
-    include Box
-
-    attr_reader :name, :inputs, :outputs, :guidances
-
-    def initialize(name)
-      @name = name
-      @inputs = Set.new
-      @outputs = Set.new
-      @guidances = Set.new
-      @x1 = @y1 = 0
-    end
-
-    def receives(input)
-      @inputs << input
-    end
-
-    def receives?(input)
-      @inputs.include?(input)
-    end
-
-    def produces(output)
-      @outputs << output
-    end
-
-    def respects(guidance)
-      @guidances << guidance
-    end
-
-    def respects?(guidance)
-      @guidances.include?(guidance)
-    end
-
-    def move_to(x, y)
-      @x1 = x
-      @y1 = y
-    end
-
-    def width
-      180
-    end
-
-    def height
-      60
-    end
-
-    def input_baseline
-      y1+height/2 - 20*(@inputs.size - 1)/2
-    end
-
-    def input_anchor_for(label)
-      input_index = @inputs.sort.index(label)
-      y = input_baseline + input_index * 20
-      Point.new(x1, y)
-    end
-
-    def output_baseline
-      y1+height/2 - 20*(@outputs.size - 1)/2
-    end
-
-    def output_anchor_for(label)
-      index = @outputs.sort.index(label)
-      y = output_baseline + index * 20
-      Point.new(x2, y)
-    end
-
-    def guidance_baseline
-      x1+width/2 - 20*(@guidances.size - 1)/2
-    end
-
-    def guidance_anchor_for(label)
-      index = @guidances.sort.index(label)
-      x = guidance_baseline + index * 20
-      Point.new(x, y1)
-    end
-
-    def to_svg
-      <<-XML
-<rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
-<text text-anchor='middle' x='#{x1 + (width / 2)}' y='#{y1 + (height / 2)}'>#{name}</text>
-XML
-    end
-
-  end
-
   class Line
 
-    attr_reader :source, :target, :label
+    attr_reader :source, :target, :name
 
-    def initialize(source, target, label)
+    def initialize(source, target, name)
       @source = source
       @target = target
-      @label = label
+      @name = name
     end
 
     def minimum_length
-      10 + label.length * 7
+      10 + name.length * 7
     end
 
     def svg_right_arrow(x,y)
@@ -146,26 +68,26 @@ XML
   class ForwardOutputInputLine < Line
 
     def x1
-      source.output_anchor_for(label).x
+      source.output_anchor_for(name).x
     end
 
     def y1
-      source.output_anchor_for(label).y
+      source.output_anchor_for(name).y
     end
 
     def x2
-      target.input_anchor_for(label).x
+      target.input_anchor_for(name).x
     end
 
     def y2
-      target.input_anchor_for(label).y
+      target.input_anchor_for(name).y
     end
 
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{y2-10} C #{x1+10} #{y2-5} #{x1+10+5} #{y2} #{x1+10+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
 XML
     end
 
@@ -174,19 +96,19 @@ XML
   class OutputGuidanceLine < Line
 
     def x1
-      source.output_anchor_for(label).x
+      source.output_anchor_for(name).x
     end
 
     def y1
-      source.output_anchor_for(label).y
+      source.output_anchor_for(name).y
     end
 
     def x2
-      target.guidance_anchor_for(label).x
+      target.guidance_anchor_for(name).x
     end
 
     def y2
-      target.guidance_anchor_for(label).y
+      target.guidance_anchor_for(name).y
     end
 
   end
@@ -197,7 +119,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x2-10} #{y1} C #{x2-5} #{y1} #{x2} #{y1+5} #{x2} #{y1+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
 XML
     end
 
@@ -209,7 +131,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1-5} #{x1+20} #{y1-10} L #{x1+20} #{y2-20+10} C #{x1+20} #{y2-20+5} #{x1+20-5} #{y2-20} #{x1+20-10} #{y2-20} L #{x2+10} #{y2-20} C #{x2+5} #{y2-20} #{x2} #{y2-20+5} #{x2} #{y2-20+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='end' x='#{x1}' y='#{y2-20-5}'>#{label}</text>
+<text text-anchor='end' x='#{x1}' y='#{y2-20-5}'>#{name}</text>
 XML
     end
 
@@ -222,11 +144,11 @@ XML
     end
 
     def y1
-      target.input_anchor_for(label).y
+      target.input_anchor_for(name).y
     end
 
     def x2
-      [x1 + minimum_length, target.input_anchor_for(label).x].max
+      [x1 + minimum_length, target.input_anchor_for(name).x].max
     end
 
     def y2
@@ -237,7 +159,7 @@ XML
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
 XML
     end
 
@@ -246,11 +168,11 @@ XML
   class ExternalOutputLine < Line
 
     def x1
-      [x2 - minimum_length, source.output_anchor_for(label).x].min
+      [x2 - minimum_length, source.output_anchor_for(name).x].min
     end
 
     def y1
-      source.output_anchor_for(label).y
+      source.output_anchor_for(name).y
     end
 
     def x2
@@ -265,28 +187,22 @@ XML
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='end' x='#{x2-5}' y='#{y2-5}'>#{label}</text>
+<text text-anchor='end' x='#{x2-5}' y='#{y2-5}'>#{name}</text>
 XML
     end
 
   end
 
-  class Diagram
+  class Box
 
-    include Box
+    attr_reader :name, :x1, :y1, :inputs, :outputs, :guidances
 
-    def initialize
-      @processes = []
-      @inputs = Set.new
-      @outputs = Set.new
-      @lines = Set.new
+    def initialize(name)
+      @name = name
       @x1 = @y1 = 0
-    end
-
-    def process(name)
-      p = ProcessBox.new(name)
-      yield(p) if block_given?
-      @processes << p
+      @inputs = OrderedSet.new
+      @outputs = OrderedSet.new
+      @guidances = OrderedSet.new
     end
 
     def receives(input)
@@ -301,8 +217,94 @@ XML
       @outputs << output
     end
 
-    def produces?(output)
-      @outputs.include?(output)
+    def produces?(guidance)
+      @outputs.include?(guidance)
+    end
+
+    def respects(guidance)
+      @guidances << guidance
+    end
+
+    def respects?(guidance)
+      @guidances.include?(guidance)
+    end
+
+    def x2
+      x1 + width
+    end
+
+    def y2
+      y1 + height
+    end
+
+  end
+
+  class ProcessBox < Box
+
+    def move_to(x, y)
+      @x1 = x
+      @y1 = y
+    end
+
+    def width
+      180
+    end
+
+    def height
+      60
+    end
+
+    def input_baseline
+      y1+height/2 - 20*(@inputs.size - 1)/2
+    end
+
+    def input_anchor_for(name)
+      input_index = @inputs.index(name)
+      y = input_baseline + input_index * 20
+      Point.new(x1, y)
+    end
+
+    def output_baseline
+      y1+height/2 - 20*(@outputs.size - 1)/2
+    end
+
+    def output_anchor_for(name)
+      index = @outputs.index(name)
+      y = output_baseline + index * 20
+      Point.new(x2, y)
+    end
+
+    def guidance_baseline
+      x1+width/2 - 20*(@guidances.size - 1)/2
+    end
+
+    def guidance_anchor_for(name)
+      index = @guidances.index(name)
+      x = guidance_baseline + index * 20
+      Point.new(x, y1)
+    end
+
+    def to_svg
+      <<-XML
+<rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
+<text text-anchor='middle' x='#{x1 + (width / 2)}' y='#{y1 + (height / 2)}'>#{name}</text>
+XML
+    end
+
+  end
+
+  class Diagram < Box
+
+    def initialize(name)
+      super
+      @processes = OrderedSet.new
+      @lines = OrderedSet.new
+    end
+
+    def process(name)
+      p = ProcessBox.new(name)
+      yield(p) if block_given?
+      @processes << p
     end
 
     def each_process_forward_of(process, &block)
@@ -322,7 +324,7 @@ XML
     end
 
     def connect
-      @lines = Set.new
+      @lines = OrderedSet.new
       @processes.each do |process|
         process.inputs.each do |input|
           @lines << ExternalInputLine.new(self, process, input) if receives?(input)
@@ -389,7 +391,7 @@ XML
 
 end
 
-d = IDEF0::Diagram.new
+d = IDEF0::Diagram.new("Ben's Burgers")
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
 d.process("Oversee Business Operations") do |process|
@@ -410,9 +412,10 @@ d.process("Manage Local Restaurant") do |process|
 end
 
 d.process("Provide Supplies") do |process|
-  process.produces("Ingredients")
   process.produces("Prices and Invoices")
+  process.produces("Ingredients")
 end
+
 d.process("Serve Customers") do |process|
   process.receives("Hungry Customer")
   process.receives("Ingredients")
