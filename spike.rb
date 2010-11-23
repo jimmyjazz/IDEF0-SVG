@@ -421,11 +421,11 @@ d.process("Provide Supplies") do |process|
 end
 
 d.process("Serve Customers") do |process|
-  process.receives("Hungry Customer")
   process.receives("Ingredients")
+  process.receives("Hungry Customer")
   process.respects("Local Management Communications")
-  process.produces("Satisfied Customer")
   process.produces("Status of Local Operations")
+  process.produces("Satisfied Customer")
 end
 d.connect
 d.layout
