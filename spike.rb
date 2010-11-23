@@ -111,7 +111,10 @@ XML
     end
 
     def to_svg
-      "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />"
+      <<-XML
+<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+XML
     end
 
   end
