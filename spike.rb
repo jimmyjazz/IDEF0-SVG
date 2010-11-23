@@ -33,12 +33,13 @@ module IDEF0
 
     include Box
 
-    attr_reader :name, :inputs, :outputs
+    attr_reader :name, :inputs, :outputs, :guidances
 
     def initialize(name)
       @name = name
       @inputs = Set.new
       @outputs = Set.new
+      @guidances = Set.new
       @x1 = @y1 = 0
     end
 
@@ -52,6 +53,14 @@ module IDEF0
 
     def produces(output)
       @outputs << output
+    end
+
+    def respects(guidance)
+      @guidances << guidance
+    end
+
+    def respects?(guidance)
+      @guidances.include?(guidance)
     end
 
     def move_to(x, y)
@@ -77,8 +86,24 @@ module IDEF0
       Point.new(x1, y)
     end
 
+    def output_baseline
+      y1+height/2 - 20*(@outputs.size - 1)/2
+    end
+
     def output_anchor_for(label)
-      Point.new(x2, y1+height/2)
+      index = @outputs.sort.index(label)
+      y = output_baseline + index * 20
+      Point.new(x2, y)
+    end
+
+    def guidance_baseline
+      x1+width/2 - 20*(@guidances.size - 1)/2
+    end
+
+    def guidance_anchor_for(label)
+      index = @guidances.sort.index(label)
+      x = guidance_baseline + index * 20
+      Point.new(x, y1)
     end
 
     def to_svg
@@ -110,6 +135,12 @@ XML
 XML
     end
 
+    def svg_down_arrow(x,y)
+      <<-XML
+<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y-6} #{x+3},#{y-6} #{x},#{y}' />
+XML
+    end
+
   end
 
   class ForwardOutputInputLine < Line
@@ -134,6 +165,34 @@ XML
       <<-XML
 <polyline stroke='black' fill='none' points='#{x1},#{y1} #{x1+10},#{y1} #{x1+10},#{y2} #{x2},#{y2}' />
 #{svg_right_arrow(x2, y2)}
+<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
+XML
+    end
+
+  end
+
+  class ForwardOutputGuidanceLine < Line
+
+    def x1
+      source.output_anchor_for(label).x
+    end
+
+    def y1
+      source.output_anchor_for(label).y
+    end
+
+    def x2
+      target.guidance_anchor_for(label).x
+    end
+
+    def y2
+      target.guidance_anchor_for(label).y
+    end
+
+    def to_svg
+      <<-XML
+<polyline stroke='black' fill='none' points='#{x1},#{y1} #{x2},#{y1} #{x2},#{y2}' />
+#{svg_down_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{label}</text>
 XML
     end
@@ -251,8 +310,9 @@ XML
 
         process.outputs.each do |output|
           @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
-          each_process_forward_of(process) do |receiver|
-            @lines << ForwardOutputInputLine.new(process, receiver, output) if receiver.receives?(output)
+          each_process_forward_of(process) do |target|
+            @lines << ForwardOutputInputLine.new(process, target, output) if target.receives?(output)
+            @lines << ForwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
           end
         end
       end
@@ -311,15 +371,24 @@ d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
 d.process("Oversee Business Operations") do |process|
   process.receives("Hungry Customer")
+  process.produces("Communications to Local Managers")
+  process.produces("Approvals and Commentary")
 end
-d.process("Expand The Business")
-d.process("Manage Local Restaurant")
+d.process("Expand The Business") do |process|
+  process.respects("Approvals and Commentary")
+end
+d.process("Manage Local Restaurant") do |process|
+  process.respects("Communications to Local Managers")
+  process.produces("Local Management Communications")
+end
+
 d.process("Provide Supplies") do |process|
   process.produces("Ingredients")
 end
 d.process("Serve Customers") do |process|
   process.receives("Hungry Customer")
   process.receives("Ingredients")
+  process.respects("Local Management Communications")
   process.produces("Satisfied Customer")
 end
 d.connect
