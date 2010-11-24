@@ -273,7 +273,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{source.y2+20-10} C #{x1+10} #{source.y2+20-5} #{x1+10-5} #{source.y2+20} #{x1+10-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='right' x='#{x1+10-10-5}' y='#{source.y2+20-5}'>#{name}</text>
+<text text-anchor='end' x='#{x1+10-10-5}' y='#{source.y2+20-5}'>#{name}</text>
 XML
     end
 
