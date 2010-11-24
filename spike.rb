@@ -75,6 +75,10 @@ module IDEF0
       10 + name.length * 7
     end
 
+    def left_edge
+      [x1, x2].min
+    end
+
     def bottom_right_from?(process)
       false
     end
@@ -437,6 +441,11 @@ XML
       @y1 = point.y
     end
 
+    def translate(dx, dy)
+      @x1 += dx
+      @y1 += dy
+    end
+
     def width
       180
     end
@@ -573,6 +582,11 @@ XML
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
+
+      dx = @lines.map(&:left_edge).reject{|x| x >= 0}.min.to_i.abs
+      @processes.each do |process|
+        process.translate(dx, 0)
+      end
     end
 
     def to_svg
@@ -623,6 +637,7 @@ d.respects("Short Term Goals")
 d.respects("Prices of Food and Supplies")
 
 d.process("Oversee Business Operations") do |process|
+  process.receives("Hungry Customer")
   process.produces("Communications to Local Managers")
   process.produces("Approvals and Commentary")
   process.respects("Business Plan")
