@@ -595,7 +595,7 @@ XML
     end
 
     def layout
-      @processes.inject(Point.new(0, 0)) do |point, process|
+      @processes.inject(@top_left) do |point, process|
         top_right_lines = @lines.select {|line| line.top_right_to?(process) }
         top_margin = top_right_lines.count * 20
         top_right_lines.reverse.each_with_index do |line, index|
