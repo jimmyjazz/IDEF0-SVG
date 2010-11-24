@@ -82,6 +82,10 @@ module IDEF0
       false
     end
 
+    def top_right_to?(process)
+      false
+    end
+
     def clear(process, distance)
       @clearance[process] = distance
     end
@@ -178,6 +182,10 @@ XML
 
     def top_right_from?(process)
       @source == process
+    end
+
+    def top_right_to?(process)
+      @target == process
     end
 
     def x_vertical
@@ -535,7 +543,10 @@ XML
 
     def layout
       @processes.inject(Point.new(0, 0)) do |point, process|
-        process.move_to(point)
+        top_right_lines = @lines.select {|line| line.top_right_to?(process) }
+        top_margin = top_right_lines.count * 20
+
+        process.move_to(point.translate(0, top_margin))
 
         down_lines = @lines.select {|line| line.bottom_right_from?(process) }
         down_margin = 20 + down_lines.count * 20
@@ -552,7 +563,7 @@ XML
 
         bottom_margin = 20
 
-        point.translate(process.width + right_margin, process.height + bottom_margin)
+        Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
     end
 
