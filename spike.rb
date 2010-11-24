@@ -74,11 +74,11 @@ module IDEF0
       10 + name.length * 7
     end
 
-    def down_from?(process)
+    def bottom_right_from?(process)
       false
     end
 
-    def up_from?(process)
+    def top_right_from?(process)
       false
     end
 
@@ -124,7 +124,7 @@ XML
       target.input_anchor_for(name).y
     end
 
-    def down_from?(process)
+    def bottom_right_from?(process)
       @source == process
     end
 
@@ -176,7 +176,7 @@ XML
 
   class BackwardGuidanceLine < InternalGuidanceLine
 
-    def up_from?(process)
+    def top_right_from?(process)
       @source == process
     end
 
@@ -324,7 +324,7 @@ XML
       target.mechanism_anchor_for(name).y
     end
 
-    def down_from?(process)
+    def bottom_right_from?(process)
       @source == process
     end
 
@@ -537,9 +537,9 @@ XML
       @processes.inject(Point.new(0, 0)) do |point, process|
         process.move_to(point)
 
-        down_lines = @lines.select {|line| line.down_from?(process) }
+        down_lines = @lines.select {|line| line.bottom_right_from?(process) }
         down_margin = 20 + down_lines.count * 20
-        up_lines = @lines.select {|line| line.up_from?(process) }
+        up_lines = @lines.select {|line| line.top_right_from?(process) }
         up_margin = 20 + up_lines.count * 20
 
         [down_lines.reverse, up_lines].each do |set|
