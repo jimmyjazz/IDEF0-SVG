@@ -79,6 +79,10 @@ module IDEF0
       [x1, x2].min
     end
 
+    def bottom_edge
+      [y1, y2].max
+    end
+
     def right_edge
       [x1, x2].max
     end
@@ -317,6 +321,10 @@ XML
       target.mechanism_anchor_for(name).y
     end
 
+    def bottom_edge
+      y1+20
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
@@ -357,11 +365,19 @@ XML
       x1 + @clearance[@source]
     end
 
+    def y_horizontal
+      y2+20
+    end
+
+    def bottom_edge
+      y_horizontal
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y2+20-10} C #{x_vertical} #{y2+20-5} #{x_vertical+5} #{y2+20} #{x_vertical+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+10+10+5}' y='#{y2+20-5}'>#{name}</text>
+<text text-anchor='start' x='#{x1+10+10+5}' y='#{y_horizontal-5}'>#{name}</text>
 XML
     end
 
@@ -526,7 +542,7 @@ XML
     end
 
     def height
-      @processes.map(&:y2).max
+      (@processes.map(&:y2) + @lines.map(&:bottom_edge)).max.to_i
     end
 
     def connect
