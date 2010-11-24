@@ -446,11 +446,11 @@ XML
     end
 
     def width
-      @processes.map(&:x2).max + 40
+      @processes.map(&:x2).max
     end
 
     def height
-      @processes.map(&:y2).max + 40
+      @processes.map(&:y2).max
     end
 
     def connect
@@ -484,6 +484,10 @@ XML
     end
 
     def layout
+      @processes.inject(0) do |x, process|
+        process.move_to(x, 0)
+        x + process.width
+      end
     end
 
     def to_svg
