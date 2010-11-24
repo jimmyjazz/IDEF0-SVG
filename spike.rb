@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+# TODO: unbundling
+# TODO: overlapping objects
+# TODO: sharing external concepts (they appear twice currently)
+# TODO: Resize boxes to accommodate anchor points
+
 require 'forwardable'
 
 module IDEF0
@@ -207,6 +212,34 @@ XML
 
   end
 
+  class ExternalGuidanceLine < Line
+
+    def x1
+      target.guidance_anchor_for(name).x
+    end
+
+    def y1
+      source.y1+20
+    end
+
+    def x2
+      x1
+    end
+
+    def y2
+      target.guidance_anchor_for(name).y
+    end
+
+    def to_svg
+      <<-XML
+<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_down_arrow(x2, y2)}
+<text text-anchor='middle' x='#{x1}' y='#{y1-5}'>#{name}</text>
+XML
+    end
+
+  end
+
   class ExternalMechanismLine < Line
 
     def x1
@@ -218,7 +251,7 @@ XML
     end
 
     def x2
-      target.mechanism_anchor_for(name).x
+      x1
     end
 
     def y2
@@ -427,6 +460,10 @@ XML
           @lines << ExternalInputLine.new(self, process, input) if receives?(input)
         end
 
+        process.guidances.each do |guidance|
+          @lines << ExternalGuidanceLine.new(self, process, guidance) if respects?(guidance)
+        end
+
         process.mechanisms.each do |mechanism|
           @lines << ExternalMechanismLine.new(self, process, mechanism) if requires?(mechanism)
         end
@@ -499,25 +536,34 @@ d = IDEF0::Diagram.new("Ben's Burgers")
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
 d.requires("Original Facility")
+d.respects("Business Plan")
+d.respects("Short Term Goals")
+d.respects("Prices of Food and Supplies")
 
 d.process("Oversee Business Operations") do |process|
-  process.receives("Hungry Customer")
-  process.respects("Expansion Plans and New Ideas")
   process.produces("Communications to Local Managers")
   process.produces("Approvals and Commentary")
+  process.respects("Business Plan")
+  process.respects("Communications with Top Management")
+  process.respects("Expansion Plans and New Ideas")
 end
 
 d.process("Expand The Business") do |process|
   process.respects("Approvals and Commentary")
+  process.respects("Suggestions for Expansion")
   process.produces("Expansion Plans and New Ideas")
   process.produces("New Facility")
 end
 
 d.process("Manage Local Restaurant") do |process|
   process.respects("Communications to Local Managers")
+  process.respects("Short Term Goals")
   process.respects("Status of Local Operations")
   process.respects("Prices and Invoices")
   process.produces("Local Management Communications")
+  process.produces("Suggestions for Expansion")
+  process.produces("Communications with Top Management")
+  process.produces("Orders and Payments")
   process.requires("Utensils")
 end
 
@@ -525,6 +571,8 @@ d.process("Provide Supplies") do |process|
   process.produces("Prices and Invoices")
   process.produces("Ingredients")
   process.produces("Utensils")
+  process.respects("Orders and Payments")
+  process.respects("Prices of Food and Supplies")
 end
 
 d.process("Serve Customers") do |process|
