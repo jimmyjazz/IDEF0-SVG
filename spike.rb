@@ -5,7 +5,6 @@
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: Resize boxes to accommodate anchor points
 # TODO: support backward input lines
-# TODO: line clearance needs to respect the anchor point order; currently it's random
 
 require 'forwardable'
 
@@ -51,6 +50,10 @@ module IDEF0
       self.class.new(@items.select(&block))
     end
 
+    def sort_by(&block)
+      self.class.new(@items.sort_by(&block))
+    end
+
   end
 
   class Point
@@ -70,6 +73,17 @@ module IDEF0
 
   end
 
+  class Anchor < Point
+
+    attr_reader :ordinal
+
+    def initialize(x, y, ordinal)
+      super(x, y)
+      @ordinal = ordinal
+    end
+
+  end
+
   class Line
 
     attr_reader :source, :target, :name
@@ -79,6 +93,34 @@ module IDEF0
       @target = target
       @name = name
       @clearance = {}
+    end
+
+    def source_anchor
+      source.output_anchor_for(name)
+    end
+
+    def source_ordinal
+      source_anchor.ordinal
+    end
+
+    def target_ordinal
+      target_anchor.ordinal
+    end
+
+    def x1
+      source_anchor.x
+    end
+
+    def y1
+      source_anchor.y
+    end
+
+    def x2
+      target_anchor.x
+    end
+
+    def y2
+      target_anchor.y
     end
 
     def minimum_length
@@ -133,20 +175,8 @@ module IDEF0
 
   class ForwardInputLine < Line
 
-    def x1
-      source.output_anchor_for(name).x
-    end
-
-    def y1
-      source.output_anchor_for(name).y
-    end
-
-    def x2
-      target.input_anchor_for(name).x
-    end
-
-    def y2
-      target.input_anchor_for(name).y
+    def target_anchor
+      target.input_anchor_for(name)
     end
 
     def bottom_right_from?(process)
@@ -169,20 +199,8 @@ XML
 
   class InternalGuidanceLine < Line
 
-    def x1
-      source.output_anchor_for(name).x
-    end
-
-    def y1
-      source.output_anchor_for(name).y
-    end
-
-    def x2
-      target.guidance_anchor_for(name).x
-    end
-
-    def y2
-      target.guidance_anchor_for(name).y
+    def target_anchor
+      target.guidance_anchor_for(name)
     end
 
   end
@@ -229,16 +247,16 @@ XML
 
   class ExternalInputLine < Line
 
+    def target_anchor
+      target.input_anchor_for(name)
+    end
+
     def x1
       x2 - minimum_length
     end
 
     def y1
-      target.input_anchor_for(name).y
-    end
-
-    def x2
-      target.input_anchor_for(name).x
+      target_anchor.y
     end
 
     def y2
@@ -256,14 +274,6 @@ XML
   end
 
   class ExternalOutputLine < Line
-
-    def x1
-      source.output_anchor_for(name).x
-    end
-
-    def y1
-      source.output_anchor_for(name).y
-    end
 
     def x2
       x1 + minimum_length
@@ -285,8 +295,12 @@ XML
 
   class ExternalGuidanceLine < Line
 
+    def target_anchor
+      target.guidance_anchor_for(name)
+    end
+
     def x1
-      target.guidance_anchor_for(name).x
+      target_anchor.x
     end
 
     def y1
@@ -295,10 +309,6 @@ XML
 
     def x2
       x1
-    end
-
-    def y2
-      target.guidance_anchor_for(name).y
     end
 
     def to_svg
@@ -313,8 +323,12 @@ XML
 
   class ExternalMechanismLine < Line
 
+    def target_anchor
+      target.mechanism_anchor_for(name)
+    end
+
     def x1
-      target.mechanism_anchor_for(name).x
+      target_anchor.x
     end
 
     def y1
@@ -323,10 +337,6 @@ XML
 
     def x2
       x1
-    end
-
-    def y2
-      target.mechanism_anchor_for(name).y
     end
 
     def bottom_edge
@@ -345,20 +355,8 @@ XML
 
   class InternalMechanismLine < Line
 
-    def x1
-      source.output_anchor_for(name).x
-    end
-
-    def y1
-      source.output_anchor_for(name).y
-    end
-
-    def x2
-      target.mechanism_anchor_for(name).x
-    end
-
-    def y2
-      target.mechanism_anchor_for(name).y
+    def target_anchor
+      target.mechanism_anchor_for(name)
     end
 
     def bottom_right_from?(process)
@@ -488,44 +486,34 @@ XML
       [60, [@inputs.count, @outputs.count].max*20+20].max
     end
 
-    def input_baseline
-      y1+height/2 - 20*(@inputs.count - 1)/2
+    def vertical_anchor(x, set, name)
+      baseline = y1+height/2 - 20*(set.count - 1)/2
+      index = set.index(name)
+      y = baseline + index * 20
+      Anchor.new(x, y, index)
+    end
+
+    def horizontal_anchor(y, set, name)
+      baseline = x1+width/2 - 20*(set.count - 1)/2
+      index = set.index(name)
+      x = baseline + index * 20
+      Anchor.new(x, y, index)
     end
 
     def input_anchor_for(name)
-      input_index = @inputs.index(name)
-      y = input_baseline + input_index * 20
-      Point.new(x1, y)
-    end
-
-    def output_baseline
-      y1+height/2 - 20*(@outputs.count - 1)/2
+      vertical_anchor(x1, @inputs, name)
     end
 
     def output_anchor_for(name)
-      index = @outputs.index(name)
-      y = output_baseline + index * 20
-      Point.new(x2, y)
-    end
-
-    def guidance_baseline
-      x1+width/2 - 20*(@guidances.count - 1)/2
+      vertical_anchor(x2, @outputs, name)
     end
 
     def guidance_anchor_for(name)
-      index = @guidances.index(name)
-      x = guidance_baseline + index * 20
-      Point.new(x, y1)
-    end
-
-    def mechanism_baseline
-      x1+width/2 - 20*(@mechanisms.count - 1)/2
+      horizontal_anchor(y1, @guidances, name)
     end
 
     def mechanism_anchor_for(name)
-      index = @mechanisms.index(name)
-      x = mechanism_baseline + index * 20
-      Point.new(x, y2)
+      horizontal_anchor(y2, @mechanisms, name)
     end
 
     def to_svg
@@ -603,7 +591,7 @@ XML
       @processes.inject(@top_left) do |point, process|
         top_right_lines = @lines.select {|line| line.top_right_to?(process) }
         top_margin = top_right_lines.count * 20
-        top_right_lines.reverse.each_with_index do |line, index|
+        top_right_lines.sort_by(&:target_ordinal).reverse.each_with_index do |line, index|
           line.clear(process, 20+index*20)
         end
 
@@ -614,8 +602,8 @@ XML
         up_lines = @lines.select {|line| line.top_right_from?(process) }
         up_margin = 20 + up_lines.count * 20
 
-        [down_lines.reverse, up_lines].each do |set|
-          set.each_with_index do |line, index|
+        [down_lines.sort_by(&:source_ordinal).reverse, up_lines.sort_by(&:source_ordinal)].each do |lines|
+          lines.each_with_index do |line, index|
             line.clear(process, 20+index*20)
           end
         end
