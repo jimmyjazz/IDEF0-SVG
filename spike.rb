@@ -48,6 +48,10 @@ module IDEF0
       @y = y
     end
 
+    def translate(dx, dy)
+      self.class.new(@x + dx, @y + dy)
+    end
+
   end
 
   class Line
@@ -369,9 +373,9 @@ XML
 
   class ChildProcessBox < ProcessBox
 
-    def move_to(x, y)
-      @x1 = x
-      @y1 = y
+    def move_to(point)
+      @x1 = point.x
+      @y1 = point.y
     end
 
     def width
@@ -484,9 +488,9 @@ XML
     end
 
     def layout
-      @processes.inject(0) do |x, process|
-        process.move_to(x, 0)
-        x + process.width
+      @processes.inject(Point.new(0, 0)) do |point, process|
+        process.move_to(point)
+        point.translate(process.width, process.height)
       end
     end
 
