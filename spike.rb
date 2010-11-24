@@ -9,6 +9,15 @@
 
 require 'forwardable'
 
+class Numeric
+
+  def positive?
+    self > 0
+  end
+
+end
+
+
 module IDEF0
 
   class OrderedSet
@@ -414,6 +423,30 @@ XML
       @mechanisms = OrderedSet.new
     end
 
+    def move_to(top_left)
+      @top_left = top_left
+    end
+
+    def translate(dx, dy)
+      move_to(@top_left.translate(dx, dy))
+    end
+
+    def x1
+      @top_left.x
+    end
+
+    def y1
+      @top_left.y
+    end
+
+    def x2
+      x1 + width
+    end
+
+    def y2
+      y1 + height
+    end
+
     def receives(input)
       @inputs << input
     end
@@ -444,30 +477,6 @@ XML
 
     def requires?(mechanism)
       @mechanisms.include?(mechanism)
-    end
-
-    def move_to(point)
-      @top_left = point
-    end
-
-    def translate(dx, dy)
-      move_to(@top_left.translate(dx, dy))
-    end
-
-    def x1
-      @top_left.x
-    end
-
-    def y1
-      @top_left.y
-    end
-
-    def x2
-      x1 + width
-    end
-
-    def y2
-      y1 + height
     end
 
   end
@@ -546,11 +555,11 @@ XML
     end
 
     def width
-      (@processes.map(&:x2) + @lines.map(&:right_edge)).max.to_i
+      (@processes.map(&:x2) + @lines.map(&:right_edge)).max || 0
     end
 
     def height
-      (@processes.map(&:y2) + @lines.map(&:bottom_edge)).max.to_i
+      (@processes.map(&:y2) + @lines.map(&:bottom_edge)).max || 0
     end
 
     def connect
@@ -611,10 +620,8 @@ XML
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
 
-      dx = @lines.map(&:left_edge).reject{|x| x >= 0}.min.to_i.abs
-      @processes.each do |process|
-        process.translate(dx, 0)
-      end
+      dx = @lines.map(&:left_edge).reject(&:positive?).map(&:abs).max || 0
+      @processes.each { |process| process.translate(dx, 0) }
     end
 
     def to_svg
