@@ -108,7 +108,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{y2-10} C #{x1+10} #{y2-5} #{x1+10+5} #{y2} #{x1+10+10} #{y2} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{y2-10} C #{x1+20} #{y2-5} #{x1+20+5} #{y2} #{x1+20+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
 XML
@@ -296,7 +296,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{y2+20-10} C #{x1+10} #{y2+20-5} #{x1+10+5} #{y2+20} #{x1+10+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{y2+20-10} C #{x1+20} #{y2+20-5} #{x1+20+5} #{y2+20} #{x1+20+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+10+10+5}' y='#{y2+20-5}'>#{name}</text>
 XML
@@ -308,7 +308,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{source.y2+20-10} C #{x1+10} #{source.y2+20-5} #{x1+10-5} #{source.y2+20} #{x1+10-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{source.y2+20-10} C #{x1+20} #{source.y2+20-5} #{x1+20-5} #{source.y2+20} #{x1+20-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 <text text-anchor='end' x='#{x1+10-10-5}' y='#{source.y2+20-5}'>#{name}</text>
 XML
