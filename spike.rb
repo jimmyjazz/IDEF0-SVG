@@ -4,6 +4,7 @@
 # TODO: overlapping objects
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: Resize boxes to accommodate anchor points
+# TODO: support backward input lines
 
 require 'forwardable'
 
@@ -37,6 +38,10 @@ module IDEF0
       self.class.new(@items.drop_while { |item| item != pattern }[1..-1])
     end
 
+    def reverse
+      self.class.new(@items.reverse)
+    end
+
   end
 
   class Point
@@ -62,6 +67,7 @@ module IDEF0
       @source = source
       @target = target
       @name = name
+      @clearance = Hash.new {|hash, key| 0 }
     end
 
     def minimum_length
@@ -74,6 +80,10 @@ module IDEF0
 
     def up_from?(process)
       false
+    end
+
+    def clear(process, distance)
+      @clearance[process] = distance
     end
 
     def svg_right_arrow(x,y)
@@ -118,9 +128,13 @@ XML
       @source == process
     end
 
+    def x_vertical #the x position of this line's single vertical segment
+      x1 + @clearance[@source]
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{y2-10} C #{x1+20} #{y2-5} #{x1+20+5} #{y2} #{x1+20+10} #{y2} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y2-10} C #{x_vertical} #{y2-5} #{x_vertical+5} #{y2} #{x_vertical+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
 XML
@@ -166,9 +180,13 @@ XML
       @source == process
     end
 
+    def x_vertical
+      x1 + @clearance[@source]
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1-5} #{x1+20} #{y1-10} L #{x1+20} #{y2-20+10} C #{x1+20} #{y2-20+5} #{x1+20-5} #{y2-20} #{x1+20-10} #{y2-20} L #{x2+10} #{y2-20} C #{x2+5} #{y2-20} #{x2} #{y2-20+5} #{x2} #{y2-20+10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1-5} #{x_vertical} #{y1-10} L #{x_vertical} #{y2-20+10} C #{x_vertical} #{y2-20+5} #{x_vertical-5} #{y2-20} #{x_vertical-10} #{y2-20} L #{x2+10} #{y2-20} C #{x2+5} #{y2-20} #{x2} #{y2-20+5} #{x2} #{y2-20+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
 <text text-anchor='end' x='#{x1}' y='#{y2-20-5}'>#{name}</text>
 XML
@@ -314,9 +332,13 @@ XML
 
   class ForwardMechanismLine < InternalMechanismLine
 
+    def x_vertical
+      x1 + @clearance[@source]
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{y2+20-10} C #{x1+20} #{y2+20-5} #{x1+20+5} #{y2+20} #{x1+20+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y2+20-10} C #{x_vertical} #{y2+20-5} #{x_vertical+5} #{y2+20} #{x_vertical+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 <text text-anchor='start' x='#{x1+10+10+5}' y='#{y2+20-5}'>#{name}</text>
 XML
@@ -326,9 +348,13 @@ XML
 
   class BackwardMechanismLine < InternalMechanismLine
 
+    def x_vertical
+      x1 + @clearance[@source]
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+20-10} #{y1} C #{x1+20-5} #{y1} #{x1+20} #{y1+5} #{x1+20} #{y1+10} L #{x1+20} #{source.y2+20-10} C #{x1+20} #{source.y2+20-5} #{x1+20-5} #{source.y2+20} #{x1+20-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2+20-10} C #{x_vertical} #{source.y2+20-5} #{x_vertical-5} #{source.y2+20} #{x_vertical-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 <text text-anchor='end' x='#{x1+10-10-5}' y='#{source.y2+20-5}'>#{name}</text>
 XML
@@ -515,6 +541,12 @@ XML
         down_margin = 20 + down_lines.count * 20
         up_lines = @lines.select {|line| line.up_from?(process) }
         up_margin = 20 + up_lines.count * 20
+
+        [down_lines.reverse, up_lines].each do |set|
+          set.each_with_index do |line, index|
+            line.clear(process, 20+index*20)
+          end
+        end
 
         right_margin = [down_margin, up_margin].max
 
