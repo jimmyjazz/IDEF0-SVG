@@ -71,9 +71,15 @@ XML
 XML
     end
 
+    def svg_up_arrow(x,y)
+      <<-XML
+<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />
+XML
+    end
+
   end
 
-  class ForwardOutputInputLine < Line
+  class ForwardInputLine < Line
 
     def x1
       source.output_anchor_for(name).x
@@ -101,7 +107,7 @@ XML
 
   end
 
-  class OutputGuidanceLine < Line
+  class InternalGuidanceLine < Line
 
     def x1
       source.output_anchor_for(name).x
@@ -121,7 +127,7 @@ XML
 
   end
 
-  class ForwardOutputGuidanceLine < OutputGuidanceLine
+  class ForwardGuidanceLine < InternalGuidanceLine
 
     def to_svg
       <<-XML
@@ -133,7 +139,7 @@ XML
 
   end
 
-  class BackwardOutputGuidanceLine < OutputGuidanceLine
+  class BackwardGuidanceLine < InternalGuidanceLine
 
     def to_svg
       <<-XML
@@ -201,9 +207,81 @@ XML
 
   end
 
+  class ExternalMechanismLine < Line
+
+    def x1
+      target.mechanism_anchor_for(name).x
+    end
+
+    def y1
+      source.y2-20
+    end
+
+    def x2
+      target.mechanism_anchor_for(name).x
+    end
+
+    def y2
+      target.mechanism_anchor_for(name).y
+    end
+
+    def to_svg
+      <<-XML
+<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_up_arrow(x2, y2)}
+<text text-anchor='middle' x='#{x1}' y='#{y1+20}'>#{name}</text>
+XML
+    end
+
+  end
+
+  class InternalMechanismLine < Line
+
+    def x1
+      source.output_anchor_for(name).x
+    end
+
+    def y1
+      source.output_anchor_for(name).y
+    end
+
+    def x2
+      target.mechanism_anchor_for(name).x
+    end
+
+    def y2
+      target.mechanism_anchor_for(name).y
+    end
+
+  end
+
+  class ForwardMechanismLine < InternalMechanismLine
+
+    def to_svg
+      <<-XML
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{y2+20-10} C #{x1+10} #{y2+20-5} #{x1+10+5} #{y2+20} #{x1+10+10} #{y2+20}  L #{x2-10} #{y2+20} C #{x2-5} #{y2+20} #{x2} #{y2+20-5} #{x2} #{y2+20-10} L #{x2} #{y2}' />
+#{svg_up_arrow(x2, y2)}
+<text text-anchor='start' x='#{x1+10+10+5}' y='#{y2+20-5}'>#{name}</text>
+XML
+    end
+
+  end
+
+  class BackwardMechanismLine < InternalMechanismLine
+
+    def to_svg
+      <<-XML
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x1+10-10} #{y1} C #{x1+10-5} #{y1} #{x1+10} #{y1+5} #{x1+10} #{y1+10} L #{x1+10} #{source.y2+20-10} C #{x1+10} #{source.y2+20-5} #{x1+10-5} #{source.y2+20} #{x1+10-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
+#{svg_up_arrow(x2, y2)}
+<text text-anchor='start' x='#{x1+10+10+5}' y='#{y2+20-5}'>#{name}</text>
+XML
+    end
+
+  end
+
   class ProcessBox
 
-    attr_reader :name, :x1, :y1, :inputs, :outputs, :guidances
+    attr_reader :name, :x1, :y1, :inputs, :outputs, :guidances, :mechanisms
 
     def initialize(name)
       @name = name
@@ -211,6 +289,7 @@ XML
       @inputs = OrderedSet.new
       @outputs = OrderedSet.new
       @guidances = OrderedSet.new
+      @mechanisms = OrderedSet.new
     end
 
     def receives(input)
@@ -235,6 +314,14 @@ XML
 
     def respects?(guidance)
       @guidances.include?(guidance)
+    end
+
+    def requires(mechanism)
+      @mechanisms << mechanism
+    end
+
+    def requires?(mechanism)
+      @mechanisms.include?(mechanism)
     end
 
     def x2
@@ -292,6 +379,16 @@ XML
       Point.new(x, y1)
     end
 
+    def mechanism_baseline
+      x1+width/2 - 20*(@mechanisms.size - 1)/2
+    end
+
+    def mechanism_anchor_for(name)
+      index = @mechanisms.index(name)
+      x = mechanism_baseline + index * 20
+      Point.new(x, y2)
+    end
+
     def to_svg
       <<-XML
 <rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />
@@ -330,14 +427,20 @@ XML
           @lines << ExternalInputLine.new(self, process, input) if receives?(input)
         end
 
+        process.mechanisms.each do |mechanism|
+          @lines << ExternalMechanismLine.new(self, process, mechanism) if requires?(mechanism)
+        end
+
         process.outputs.each do |output|
           @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
           @processes.after(process).each do |target|
-            @lines << ForwardOutputInputLine.new(process, target, output) if target.receives?(output)
-            @lines << ForwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
+            @lines << ForwardInputLine.new(process, target, output) if target.receives?(output)
+            @lines << ForwardGuidanceLine.new(process, target, output) if target.respects?(output)
+            @lines << ForwardMechanismLine.new(process, target, output) if target.requires?(output)
           end
           @processes.before(process).each do |target|
-            @lines << BackwardOutputGuidanceLine.new(process, target, output) if target.respects?(output)
+            @lines << BackwardGuidanceLine.new(process, target, output) if target.respects?(output)
+            @lines << BackwardMechanismLine.new(process, target, output) if target.requires?(output)
           end
         end
       end
@@ -395,6 +498,7 @@ d = IDEF0::Diagram.new("Ben's Burgers")
 
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
+d.requires("Original Facility")
 
 d.process("Oversee Business Operations") do |process|
   process.receives("Hungry Customer")
@@ -406,6 +510,7 @@ end
 d.process("Expand The Business") do |process|
   process.respects("Approvals and Commentary")
   process.produces("Expansion Plans and New Ideas")
+  process.produces("New Facility")
 end
 
 d.process("Manage Local Restaurant") do |process|
@@ -413,11 +518,13 @@ d.process("Manage Local Restaurant") do |process|
   process.respects("Status of Local Operations")
   process.respects("Prices and Invoices")
   process.produces("Local Management Communications")
+  process.requires("Utensils")
 end
 
 d.process("Provide Supplies") do |process|
   process.produces("Prices and Invoices")
   process.produces("Ingredients")
+  process.produces("Utensils")
 end
 
 d.process("Serve Customers") do |process|
@@ -426,6 +533,8 @@ d.process("Serve Customers") do |process|
   process.respects("Local Management Communications")
   process.produces("Status of Local Operations")
   process.produces("Satisfied Customer")
+  process.requires("New Facility")
+  process.requires("Original Facility")
 end
 d.connect
 d.layout
