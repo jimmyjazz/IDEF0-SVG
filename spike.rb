@@ -78,7 +78,7 @@ module IDEF0
       @source = source
       @target = target
       @name = name
-      @clearance = Hash.new { |hash, key| 0 }
+      @clearance = {}
     end
 
     def minimum_length
@@ -111,6 +111,10 @@ module IDEF0
 
     def clear(process, distance)
       @clearance[process] = distance
+    end
+
+    def clearance_from(process)
+      @clearance[process] || 0
     end
 
     def svg_right_arrow(x,y)
@@ -150,7 +154,7 @@ module IDEF0
     end
 
     def x_vertical #the x position of this line's single vertical segment
-      x1 + @clearance[@source]
+      x1 + clearance_from(@source)
     end
 
     def to_svg
@@ -206,11 +210,11 @@ XML
     end
 
     def x_vertical
-      x1 + @clearance[@source]
+      x1 + clearance_from(@source)
     end
 
     def y_horizontal
-      y2 - @clearance[@target]
+      y2 - clearance_from(@target)
     end
 
     def to_svg
@@ -366,7 +370,7 @@ XML
   class ForwardMechanismLine < InternalMechanismLine
 
     def x_vertical
-      x1 + @clearance[@source]
+      x1 + clearance_from(@source)
     end
 
     def y_horizontal
@@ -390,7 +394,7 @@ XML
   class BackwardMechanismLine < InternalMechanismLine
 
     def x_vertical
-      x1 + @clearance[@source]
+      x1 + clearance_from(@source)
     end
 
     def to_svg
