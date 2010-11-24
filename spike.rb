@@ -68,6 +68,10 @@ module IDEF0
       10 + name.length * 7
     end
 
+    def down_from?(process)
+      false
+    end
+
     def svg_right_arrow(x,y)
       <<-XML
 <polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />
@@ -104,6 +108,10 @@ XML
 
     def y2
       target.input_anchor_for(name).y
+    end
+
+    def down_from?(process)
+      @source == process
     end
 
     def to_svg
@@ -288,6 +296,10 @@ XML
 
     def y2
       target.mechanism_anchor_for(name).y
+    end
+
+    def down_from?(process)
+      @source == process
     end
 
   end
@@ -490,7 +502,9 @@ XML
     def layout
       @processes.inject(Point.new(0, 0)) do |point, process|
         process.move_to(point)
-        point.translate(process.width, process.height)
+        down_lines = @lines.select {|line| line.down_from?(process) }
+        right_margin = 20 + down_lines.count * 20
+        point.translate(process.width + right_margin, process.height)
       end
     end
 
