@@ -135,12 +135,16 @@ module IDEF0
       [x1, x2].min
     end
 
-    def bottom_edge
-      [y1, y2].max
+    def top_edge
+      [y1, y2].min
     end
 
     def right_edge
       [x1, x2].max
+    end
+
+    def bottom_edge
+      [y1, y2].max
     end
 
     def bottom_right_from?(process)
@@ -222,6 +226,10 @@ XML
   end
 
   class BackwardGuidanceLine < InternalGuidanceLine
+
+    def top_edge
+      y_horizontal-20
+    end
 
     def top_right_from?(process)
       @source == process
@@ -619,8 +627,11 @@ XML
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
 
-      dx = @lines.map(&:left_edge).reject(&:positive?).map(&:abs).max || 0
-      @processes.each { |process| process.translate(dx, 0) }
+      dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
+        set.reject(&:positive?).map(&:abs).max || 0
+      end
+
+      @processes.each { |process| process.translate(dx, dy) }
     end
 
     def to_svg
