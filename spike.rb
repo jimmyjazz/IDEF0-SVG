@@ -79,6 +79,10 @@ module IDEF0
       [x1, x2].min
     end
 
+    def right_edge
+      [x1, x2].max
+    end
+
     def bottom_right_from?(process)
       false
     end
@@ -518,7 +522,7 @@ XML
     end
 
     def width
-      @processes.map(&:x2).max
+      (@processes.map(&:x2) + @lines.map(&:right_edge)).max.to_i
     end
 
     def height
