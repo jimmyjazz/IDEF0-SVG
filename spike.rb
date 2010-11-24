@@ -72,6 +72,10 @@ module IDEF0
       false
     end
 
+    def up_from?(process)
+      false
+    end
+
     def svg_right_arrow(x,y)
       <<-XML
 <polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />
@@ -157,6 +161,10 @@ XML
   end
 
   class BackwardGuidanceLine < InternalGuidanceLine
+
+    def up_from?(process)
+      @source == process
+    end
 
     def to_svg
       <<-XML
@@ -502,8 +510,14 @@ XML
     def layout
       @processes.inject(Point.new(0, 0)) do |point, process|
         process.move_to(point)
+
         down_lines = @lines.select {|line| line.down_from?(process) }
-        right_margin = 20 + down_lines.count * 20
+        down_margin = 20 + down_lines.count * 20
+        up_lines = @lines.select {|line| line.up_from?(process) }
+        up_margin = 20 + up_lines.count * 20
+
+        right_margin = [down_margin, up_margin].max
+
         point.translate(process.width + right_margin, process.height)
       end
     end
