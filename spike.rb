@@ -377,7 +377,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+10+10+5}' y='#{y_horizontal-5}'>#{name}</text>
+<text text-anchor='start' x='#{x1+10+10+20}' y='#{y_horizontal-5}'>#{name}</text>
 XML
     end
 
