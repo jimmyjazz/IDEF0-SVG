@@ -115,21 +115,15 @@ module IDEF0
     end
 
     def svg_right_arrow(x,y)
-      <<-XML
-<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />
-XML
+      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />"
     end
 
     def svg_down_arrow(x,y)
-      <<-XML
-<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y-6} #{x+3},#{y-6} #{x},#{y}' />
-XML
+      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y-6} #{x+3},#{y-6} #{x},#{y}' />"
     end
 
     def svg_up_arrow(x,y)
-      <<-XML
-<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />
-XML
+      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />"
     end
 
   end
@@ -662,7 +656,7 @@ XML
 
 end
 
-d = IDEF0::Diagram.new("Ben's Burgers")
+d = IDEF0::Diagram.new("Operate Ben's Burgers")
 
 d.receives("Hungry Customer")
 d.produces("Satisfied Customer")
