@@ -581,11 +581,13 @@ XML
 
         process.outputs.each do |output|
           @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
+
           @processes.after(process).each do |target|
             @lines << ForwardInputLine.new(process, target, output) if target.receives?(output)
             @lines << ForwardGuidanceLine.new(process, target, output) if target.respects?(output)
             @lines << ForwardMechanismLine.new(process, target, output) if target.requires?(output)
           end
+
           @processes.before(process).each do |target|
             @lines << BackwardGuidanceLine.new(process, target, output) if target.respects?(output)
             @lines << BackwardMechanismLine.new(process, target, output) if target.requires?(output)
