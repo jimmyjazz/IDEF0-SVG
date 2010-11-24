@@ -429,7 +429,7 @@ XML
     end
 
     def height
-      60
+      [60, [@inputs.count, @outputs.count].max*20+20].max
     end
 
     def input_baseline
@@ -621,9 +621,9 @@ d.process("Manage Local Restaurant") do |process|
   process.respects("Short Term Goals")
   process.respects("Status of Local Operations")
   process.respects("Prices and Invoices")
-  process.produces("Local Management Communications")
   process.produces("Suggestions for Expansion")
   process.produces("Communications with Top Management")
+  process.produces("Local Management Communications")
   process.produces("Orders and Payments")
   process.requires("Utensils")
 end
