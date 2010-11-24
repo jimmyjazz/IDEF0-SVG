@@ -550,7 +550,9 @@ XML
 
         right_margin = [down_margin, up_margin].max
 
-        point.translate(process.width + right_margin, process.height)
+        bottom_margin = 20
+
+        point.translate(process.width + right_margin, process.height + bottom_margin)
       end
     end
 
