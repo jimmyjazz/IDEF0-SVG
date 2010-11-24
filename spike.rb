@@ -73,14 +73,18 @@ module IDEF0
 
   end
 
-  class Anchor < Point
+  class Anchor
+
+    extend Forwardable
 
     attr_reader :ordinal
 
-    def initialize(x, y, ordinal)
-      super(x, y)
+    def initialize(point, ordinal)
+      @point = point
       @ordinal = ordinal
     end
+
+    def_delegators :@point, :x, :y
 
   end
 
@@ -490,14 +494,14 @@ XML
       baseline = y1+height/2 - 20*(set.count - 1)/2
       index = set.index(name)
       y = baseline + index * 20
-      Anchor.new(x, y, index)
+      Anchor.new(Point.new(x, y), index)
     end
 
     def horizontal_anchor(y, set, name)
       baseline = x1+width/2 - 20*(set.count - 1)/2
       index = set.index(name)
       x = baseline + index * 20
-      Anchor.new(x, y, index)
+      Anchor.new(Point.new(x, y), index)
     end
 
     def input_anchor_for(name)
