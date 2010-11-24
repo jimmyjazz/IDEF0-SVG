@@ -484,13 +484,6 @@ XML
     end
 
     def layout
-      x = x1 + 20
-      y = y1 + 40
-      @processes.each do |process|
-        process.move_to(x, y)
-        x = process.x2 + 30
-        y = process.y2 + 30
-      end
     end
 
     def to_svg
