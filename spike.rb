@@ -228,7 +228,11 @@ XML
   class BackwardGuidanceLine < InternalGuidanceLine
 
     def top_edge
-      y_horizontal-20
+      y_horizontal
+    end
+
+    def right_edge
+      x_vertical
     end
 
     def top_right_from?(process)
@@ -251,7 +255,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1-5} #{x_vertical} #{y1-10} L #{x_vertical} #{y_horizontal+10} C #{x_vertical} #{y_horizontal+5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal+5} #{x2} #{y_horizontal+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='end' x='#{x1}' y='#{y_horizontal-5}'>#{name}</text>
+<text text-anchor='end' x='#{right_edge-10}' y='#{y_horizontal-5+20}'>#{name}</text>
 XML
     end
 
@@ -264,7 +268,7 @@ XML
     end
 
     def x1
-      x2 - minimum_length
+      [x2 - minimum_length, source.x1].min
     end
 
     def y1
@@ -316,7 +320,7 @@ XML
     end
 
     def y1
-      y2-40+20
+      source.y1 + 20
     end
 
     def x2
@@ -395,7 +399,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+10+10+20}' y='#{y_horizontal-5}'>#{name}</text>
+<text text-anchor='start' x='#{x_vertical+10}' y='#{y_horizontal-5}'>#{name}</text>
 XML
     end
 
@@ -407,11 +411,15 @@ XML
       x1 + clearance_from(@source)
     end
 
+    def right_edge
+      x_vertical
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2+20-10} C #{x_vertical} #{source.y2+20-5} #{x_vertical-5} #{source.y2+20} #{x_vertical-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='end' x='#{x1+10-10-5}' y='#{source.y2+20-5}'>#{name}</text>
+<text text-anchor='end' x='#{right_edge-10}' y='#{source.y2+20-5}'>#{name}</text>
 XML
     end
 
@@ -682,7 +690,6 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
   respects("Prices of Food and Supplies")
 
   process("Oversee Business Operations") do
-    receives("Hungry Customer")
     produces("Communications to Local Managers")
     produces("Approvals and Commentary")
     respects("Business Plan")
