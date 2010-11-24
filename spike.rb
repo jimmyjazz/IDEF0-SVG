@@ -534,6 +534,14 @@ XML
 
   end
 
+  def self.diagram(name, &block)
+    Diagram.new(name).tap do |diagram|
+      diagram.instance_eval(&block)
+      diagram.connect
+      diagram.layout
+    end
+  end
+
   class Diagram < ProcessBox
 
     def initialize(name)
@@ -542,10 +550,10 @@ XML
       @lines = OrderedSet.new
     end
 
-    def process(name)
-      p = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
-      @processes << p
-      yield(p) if block_given?
+    def process(name, &block)
+      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
+      @processes << process
+      process.instance_eval(&block) if block_given?
     end
 
     def width
@@ -656,60 +664,61 @@ XML
 
 end
 
-d = IDEF0::Diagram.new("Operate Ben's Burgers")
+diagram = IDEF0.diagram("Operate Ben's Burgers") do
 
-d.receives("Hungry Customer")
-d.produces("Satisfied Customer")
-d.requires("Original Facility")
-d.respects("Business Plan")
-d.respects("Short Term Goals")
-d.respects("Prices of Food and Supplies")
+  receives("Hungry Customer")
+  produces("Satisfied Customer")
+  requires("Original Facility")
+  respects("Business Plan")
+  respects("Short Term Goals")
+  respects("Prices of Food and Supplies")
 
-d.process("Oversee Business Operations") do |process|
-  process.receives("Hungry Customer")
-  process.produces("Communications to Local Managers")
-  process.produces("Approvals and Commentary")
-  process.respects("Business Plan")
-  process.respects("Communications with Top Management")
-  process.respects("Expansion Plans and New Ideas")
+  process("Oversee Business Operations") do
+    receives("Hungry Customer")
+    produces("Communications to Local Managers")
+    produces("Approvals and Commentary")
+    respects("Business Plan")
+    respects("Communications with Top Management")
+    respects("Expansion Plans and New Ideas")
+  end
+
+  process("Expand The Business") do
+    respects("Approvals and Commentary")
+    respects("Suggestions for Expansion")
+    produces("Expansion Plans and New Ideas")
+    produces("New Facility")
+  end
+
+  process("Manage Local Restaurant") do
+    respects("Communications to Local Managers")
+    respects("Short Term Goals")
+    respects("Status of Local Operations")
+    respects("Prices and Invoices")
+    produces("Suggestions for Expansion")
+    produces("Communications with Top Management")
+    produces("Local Management Communications")
+    produces("Orders and Payments")
+    requires("Utensils")
+  end
+
+  process("Provide Supplies") do
+    produces("Prices and Invoices")
+    produces("Ingredients")
+    produces("Utensils")
+    respects("Orders and Payments")
+    respects("Prices of Food and Supplies")
+  end
+
+  process("Serve Customers") do
+    receives("Ingredients")
+    receives("Hungry Customer")
+    respects("Local Management Communications")
+    produces("Status of Local Operations")
+    produces("Satisfied Customer")
+    requires("New Facility")
+    requires("Original Facility")
+  end
+
 end
 
-d.process("Expand The Business") do |process|
-  process.respects("Approvals and Commentary")
-  process.respects("Suggestions for Expansion")
-  process.produces("Expansion Plans and New Ideas")
-  process.produces("New Facility")
-end
-
-d.process("Manage Local Restaurant") do |process|
-  process.respects("Communications to Local Managers")
-  process.respects("Short Term Goals")
-  process.respects("Status of Local Operations")
-  process.respects("Prices and Invoices")
-  process.produces("Suggestions for Expansion")
-  process.produces("Communications with Top Management")
-  process.produces("Local Management Communications")
-  process.produces("Orders and Payments")
-  process.requires("Utensils")
-end
-
-d.process("Provide Supplies") do |process|
-  process.produces("Prices and Invoices")
-  process.produces("Ingredients")
-  process.produces("Utensils")
-  process.respects("Orders and Payments")
-  process.respects("Prices of Food and Supplies")
-end
-
-d.process("Serve Customers") do |process|
-  process.receives("Ingredients")
-  process.receives("Hungry Customer")
-  process.respects("Local Management Communications")
-  process.produces("Status of Local Operations")
-  process.produces("Satisfied Customer")
-  process.requires("New Facility")
-  process.requires("Original Facility")
-end
-d.connect
-d.layout
-puts d.to_svg
+puts diagram.to_svg
