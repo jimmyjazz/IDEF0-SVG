@@ -192,11 +192,15 @@ XML
       x1 + @clearance[@source]
     end
 
+    def y_horizontal
+      y2 - @clearance[@target]
+    end
+
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1-5} #{x_vertical} #{y1-10} L #{x_vertical} #{y2-20+10} C #{x_vertical} #{y2-20+5} #{x_vertical-5} #{y2-20} #{x_vertical-10} #{y2-20} L #{x2+10} #{y2-20} C #{x2+5} #{y2-20} #{x2} #{y2-20+5} #{x2} #{y2-20+10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1-5} #{x_vertical} #{y1-10} L #{x_vertical} #{y_horizontal+10} C #{x_vertical} #{y_horizontal+5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal+5} #{x2} #{y_horizontal+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='end' x='#{x1}' y='#{y2-20-5}'>#{name}</text>
+<text text-anchor='end' x='#{x1}' y='#{y_horizontal-5}'>#{name}</text>
 XML
     end
 
@@ -545,6 +549,9 @@ XML
       @processes.inject(Point.new(0, 0)) do |point, process|
         top_right_lines = @lines.select {|line| line.top_right_to?(process) }
         top_margin = top_right_lines.count * 20
+        top_right_lines.reverse.each_with_index do |line, index|
+          line.clear(process, 20+index*20)
+        end
 
         process.move_to(point.translate(0, top_margin))
 
