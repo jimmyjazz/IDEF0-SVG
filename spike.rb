@@ -159,7 +159,7 @@ XML
   class ExternalInputLine < Line
 
     def x1
-      source.x1
+      x2 - minimum_length
     end
 
     def y1
@@ -167,7 +167,7 @@ XML
     end
 
     def x2
-      [x1 + minimum_length, target.input_anchor_for(name).x].max
+      target.input_anchor_for(name).x
     end
 
     def y2
@@ -187,7 +187,7 @@ XML
   class ExternalOutputLine < Line
 
     def x1
-      [x2 - minimum_length, source.output_anchor_for(name).x].min
+      source.output_anchor_for(name).x
     end
 
     def y1
@@ -195,7 +195,7 @@ XML
     end
 
     def x2
-      target.x2
+      x1 + minimum_length
     end
 
     def y2
