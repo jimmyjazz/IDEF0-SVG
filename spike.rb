@@ -5,6 +5,7 @@
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: Resize boxes to accommodate anchor points
 # TODO: support backward input lines
+# TODO: line clearance needs to respect the anchor point order; currently it's random
 
 require 'forwardable'
 
