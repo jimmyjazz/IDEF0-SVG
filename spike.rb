@@ -58,6 +58,8 @@ module IDEF0
       self.class.new(@x + dx, @y + dy)
     end
 
+    ORIGIN = new(0, 0)
+
   end
 
   class Line
@@ -68,7 +70,7 @@ module IDEF0
       @source = source
       @target = target
       @name = name
-      @clearance = Hash.new {|hash, key| 0 }
+      @clearance = Hash.new { |hash, key| 0 }
     end
 
     def minimum_length
@@ -401,11 +403,11 @@ XML
 
   class ProcessBox
 
-    attr_reader :name, :x1, :y1, :inputs, :outputs, :guidances, :mechanisms
+    attr_reader :name, :inputs, :outputs, :guidances, :mechanisms
 
     def initialize(name)
       @name = name
-      @x1 = @y1 = 0
+      @top_left = Point::ORIGIN
       @inputs = OrderedSet.new
       @outputs = OrderedSet.new
       @guidances = OrderedSet.new
@@ -444,6 +446,22 @@ XML
       @mechanisms.include?(mechanism)
     end
 
+    def move_to(point)
+      @top_left = point
+    end
+
+    def translate(dx, dy)
+      move_to(@top_left.translate(dx, dy))
+    end
+
+    def x1
+      @top_left.x
+    end
+
+    def y1
+      @top_left.y
+    end
+
     def x2
       x1 + width
     end
@@ -455,16 +473,6 @@ XML
   end
 
   class ChildProcessBox < ProcessBox
-
-    def move_to(point)
-      @x1 = point.x
-      @y1 = point.y
-    end
-
-    def translate(dx, dy)
-      @x1 += dx
-      @y1 += dy
-    end
 
     def width
       180
