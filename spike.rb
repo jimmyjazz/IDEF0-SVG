@@ -223,7 +223,7 @@ XML
     end
 
     def y1
-      source.y1+20
+      y2-40+20
     end
 
     def x2
@@ -251,7 +251,7 @@ XML
     end
 
     def y1
-      source.y2-20
+      y2+40-20
     end
 
     def x2
