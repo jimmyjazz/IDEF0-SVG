@@ -20,25 +20,20 @@ end
 
 module IDEF0
 
-  class OrderedSet
+  class ArraySet
 
     extend Forwardable
-
-    include Enumerable
 
     def initialize(items = [])
       @items = items
     end
 
+    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map
+
     def add(item)
       @items << item unless include?(item)
     end
     def_delegator :self, :add, :<<
-
-    def_delegator :@items, :index
-    def_delegator :@items, :each
-    def_delegator :@items, :[]
-    def_delegator :@items, :size
 
     def before(pattern)
       self.class.new(@items.take_while { |item| item != pattern })
@@ -50,6 +45,10 @@ module IDEF0
 
     def reverse
       self.class.new(@items.reverse)
+    end
+
+    def select(&block)
+      self.class.new(@items.select(&block))
     end
 
   end
@@ -411,10 +410,10 @@ XML
     def initialize(name)
       @name = name
       @top_left = Point::ORIGIN
-      @inputs = OrderedSet.new
-      @outputs = OrderedSet.new
-      @guidances = OrderedSet.new
-      @mechanisms = OrderedSet.new
+      @inputs = ArraySet.new
+      @outputs = ArraySet.new
+      @guidances = ArraySet.new
+      @mechanisms = ArraySet.new
     end
 
     def move_to(top_left)
@@ -486,7 +485,7 @@ XML
     end
 
     def input_baseline
-      y1+height/2 - 20*(@inputs.size - 1)/2
+      y1+height/2 - 20*(@inputs.count - 1)/2
     end
 
     def input_anchor_for(name)
@@ -496,7 +495,7 @@ XML
     end
 
     def output_baseline
-      y1+height/2 - 20*(@outputs.size - 1)/2
+      y1+height/2 - 20*(@outputs.count - 1)/2
     end
 
     def output_anchor_for(name)
@@ -506,7 +505,7 @@ XML
     end
 
     def guidance_baseline
-      x1+width/2 - 20*(@guidances.size - 1)/2
+      x1+width/2 - 20*(@guidances.count - 1)/2
     end
 
     def guidance_anchor_for(name)
@@ -516,7 +515,7 @@ XML
     end
 
     def mechanism_baseline
-      x1+width/2 - 20*(@mechanisms.size - 1)/2
+      x1+width/2 - 20*(@mechanisms.count - 1)/2
     end
 
     def mechanism_anchor_for(name)
@@ -546,8 +545,8 @@ XML
 
     def initialize(name)
       super
-      @processes = OrderedSet.new
-      @lines = OrderedSet.new
+      @processes = ArraySet.new
+      @lines = ArraySet.new
     end
 
     def process(name, &block)
@@ -565,7 +564,7 @@ XML
     end
 
     def connect
-      @lines = OrderedSet.new
+      @lines = ArraySet.new
       @processes.each do |process|
         process.inputs.each do |input|
           @lines << ExternalInputLine.new(self, process, input) if receives?(input)
