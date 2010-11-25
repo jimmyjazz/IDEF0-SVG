@@ -258,6 +258,10 @@ module IDEF0
       false
     end
 
+    def bottom_left_to?(process)
+      false
+    end
+
     def clear(process, distance)
       @clearance[process] = distance
     end
@@ -465,6 +469,11 @@ XML
 
   class ExternalMechanismLine < Line
 
+    def initialize(*args)
+      super
+      clear(@target, 40)
+    end
+
     def target_anchor
       target.mechanism_anchor_for(name)
     end
@@ -474,7 +483,7 @@ XML
     end
 
     def y1
-      [source.y2, y2+40].max
+      [source.y2, y2+clearance_from(@target)].max
     end
 
     def x2
@@ -483,6 +492,12 @@ XML
 
     def label
       CentredLabel.new(@name, Point.new(x1, y1-5))
+    end
+
+    def avoid(lines)
+      while lines.any?{|other| label.overlaps?(other.label)} do
+        clear(@target, 20+clearance_from(@target))
+      end
     end
 
     def to_svg
@@ -514,7 +529,7 @@ XML
     end
 
     def y_horizontal
-      y2+20
+      y2 + clearance_from(@target)
     end
 
     def bottom_edge
@@ -523,6 +538,10 @@ XML
 
     def label
       LeftAlignedLabel.new(@name, Point.new(x_vertical+10, y_horizontal-5))
+    end
+
+    def bottom_left_to?(process)
+      @target == process
     end
 
     def to_svg
@@ -780,7 +799,11 @@ XML
 
         right_margin = [down_margin, up_margin].max
 
-        bottom_margin = 20
+        bottom_left_lines = @lines.select {|line| line.bottom_left_to?(process) }
+        bottom_margin = 20 + bottom_left_lines.count * 20
+        bottom_left_lines.sort_by(&:target_ordinal).each_with_index do |line, index|
+          line.clear(process, 20+index*20)
+        end
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
