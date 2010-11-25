@@ -45,6 +45,15 @@ module IDEF0
     end
     def_delegator :self, :add, :<<
 
+    def delete(item)
+      self.class.new(@items.dup).delete!(item)
+    end
+
+    def delete!(item)
+      @items.delete(item)
+      self
+    end
+
     def before(pattern)
       self.class.new(@items.take_while { |item| item != pattern })
     end
@@ -136,6 +145,9 @@ XML
 
     def label
       Label.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5), "start")
+    end
+
+    def avoid(lines)
     end
 
     def source_anchor
@@ -362,8 +374,17 @@ XML
 
   class ExternalGuidanceLine < Line
 
+    def initialize(*args)
+      super
+      clear(@target, 40)
+    end
+
     def target_anchor
       target.guidance_anchor_for(name)
+    end
+
+    def avoid(lines)
+      clear(@target, 20+clearance_from(@target))
     end
 
     def x1
@@ -371,7 +392,7 @@ XML
     end
 
     def y1
-      [source.y1, y2 - 40].min
+      [source.y1, y2 - clearance_from(target)].min
     end
 
     def x2
@@ -712,6 +733,10 @@ XML
         bottom_margin = 20
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
+      end
+
+      @lines.each do |line|
+        line.avoid(@lines.delete(line))
       end
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
