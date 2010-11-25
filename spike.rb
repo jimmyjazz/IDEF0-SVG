@@ -331,7 +331,7 @@ XML
     end
 
     def y1
-      [source.y1, y2 - 50].min
+      [source.y1, y2 - 40].min
     end
 
     def x2
@@ -359,7 +359,7 @@ XML
     end
 
     def y1
-      [source.y2, y2+50].max
+      [source.y2, y2+40].max
     end
 
     def x2
