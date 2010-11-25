@@ -674,7 +674,7 @@ XML
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
 
-      @lines.each(&:justify)
+      @lines.reverse.each(&:justify)
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
         set.reject(&:positive?).map(&:abs).max || 0
