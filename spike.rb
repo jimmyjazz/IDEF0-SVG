@@ -885,6 +885,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     respects("Approvals and Commentary")
     respects("Suggestions for Expansion")
     produces("Expansion Plans and New Ideas")
+    produces("Transport")
     produces("New Facility")
   end
 
@@ -896,17 +897,20 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Suggestions for Expansion")
     produces("Communications with Top Management")
     produces("Local Management Communications")
-    produces("Orders and Payments")
-    requires("Utensils")
+    produces("Orders Dand Payments")
+    requires("Uniforms")
+    requires("Stationary")
   end
 
   process("Provide Supplies") do
     produces("Prices and Invoices")
     produces("Ingredients")
     produces("Manchester")
-    produces("Utensils")
+    produces("Uniforms")
+    produces("Stationary")
     respects("Orders and Payments")
     respects("Prices of Food and Supplies")
+    requires("Transport")
   end
 
   process("Serve Customers") do
@@ -916,6 +920,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Status of Local Operations")
     produces("Satisfied Customer")
     requires("Manchester")
+    requires("Uniforms")
     requires("New Facility")
     requires("Original Facility")
   end
