@@ -842,6 +842,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
   produces("Satisfied Customer")
   requires("Original Facility")
   respects("Business Plan")
+  respects("Business Plan 2")
   respects("Short Term Goals")
   respects("Prices of Food and Supplies")
 
@@ -850,6 +851,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Communications to Local Managers")
     produces("Approvals and Commentary")
     respects("Business Plan")
+    respects("Business Plan 2")
     respects("Communications with Top Management")
     respects("Expansion Plans and New Ideas")
   end
