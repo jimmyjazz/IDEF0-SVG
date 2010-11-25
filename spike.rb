@@ -132,10 +132,10 @@ module IDEF0
     end
 
     def overlaps?(other)
-      left_edge <= other.right_edge &&
-      right_edge >= other.left_edge &&
-      top_edge <= other.bottom_edge &&
-      bottom_edge >= other.top_edge
+      left_edge < other.right_edge &&
+      right_edge > other.left_edge &&
+      top_edge < other.bottom_edge &&
+      bottom_edge > other.top_edge
     end
 
     def to_svg
