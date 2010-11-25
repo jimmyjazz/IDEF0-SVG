@@ -272,7 +272,7 @@ XML
     end
 
     def x1
-      x2 - [minimum_length, clearance_from(target)].max
+      x2 - clearance_from(target)
     end
 
     def y1
@@ -281,6 +281,10 @@ XML
 
     def y2
       y1
+    end
+
+    def justify
+      clear(@target, [minimum_length, target_anchor.x - source.x1].max)
     end
 
     def to_svg
