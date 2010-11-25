@@ -110,22 +110,72 @@ module IDEF0
 
   class Label
 
-    def initialize(text, point, anchor)
+    def initialize(text, point)
       @text = text
       @point = point
-      @anchor = anchor
     end
 
     def length
       @text.length * 7
     end
 
+    def top_edge
+      @point.y - 20
+    end
+
+    def bottom_edge
+      @point.y
+    end
+
+    def right_edge
+      left_edge + length
+    end
+
     def overlaps?(other)
-      false
+      left_edge <= other.right_edge &&
+      right_edge >= other.left_edge &&
+      top_edge <= other.bottom_edge &&
+      bottom_edge >= other.top_edge
     end
 
     def to_svg
-      "<text text-anchor='#{@anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>"
+      "<text text-anchor='#{text_anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>"
+    end
+
+  end
+
+  class LeftAlignedLabel < Label
+
+    def left_edge
+      @point.x
+    end
+
+    def text_anchor
+      "start"
+    end
+
+  end
+
+  class RightAlignedLabel < Label
+
+    def left_edge
+      @point.x - length
+    end
+
+    def text_anchor
+      "end"
+    end
+
+  end
+
+  class CentredLabel < Label
+
+    def left_edge
+      @point.x - length / 2
+    end
+
+    def text_anchor
+      "middle"
     end
 
   end
@@ -142,7 +192,7 @@ module IDEF0
     end
 
     def label
-      Label.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5), "start")
+      LeftAlignedLabel.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5))
     end
 
     def avoid(lines)
@@ -301,7 +351,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(right_edge-10, y_horizontal-5+20), "end")
+      RightAlignedLabel.new(@name, Point.new(right_edge-10, y_horizontal-5+20))
     end
 
     def to_svg
@@ -333,7 +383,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(source.x1+5, y1-5), "start")
+      LeftAlignedLabel.new(@name, Point.new(source.x1+5, y1-5))
     end
 
     def to_svg
@@ -357,7 +407,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(target.x2-5, y2-5), "end")
+      RightAlignedLabel.new(@name, Point.new(target.x2-5, y2-5))
     end
 
     def to_svg
@@ -400,7 +450,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(x1, y1+20-5), "middle")
+      CentredLabel.new(@name, Point.new(x1, y1+20-5))
     end
 
     def to_svg
@@ -432,7 +482,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(x1, y1-5), "middle")
+      CentredLabel.new(@name, Point.new(x1, y1-5))
     end
 
     def to_svg
@@ -472,7 +522,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(x_vertical+10, y_horizontal-5), "start")
+      LeftAlignedLabel.new(@name, Point.new(x_vertical+10, y_horizontal-5))
     end
 
     def to_svg
@@ -496,7 +546,7 @@ XML
     end
 
     def label
-      Label.new(@name, Point.new(right_edge-10, source.y2+20-5), "end")
+      RightAlignedLabel.new(@name, Point.new(right_edge-10, source.y2+20-5))
     end
 
     def to_svg
