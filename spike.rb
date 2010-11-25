@@ -327,10 +327,6 @@ XML
       x1
     end
 
-    def top_edge
-      y1-30
-    end
-
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1+20}' x2='#{x2}' y2='#{y2}' stroke='black' />
