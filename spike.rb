@@ -178,10 +178,6 @@ module IDEF0
       @clearance[process] || 0
     end
 
-    def justify
-
-    end
-
     def svg_right_arrow(x,y)
       "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />"
     end
@@ -283,7 +279,7 @@ XML
     end
 
     def x1
-      x2 - clearance_from(target)
+      source.x1
     end
 
     def y1
@@ -292,10 +288,6 @@ XML
 
     def y2
       y1
-    end
-
-    def justify
-      clear(@target, [minimum_length, target_anchor.x - source.left_edge].max)
     end
 
     def to_svg
@@ -311,7 +303,7 @@ XML
   class ExternalOutputLine < Line
 
     def x2
-      x1 + minimum_length
+      [x1 + minimum_length, target.x2].max
     end
 
     def y2
@@ -339,15 +331,11 @@ XML
     end
 
     def y1
-      y2-clearance_from(@target)
+      source.y1
     end
 
     def x2
       x1
-    end
-
-    def justify
-      clear(@target, [50, target_anchor.y - source.top_edge].max)
     end
 
     def to_svg
@@ -371,22 +359,18 @@ XML
     end
 
     def y1
-      y2+40-20
+      [source.y2, y2+50].max
     end
 
     def x2
       x1
     end
 
-    def bottom_edge
-      y1+20
-    end
-
     def to_svg
       <<-XML
-<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+<line x1='#{x1}' y1='#{y1-20}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='middle' x='#{x1}' y='#{y1+20}'>#{name}</text>
+<text text-anchor='middle' x='#{x1}' y='#{y1-5}'>#{name}</text>
 XML
     end
 
@@ -485,12 +469,12 @@ XML
       y1 + height
     end
 
-    def left_edge
-      x1
+    def right_edge
+      x2
     end
 
-    def top_edge
-      y1
+    def bottom_edge
+      y2
     end
 
     def receives(input)
@@ -586,10 +570,18 @@ XML
 
   class Diagram < ProcessBox
 
+    attr_reader :width, :height
+
     def initialize(name)
       super
       @processes = ArraySet.new
       @lines = ArraySet.new
+      @width = @height = 0
+    end
+
+    def resize(width, height)
+      @width = width
+      @height = height
     end
 
     def process(name, &block)
@@ -598,20 +590,12 @@ XML
       process.instance_eval(&block) if block_given?
     end
 
-    def width
-      (@processes.map(&:x2) + @lines.map(&:right_edge)).max || 0
+    def bottom_edge
+      (@processes + @lines).map(&:bottom_edge).max || 0
     end
 
-    def height
-      (@processes.map(&:y2) + @lines.map(&:bottom_edge)).max || 0
-    end
-
-    def top_edge
-      (@processes + @lines).map(&:top_edge).min || 0
-    end
-
-    def left_edge
-      (@processes + @lines).map(&:left_edge).min || 0
+    def right_edge
+      (@processes + @lines).map(&:right_edge).max || 0
     end
 
     def connect
@@ -674,13 +658,13 @@ XML
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
 
-      @lines.reverse.each(&:justify)
-
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
         set.reject(&:positive?).map(&:abs).max || 0
       end
 
       @processes.each { |process| process.translate(dx, dy) }
+
+      resize(right_edge, bottom_edge)
     end
 
     def to_svg
