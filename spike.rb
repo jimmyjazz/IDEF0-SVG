@@ -735,8 +735,8 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Communications to Local Managers")
     produces("Approvals and Commentary")
     respects("Business Plan")
-    # respects("Communications with Top Management")
-    # respects("Expansion Plans and New Ideas")
+    respects("Communications with Top Management")
+    respects("Expansion Plans and New Ideas")
   end
 
   process("Expand The Business") do
