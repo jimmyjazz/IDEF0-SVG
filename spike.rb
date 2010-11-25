@@ -878,6 +878,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
   process("Provide Supplies") do
     produces("Prices and Invoices")
     produces("Ingredients")
+    produces("Manchester")
     produces("Utensils")
     respects("Orders and Payments")
     respects("Prices of Food and Supplies")
@@ -889,6 +890,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     respects("Local Management Communications")
     produces("Status of Local Operations")
     produces("Satisfied Customer")
+    requires("Manchester")
     requires("New Facility")
     requires("Original Facility")
   end
