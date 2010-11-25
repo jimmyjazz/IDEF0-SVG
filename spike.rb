@@ -29,8 +29,19 @@ module IDEF0
 
     def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map
 
+    def union(other)
+      self.class.new(@items.dup).union!(other)
+    end
+    def_delegator :self, :union, :+
+
+    def union!(other)
+      other.each {|item| @items << item }
+      self
+    end
+
     def add(item)
       @items << item unless include?(item)
+      self
     end
     def_delegator :self, :add, :<<
 
@@ -284,7 +295,7 @@ XML
     end
 
     def justify
-      clear(@target, [minimum_length, target_anchor.x - source.x1].max)
+      clear(@target, [minimum_length, target_anchor.x - source.left_edge].max)
     end
 
     def to_svg
@@ -336,7 +347,7 @@ XML
     end
 
     def justify
-      clear(@target, 20 + 10 + [20, target_anchor.y - source.y1].max)
+      clear(@target, [50, target_anchor.y - source.top_edge].max)
     end
 
     def to_svg
@@ -474,6 +485,14 @@ XML
       y1 + height
     end
 
+    def left_edge
+      x1
+    end
+
+    def top_edge
+      y1
+    end
+
     def receives(input)
       @inputs << input
     end
@@ -585,6 +604,14 @@ XML
 
     def height
       (@processes.map(&:y2) + @lines.map(&:bottom_edge)).max || 0
+    end
+
+    def top_edge
+      (@processes + @lines).map(&:top_edge).min || 0
+    end
+
+    def left_edge
+      (@processes + @lines).map(&:left_edge).min || 0
     end
 
     def connect
@@ -704,11 +731,12 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
   respects("Prices of Food and Supplies")
 
   process("Oversee Business Operations") do
+    receives("Hungry Customer")
     produces("Communications to Local Managers")
     produces("Approvals and Commentary")
     respects("Business Plan")
-    respects("Communications with Top Management")
-    respects("Expansion Plans and New Ideas")
+    # respects("Communications with Top Management")
+    # respects("Expansion Plans and New Ideas")
   end
 
   process("Expand The Business") do
