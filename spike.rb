@@ -268,7 +268,7 @@ XML
     end
 
     def x1
-      [x2 - minimum_length, source.x1].min
+      x2 - [minimum_length, clearance_from(target)].max
     end
 
     def y1
@@ -320,7 +320,7 @@ XML
     end
 
     def y1
-      source.y1
+      y2-clearance_from(target)-20
     end
 
     def x2
