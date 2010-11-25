@@ -320,18 +320,22 @@ XML
     end
 
     def y1
-      source.y1 + 20
+      source.y1
     end
 
     def x2
       x1
     end
 
+    def top_edge
+      y1-30
+    end
+
     def to_svg
       <<-XML
-<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+<line x1='#{x1}' y1='#{y1+20}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='middle' x='#{x1}' y='#{y1-5}'>#{name}</text>
+<text text-anchor='middle' x='#{x1}' y='#{y1+20-5}'>#{name}</text>
 XML
     end
 
