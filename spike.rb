@@ -27,7 +27,7 @@ module IDEF0
       @items = items
     end
 
-    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map
+    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?
 
     def union(other)
       self.class.new(@items.dup).union!(other)
@@ -125,9 +125,7 @@ module IDEF0
     end
 
     def to_svg
-      <<-XML
-<text text-anchor='#{@anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>
-XML
+      "<text text-anchor='#{@anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>"
     end
 
   end
@@ -384,7 +382,9 @@ XML
     end
 
     def avoid(lines)
-      clear(@target, 20+clearance_from(@target))
+      while lines.any?{|other| label.overlaps?(other.label)} do
+        clear(@target, 20+clearance_from(@target))
+      end
     end
 
     def x1
