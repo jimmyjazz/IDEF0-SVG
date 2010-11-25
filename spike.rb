@@ -99,6 +99,30 @@ module IDEF0
 
   end
 
+  class Label
+
+    def initialize(text, point, anchor)
+      @text = text
+      @point = point
+      @anchor = anchor
+    end
+
+    def length
+      @text.length * 7
+    end
+
+    def overlaps?(other)
+      false
+    end
+
+    def to_svg
+      <<-XML
+<text text-anchor='#{@anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>
+XML
+    end
+
+  end
+
   class Line
 
     attr_reader :source, :target, :name
@@ -108,6 +132,10 @@ module IDEF0
       @target = target
       @name = name
       @clearance = {}
+    end
+
+    def label
+      Label.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5), "start")
     end
 
     def source_anchor
@@ -139,7 +167,7 @@ module IDEF0
     end
 
     def minimum_length
-      10 + name.length * 7
+      10 + label.length
     end
 
     def left_edge
@@ -210,7 +238,7 @@ module IDEF0
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y2-10} C #{x_vertical} #{y2-5} #{x_vertical+5} #{y2} #{x_vertical+10} #{y2} L #{x2} #{y2}' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -230,7 +258,7 @@ XML
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x2-10} #{y1} C #{x2-5} #{y1} #{x2} #{y1+5} #{x2} #{y1+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -262,11 +290,15 @@ XML
       y2 - clearance_from(@target)
     end
 
+    def label
+      Label.new(@name, Point.new(right_edge-10, y_horizontal-5+20), "end")
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1-5} #{x_vertical} #{y1-10} L #{x_vertical} #{y_horizontal+10} C #{x_vertical} #{y_horizontal+5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal+5} #{x2} #{y_horizontal+10} L #{x2} #{y2}' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='end' x='#{right_edge-10}' y='#{y_horizontal-5+20}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -290,11 +322,15 @@ XML
       y1
     end
 
+    def label
+      Label.new(@name, Point.new(source.x1+5, y1-5), "start")
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='start' x='#{x1+5}' y='#{y1-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -310,11 +346,15 @@ XML
       y1
     end
 
+    def label
+      Label.new(@name, Point.new(target.x2-5, y2-5), "end")
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_right_arrow(x2, y2)}
-<text text-anchor='end' x='#{x2-5}' y='#{y2-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -338,11 +378,15 @@ XML
       x1
     end
 
+    def label
+      Label.new(@name, Point.new(x1, y1+20-5), "middle")
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1+20}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_down_arrow(x2, y2)}
-<text text-anchor='middle' x='#{x1}' y='#{y1+20-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -366,11 +410,15 @@ XML
       x1
     end
 
+    def label
+      Label.new(@name, Point.new(x1, y1-5), "middle")
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1-20}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='middle' x='#{x1}' y='#{y1-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -402,11 +450,15 @@ XML
       y_horizontal
     end
 
+    def label
+      Label.new(@name, Point.new(x_vertical+10, y_horizontal-5), "start")
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='start' x='#{x_vertical+10}' y='#{y_horizontal-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
@@ -422,11 +474,15 @@ XML
       x_vertical
     end
 
+    def label
+      Label.new(@name, Point.new(right_edge-10, source.y2+20-5), "end")
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2+20-10} C #{x_vertical} #{source.y2+20-5} #{x_vertical-5} #{source.y2+20} #{x_vertical-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
-<text text-anchor='end' x='#{right_edge-10}' y='#{source.y2+20-5}'>#{name}</text>
+#{label.to_svg}
 XML
     end
 
