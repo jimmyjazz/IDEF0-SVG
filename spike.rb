@@ -5,6 +5,8 @@
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: Resize boxes to accommodate anchor points
 # TODO: support backward input lines
+# TODO: test that a process producing multiple backwards mechanism lines ensures they are separated
+# TODO test that a process requiring a forward mechanism and also producing a backwards mechanism keeps them separated
 
 require 'forwardable'
 
