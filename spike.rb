@@ -167,6 +167,10 @@ module IDEF0
       @clearance[process] || 0
     end
 
+    def justify
+
+    end
+
     def svg_right_arrow(x,y)
       "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />"
     end
@@ -320,11 +324,15 @@ XML
     end
 
     def y1
-      y2-clearance_from(target)-20
+      y2-clearance_from(@target)
     end
 
     def x2
       x1
+    end
+
+    def justify
+      clear(@target, 20 + 10 + [20, target_anchor.y - source.y1].max)
     end
 
     def to_svg
@@ -634,6 +642,8 @@ XML
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
+
+      @lines.each(&:justify)
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
         set.reject(&:positive?).map(&:abs).max || 0
