@@ -279,7 +279,7 @@ XML
     end
 
     def x1
-      source.x1
+      [source.x1, x2 - minimum_length].min
     end
 
     def y1
@@ -331,7 +331,7 @@ XML
     end
 
     def y1
-      source.y1
+      [source.y1, y2 - 50].min
     end
 
     def x2
