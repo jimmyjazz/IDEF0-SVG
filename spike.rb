@@ -362,7 +362,7 @@ XML
     def precedence(side)
       case side
       when @target.top_side
-        [1, -@source.sequence, -target_anchor.sequence]
+        [1, @source.sequence, -target_anchor.sequence]
       when @source.right_side
         [1, -@target.sequence, source_anchor.sequence]
       end
@@ -841,7 +841,7 @@ XML
       @processes.inject(@top_left) do |point, process|
         top_lines = @lines.select {|line| line.clear?(process.top_side) }
         top_margin = top_lines.count * 20
-        top_lines.sort_by(&:target_sequence).reverse.each_with_index do |line, index|
+        top_lines.sort_by {|line| line.precedence(process.top_side)}.each_with_index do |line, index|
           line.clear(process.top_side, 20+index*20)
         end
 
