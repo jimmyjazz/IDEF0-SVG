@@ -2,6 +2,7 @@
 
 # TODO: support backward input lines
 # TODO: overlapping labels for external guidances/mechanisms
+# TODO: alert reader to issues with the model, such as an input that is received but not produced by any process
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: unbundling
 # TODO: Resize boxes to accommodate anchor points
