@@ -591,7 +591,7 @@ XML
       when @source.bottom_side
         [2, source_anchor.x - target_anchor.x]
       when @source.right_side
-        [1, source_anchor.x - target_anchor.x]
+        [1, -@target.sequence, -target_anchor.ordinal]
       end
     end
 
