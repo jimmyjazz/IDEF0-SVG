@@ -264,12 +264,12 @@ module IDEF0
       false
     end
 
-    def clear(process, distance)
-      @clearance[process] = distance
+    def clear(side, distance)
+      @clearance[side] = distance
     end
 
-    def clearance_from(process)
-      @clearance[process] || 0
+    def clearance_from(side)
+      @clearance[side] || 0
     end
 
     def svg_right_arrow(x,y)
@@ -297,7 +297,7 @@ module IDEF0
     end
 
     def x_vertical #the x position of this line's single vertical segment
-      x1 + clearance_from(@source)
+      x1 + clearance_from(@source.right_side)
     end
 
     def to_svg
@@ -349,11 +349,11 @@ XML
     end
 
     def x_vertical
-      x1 + clearance_from(@source)
+      x1 + clearance_from(@source.right_side)
     end
 
     def y_horizontal
-      y2 - clearance_from(@target)
+      y2 - clearance_from(@target.top_side)
     end
 
     def label
@@ -430,7 +430,7 @@ XML
 
     def initialize(*args)
       super
-      clear(@target, 40)
+      clear(@target.top_side, 40)
     end
 
     def target_anchor
@@ -439,7 +439,7 @@ XML
 
     def avoid(lines)
       while lines.any?{|other| label.overlaps?(other.label)} do
-        clear(@target, 20+clearance_from(@target))
+        clear(@target.top_side, 20+clearance_from(@target.top_side))
       end
     end
 
@@ -448,7 +448,7 @@ XML
     end
 
     def y1
-      [source.y1, y2 - clearance_from(target)].min
+      [source.y1, y2 - clearance_from(@target.top_side)].min
     end
 
     def x2
@@ -473,7 +473,7 @@ XML
 
     def initialize(*args)
       super
-      clear(@target, 40)
+      clear(@target.bottom_side, 40)
     end
 
     def target_anchor
@@ -485,7 +485,7 @@ XML
     end
 
     def y1
-      [source.y2, y2+clearance_from(@target)].max
+      [source.y2, y2+clearance_from(@target.bottom_side)].max
     end
 
     def x2
@@ -498,7 +498,7 @@ XML
 
     def avoid(lines)
       while lines.any?{|other| label.overlaps?(other.label)} do
-        clear(@target, 20+clearance_from(@target))
+        clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
       end
     end
 
@@ -527,11 +527,11 @@ XML
   class ForwardMechanismLine < InternalMechanismLine
 
     def x_vertical
-      x1 + clearance_from(@source)
+      x1 + clearance_from(@source.right_side)
     end
 
     def y_horizontal
-      y2 + clearance_from(@target)
+      y2 + clearance_from(@target.bottom_side)
     end
 
     def bottom_edge
@@ -559,7 +559,7 @@ XML
   class BackwardMechanismLine < InternalMechanismLine
 
     def x_vertical
-      x1 + clearance_from(@source)
+      x1 + clearance_from(@source.right_side)
     end
 
     def right_edge
@@ -572,7 +572,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2+20-10} C #{x_vertical} #{source.y2+20-5} #{x_vertical-5} #{source.y2+20} #{x_vertical-10} #{source.y2+20} L #{x2+10} #{source.y2+20} C #{x2+5} #{source.y2+20} #{x2} #{source.y2+20-5} #{x2} #{source.y2+20-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2-10} C #{x_vertical} #{source.y2-5} #{x_vertical-5} #{source.y2} #{x_vertical-10} #{source.y2} L #{x2+10} #{source.y2} C #{x2+5} #{source.y2} #{x2} #{source.y2-5} #{x2} #{source.y2-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 #{label.to_svg}
 XML
@@ -580,13 +580,26 @@ XML
 
   end
 
+  class Side
+
+    def initialize(process, direction)
+      @process = process
+      @direction = direction
+    end
+
+  end
+
   class ProcessBox
 
     attr_reader :name, :inputs, :outputs, :guidances, :mechanisms
+    attr_reader :top_side, :bottom_side, :left_side, :right_side
 
     def initialize(name)
       @name = name
       @top_left = Point::ORIGIN
+      [:top, :bottom, :left, :right].each do |direction|
+        instance_variable_set("@#{direction}_side", Side.new(self,direction))
+      end
       @inputs = ArraySet.new
       @outputs = ArraySet.new
       @guidances = ArraySet.new
@@ -783,7 +796,7 @@ XML
         top_right_lines = @lines.select {|line| line.top_right_to?(process) }
         top_margin = top_right_lines.count * 20
         top_right_lines.sort_by(&:target_ordinal).reverse.each_with_index do |line, index|
-          line.clear(process, 20+index*20)
+          line.clear(process.top_side, 20+index*20)
         end
 
         process.move_to(point.translate(0, top_margin))
@@ -795,7 +808,7 @@ XML
 
         [down_lines.sort_by(&:source_ordinal).reverse, up_lines.sort_by(&:source_ordinal)].each do |lines|
           lines.each_with_index do |line, index|
-            line.clear(process, 20+index*20)
+            line.clear(process.right_side, 20+index*20)
           end
         end
 
@@ -804,7 +817,7 @@ XML
         bottom_left_lines = @lines.select {|line| line.bottom_left_to?(process) }
         bottom_margin = 20 + bottom_left_lines.count * 20
         bottom_left_lines.sort_by(&:target_ordinal).each_with_index do |line, index|
-          line.clear(process, 20+index*20)
+          line.clear(process.bottom_side, 20+index*20)
         end
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
@@ -898,6 +911,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Communications with Top Management")
     produces("Local Management Communications")
     produces("Orders Dand Payments")
+    produces("Finance System")
     requires("Uniforms")
     requires("Stationary")
   end
@@ -910,6 +924,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Stationary")
     respects("Orders and Payments")
     respects("Prices of Food and Supplies")
+    requires("Finance System")
     requires("Transport")
   end
 
