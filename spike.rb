@@ -1,12 +1,10 @@
 #!/usr/bin/env ruby
 
-# TODO: unbundling
-# TODO: overlapping objects
-# TODO: sharing external concepts (they appear twice currently)
-# TODO: Resize boxes to accommodate anchor points
 # TODO: support backward input lines
-# TODO: test that a process producing multiple backwards mechanism lines ensures they are separated
-# TODO test that a process requiring a forward mechanism and also producing a backwards mechanism keeps them separated
+# TODO: overlapping labels for external guidances/mechanisms
+# TODO: sharing external concepts (they appear twice currently)
+# TODO: unbundling
+# TODO: Resize boxes to accommodate anchor points
 
 require 'forwardable'
 
