@@ -207,14 +207,6 @@ module IDEF0
       source.output_anchor_for(name)
     end
 
-    def source_sequence
-      source_anchor.sequence
-    end
-
-    def target_sequence
-      target_anchor.sequence
-    end
-
     def x1
       source_anchor.x
     end
