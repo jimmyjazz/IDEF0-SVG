@@ -264,6 +264,10 @@ module IDEF0
       sides_to_clear.include?(side)
     end
 
+    def precedence(side)
+      nil
+    end
+
     def clear(side, distance)
       @clearance[side] = distance
     end
@@ -542,6 +546,13 @@ XML
       [@source.right_side, @target.bottom_side]
     end
 
+    def precedence(side)
+      case side
+      when @target.bottom_side
+        [1, target_anchor.x - source_anchor.x]
+      end
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
@@ -564,6 +575,13 @@ XML
 
     def sides_to_clear
       [@source.right_side, @source.bottom_side]
+    end
+
+    def precedence(side)
+      case side
+      when @source.bottom_side
+        [2, source_anchor.x - target_anchor.x]
+      end
     end
 
     def label
@@ -815,7 +833,7 @@ XML
 
         bottom_lines = @lines.select {|line| line.clear?(process.bottom_side) }
         bottom_margin = 20 + bottom_lines.count * 20
-        bottom_lines.sort_by(&:target_ordinal).each_with_index do |line, index|
+        bottom_lines.sort_by {|line| line.precedence(process.bottom_side)}.each_with_index do |line, index|
           line.clear(process.bottom_side, 20+index*20)
         end
 
