@@ -556,7 +556,7 @@ XML
     def precedence(side)
       case side
       when @target.bottom_side
-        [1, target_anchor.x - source_anchor.x]
+        [1, -@source.sequence, target_anchor.ordinal]
       when @source.right_side
         [2, -@target.sequence, 1, -target_anchor.ordinal]
       end
