@@ -543,7 +543,7 @@ XML
   class BackwardMechanismLine < InternalMechanismLine
 
     def y_horizontal
-      y2 + clearance_from(@source.bottom_side)
+      @source.bottom_edge + clearance_from(@source.bottom_side)
     end
 
     def right_edge
@@ -560,7 +560,7 @@ XML
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{source.y2-10} C #{x_vertical} #{source.y2-5} #{x_vertical-5} #{source.y2} #{x_vertical-10} #{source.y2} L #{x2+10} #{source.y2} C #{x2+5} #{source.y2} #{x2} #{source.y2-5} #{x2} #{source.y2-10} L #{x2} #{y2}' />
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
 #{svg_up_arrow(x2, y2)}
 #{label.to_svg}
 XML
