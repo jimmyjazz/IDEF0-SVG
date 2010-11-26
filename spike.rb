@@ -844,8 +844,6 @@ XML
           line.clear(process.top_side, 20+index*20)
         end
 
-        process.move_to(point.translate(0, top_margin))
-
         right_lines = @lines.select {|line| line.clear?(process.right_side) }
         right_up_lines, right_down_lines = right_lines.partition(&:upward?)
 
@@ -864,6 +862,8 @@ XML
         bottom_lines.sort_by {|line| line.precedence(process.bottom_side)}.each_with_index do |line, index|
           line.clear(process.bottom_side, 20+index*20)
         end
+
+        process.move_to(point.translate(0, top_margin))
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
