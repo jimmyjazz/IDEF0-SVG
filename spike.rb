@@ -555,7 +555,7 @@ XML
     end
 
     def label
-      RightAlignedLabel.new(@name, Point.new(right_edge-10, source.y2+20-5))
+      RightAlignedLabel.new(@name, Point.new(right_edge-10, y_horizontal-5))
     end
 
     def to_svg
@@ -792,7 +792,7 @@ XML
         right_lines = @lines.select {|line| line.clear?(process.right_side) }
         right_margin = 20 + right_lines.count * 20
 
-        right_lines.sort_by(&:source_ordinal).each_with_index do |line, index|
+        right_lines.sort_by(&:source_ordinal).reverse.each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
 
