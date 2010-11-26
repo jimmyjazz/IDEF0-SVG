@@ -300,6 +300,13 @@ module IDEF0
       [@source.right_side]
     end
 
+    def precedence(side)
+      case side
+      when @source.right_side
+        [2, -@target.sequence, 2, -target_anchor.ordinal]
+      end
+    end
+
     def x_vertical #the x position of this line's single vertical segment
       x1 + clearance_from(@source.right_side)
     end
@@ -550,6 +557,8 @@ XML
       case side
       when @target.bottom_side
         [1, target_anchor.x - source_anchor.x]
+      when @source.right_side
+        [2, -@target.sequence, 1, -target_anchor.ordinal]
       end
     end
 
@@ -581,6 +590,8 @@ XML
       case side
       when @source.bottom_side
         [2, source_anchor.x - target_anchor.x]
+      when @source.right_side
+        [1, source_anchor.x - target_anchor.x]
       end
     end
 
@@ -609,7 +620,8 @@ XML
 
   class ProcessBox
 
-    attr_reader :name, :inputs, :outputs, :guidances, :mechanisms
+    attr_reader :name
+    attr_reader :inputs, :outputs, :guidances, :mechanisms
     attr_reader :top_side, :bottom_side, :left_side, :right_side
 
     def initialize(name)
@@ -692,6 +704,13 @@ XML
 
   class ChildProcessBox < ProcessBox
 
+    attr_reader :sequence
+
+    def initialize(name, sequence)
+      super(name)
+      @sequence = sequence
+    end
+
     def width
       180
     end
@@ -700,14 +719,14 @@ XML
       [60, [@inputs.count, @outputs.count].max*20+20].max
     end
 
-    def vertical_anchor(x, set, name)
+    def vertical_anchor(set, x, name)
       baseline = y1+height/2 - 20*(set.count - 1)/2
       index = set.index(name)
       y = baseline + index * 20
       Anchor.new(Point.new(x, y), index)
     end
 
-    def horizontal_anchor(y, set, name)
+    def horizontal_anchor(set, name, y)
       baseline = x1+width/2 - 20*(set.count - 1)/2
       index = set.index(name)
       x = baseline + index * 20
@@ -715,19 +734,19 @@ XML
     end
 
     def input_anchor_for(name)
-      vertical_anchor(x1, @inputs, name)
+      vertical_anchor(@inputs, x1, name)
     end
 
     def output_anchor_for(name)
-      vertical_anchor(x2, @outputs, name)
+      vertical_anchor(@outputs, x2, name)
     end
 
     def guidance_anchor_for(name)
-      horizontal_anchor(y1, @guidances, name)
+      horizontal_anchor(@guidances, name, y1)
     end
 
     def mechanism_anchor_for(name)
-      horizontal_anchor(y2, @mechanisms, name)
+      horizontal_anchor(@mechanisms, name, y2)
     end
 
     def to_svg
@@ -764,7 +783,7 @@ XML
     end
 
     def process(name, &block)
-      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
+      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name, @processes.count)
       @processes << process
       process.instance_eval(&block) if block_given?
     end
@@ -827,7 +846,8 @@ XML
         right_up_lines.sort_by(&:source_ordinal).each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
-        right_down_lines.sort_by(&:source_ordinal).reverse.each_with_index do |line, index|
+
+        right_down_lines.sort_by {|line| line.precedence(process.right_side)}.each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
 
