@@ -28,7 +28,7 @@ module IDEF0
       @items = items
     end
 
-    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?
+    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?, :group_by
 
     def union(other)
       self.class.new(@items.dup).union!(other)
@@ -61,10 +61,6 @@ module IDEF0
 
     def after(pattern)
       self.class.new(@items.drop_while { |item| item != pattern }[1..-1])
-    end
-
-    def reverse
-      self.class.new(@items.reverse)
     end
 
     def select(&block)
@@ -243,8 +239,8 @@ module IDEF0
       [y1, y2].max
     end
 
-    def upward?
-      false
+    def group
+      1
     end
 
     def sides_to_clear
@@ -334,8 +330,8 @@ XML
 
   class BackwardGuidanceLine < InternalGuidanceLine
 
-    def upward?
-      true
+    def group
+      2
     end
 
     def top_edge
@@ -830,39 +826,30 @@ XML
 
     def layout
       @processes.inject(@top_left) do |point, process|
-        top_lines = @lines.select {|line| line.clear?(process.top_side) }
-        top_margin = top_lines.count * 20
-        top_lines.sort_by {|line| line.precedence(process.top_side)}.each_with_index do |line, index|
-          line.clear(process.top_side, 20+index*20)
-        end
 
-        right_lines = @lines.select {|line| line.clear?(process.right_side) }
-        right_up_lines, right_down_lines = right_lines.partition(&:upward?)
+        top_margin, bottom_margin, left_margin, right_margin =
+          [process.top_side, process.bottom_side, process.left_side, process.right_side]
+          .map do |side|
+            grouped_lines = @lines.select { |line| line.clear?(side) }
+              .sort_by { |line| line.precedence(side)}
+              .group_by(&:group)
+              .values
 
-        right_margin = 20 + 20 * [right_up_lines.count, right_down_lines.count].max
+            grouped_lines.each do |line_group|
+              line_group.each_with_index { |line, index| line.clear(side, 20 + index * 20) }
+            end
 
-        right_up_lines.sort_by {|line| line.precedence(process.right_side)}.each_with_index do |line, index|
-          line.clear(process.right_side, 20+index*20)
-        end
+            line_count = grouped_lines.map(&:count).max || 0
 
-        right_down_lines.sort_by {|line| line.precedence(process.right_side)}.each_with_index do |line, index|
-          line.clear(process.right_side, 20+index*20)
-        end
-
-        bottom_lines = @lines.select {|line| line.clear?(process.bottom_side) }
-        bottom_margin = 20 + bottom_lines.count * 20
-        bottom_lines.sort_by {|line| line.precedence(process.bottom_side)}.each_with_index do |line, index|
-          line.clear(process.bottom_side, 20+index*20)
-        end
+            20 + line_count * 20
+          end
 
         process.move_to(point.translate(0, top_margin))
 
         Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
       end
 
-      @lines.each do |line|
-        line.avoid(@lines.delete(line))
-      end
+      @lines.each { |line| line.avoid(@lines.delete(line)) }
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
         set.reject(&:positive?).map(&:abs).max || 0
