@@ -76,6 +76,10 @@ module IDEF0
       self.class.new(@items.sort_by(&block))
     end
 
+    def partition(&block)
+      @items.partition(&block).map {|items| self.class.new(items) }
+    end
+
   end
 
   class Point
@@ -248,6 +252,10 @@ module IDEF0
       [y1, y2].max
     end
 
+    def upward?
+      false
+    end
+
     def sides_to_clear
       []
     end
@@ -323,6 +331,10 @@ XML
   end
 
   class BackwardGuidanceLine < InternalGuidanceLine
+
+    def upward?
+      true
+    end
 
     def top_edge
       y_horizontal
@@ -790,9 +802,14 @@ XML
         process.move_to(point.translate(0, top_margin))
 
         right_lines = @lines.select {|line| line.clear?(process.right_side) }
-        right_margin = 20 + right_lines.count * 20
+        right_up_lines, right_down_lines = right_lines.partition(&:upward?)
 
-        right_lines.sort_by(&:source_ordinal).reverse.each_with_index do |line, index|
+        right_margin = 20 + 20 * [right_up_lines.count, right_down_lines.count].max
+
+        right_up_lines.sort_by(&:source_ordinal).each_with_index do |line, index|
+          line.clear(process.right_side, 20+index*20)
+        end
+        right_down_lines.sort_by(&:source_ordinal).reverse.each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
 
