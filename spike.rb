@@ -248,20 +248,12 @@ module IDEF0
       [y1, y2].max
     end
 
-    def bottom_right_from?(process)
-      false
+    def sides_to_clear
+      []
     end
 
-    def top_right_from?(process)
-      false
-    end
-
-    def top_right_to?(process)
-      false
-    end
-
-    def bottom_left_to?(process)
-      false
+    def clear?(side)
+      sides_to_clear.include?(side)
     end
 
     def clear(side, distance)
@@ -292,8 +284,8 @@ module IDEF0
       target.input_anchor_for(name)
     end
 
-    def bottom_right_from?(process)
-      @source == process
+    def sides_to_clear
+      [@source.right_side]
     end
 
     def x_vertical #the x position of this line's single vertical segment
@@ -340,12 +332,8 @@ XML
       x_vertical
     end
 
-    def top_right_from?(process)
-      @source == process
-    end
-
-    def top_right_to?(process)
-      @target == process
+    def sides_to_clear
+      [@target.top_side, @source.right_side]
     end
 
     def x_vertical
@@ -518,32 +506,28 @@ XML
       target.mechanism_anchor_for(name)
     end
 
-    def bottom_right_from?(process)
-      @source == process
-    end
-
-  end
-
-  class ForwardMechanismLine < InternalMechanismLine
-
     def x_vertical
       x1 + clearance_from(@source.right_side)
-    end
-
-    def y_horizontal
-      y2 + clearance_from(@target.bottom_side)
     end
 
     def bottom_edge
       y_horizontal
     end
 
+  end
+
+  class ForwardMechanismLine < InternalMechanismLine
+
+    def y_horizontal
+      y2 + clearance_from(@target.bottom_side)
+    end
+
     def label
       LeftAlignedLabel.new(@name, Point.new(x_vertical+10, y_horizontal-5))
     end
 
-    def bottom_left_to?(process)
-      @target == process
+    def sides_to_clear
+      [@source.right_side, @target.bottom_side]
     end
 
     def to_svg
@@ -558,12 +542,16 @@ XML
 
   class BackwardMechanismLine < InternalMechanismLine
 
-    def x_vertical
-      x1 + clearance_from(@source.right_side)
+    def y_horizontal
+      y2 + clearance_from(@source.bottom_side)
     end
 
     def right_edge
       x_vertical
+    end
+
+    def sides_to_clear
+      [@source.right_side, @source.bottom_side]
     end
 
     def label
@@ -793,30 +781,24 @@ XML
 
     def layout
       @processes.inject(@top_left) do |point, process|
-        top_right_lines = @lines.select {|line| line.top_right_to?(process) }
-        top_margin = top_right_lines.count * 20
-        top_right_lines.sort_by(&:target_ordinal).reverse.each_with_index do |line, index|
+        top_lines = @lines.select {|line| line.clear?(process.top_side) }
+        top_margin = top_lines.count * 20
+        top_lines.sort_by(&:target_ordinal).reverse.each_with_index do |line, index|
           line.clear(process.top_side, 20+index*20)
         end
 
         process.move_to(point.translate(0, top_margin))
 
-        down_lines = @lines.select {|line| line.bottom_right_from?(process) }
-        down_margin = 20 + down_lines.count * 20
-        up_lines = @lines.select {|line| line.top_right_from?(process) }
-        up_margin = 20 + up_lines.count * 20
+        right_lines = @lines.select {|line| line.clear?(process.right_side) }
+        right_margin = 20 + right_lines.count * 20
 
-        [down_lines.sort_by(&:source_ordinal).reverse, up_lines.sort_by(&:source_ordinal)].each do |lines|
-          lines.each_with_index do |line, index|
-            line.clear(process.right_side, 20+index*20)
-          end
+        right_lines.sort_by(&:source_ordinal).each_with_index do |line, index|
+          line.clear(process.right_side, 20+index*20)
         end
 
-        right_margin = [down_margin, up_margin].max
-
-        bottom_left_lines = @lines.select {|line| line.bottom_left_to?(process) }
-        bottom_margin = 20 + bottom_left_lines.count * 20
-        bottom_left_lines.sort_by(&:target_ordinal).each_with_index do |line, index|
+        bottom_lines = @lines.select {|line| line.clear?(process.bottom_side) }
+        bottom_margin = 20 + bottom_lines.count * 20
+        bottom_lines.sort_by(&:target_ordinal).each_with_index do |line, index|
           line.clear(process.bottom_side, 20+index*20)
         end
 
