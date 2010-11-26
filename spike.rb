@@ -359,6 +359,15 @@ XML
       [@target.top_side, @source.right_side]
     end
 
+    def precedence(side)
+      case side
+      when @target.top_side
+        [1, -@source.sequence, -target_anchor.sequence]
+      when @source.right_side
+        [1, -@target.sequence, source_anchor.sequence]
+      end
+    end
+
     def x_vertical
       x1 + clearance_from(@source.right_side)
     end
@@ -843,7 +852,7 @@ XML
 
         right_margin = 20 + 20 * [right_up_lines.count, right_down_lines.count].max
 
-        right_up_lines.sort_by(&:source_sequence).each_with_index do |line, index|
+        right_up_lines.sort_by {|line| line.precedence(process.right_side)}.each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
 
