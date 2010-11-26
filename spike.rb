@@ -103,11 +103,11 @@ module IDEF0
 
     extend Forwardable
 
-    attr_reader :ordinal
+    attr_reader :sequence
 
-    def initialize(point, ordinal)
+    def initialize(point, sequence)
       @point = point
-      @ordinal = ordinal
+      @sequence = sequence
     end
 
     def_delegators :@point, :x, :y
@@ -208,12 +208,12 @@ module IDEF0
       source.output_anchor_for(name)
     end
 
-    def source_ordinal
-      source_anchor.ordinal
+    def source_sequence
+      source_anchor.sequence
     end
 
-    def target_ordinal
-      target_anchor.ordinal
+    def target_sequence
+      target_anchor.sequence
     end
 
     def x1
@@ -303,7 +303,7 @@ module IDEF0
     def precedence(side)
       case side
       when @source.right_side
-        [2, -@target.sequence, 2, -target_anchor.ordinal]
+        [2, -@target.sequence, 2, -target_anchor.sequence]
       end
     end
 
@@ -556,9 +556,9 @@ XML
     def precedence(side)
       case side
       when @target.bottom_side
-        [1, -@source.sequence, target_anchor.ordinal]
+        [1, -@source.sequence, target_anchor.sequence]
       when @source.right_side
-        [2, -@target.sequence, 1, -target_anchor.ordinal]
+        [2, -@target.sequence, 1, -target_anchor.sequence]
       end
     end
 
@@ -589,9 +589,9 @@ XML
     def precedence(side)
       case side
       when @source.bottom_side
-        [2, -@target.sequence, -target_anchor.ordinal]
+        [2, -@target.sequence, -target_anchor.sequence]
       when @source.right_side
-        [1, -@target.sequence, -target_anchor.ordinal]
+        [1, -@target.sequence, -target_anchor.sequence]
       end
     end
 
@@ -832,7 +832,7 @@ XML
       @processes.inject(@top_left) do |point, process|
         top_lines = @lines.select {|line| line.clear?(process.top_side) }
         top_margin = top_lines.count * 20
-        top_lines.sort_by(&:target_ordinal).reverse.each_with_index do |line, index|
+        top_lines.sort_by(&:target_sequence).reverse.each_with_index do |line, index|
           line.clear(process.top_side, 20+index*20)
         end
 
@@ -843,7 +843,7 @@ XML
 
         right_margin = 20 + 20 * [right_up_lines.count, right_down_lines.count].max
 
-        right_up_lines.sort_by(&:source_ordinal).each_with_index do |line, index|
+        right_up_lines.sort_by(&:source_sequence).each_with_index do |line, index|
           line.clear(process.right_side, 20+index*20)
         end
 
