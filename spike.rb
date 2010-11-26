@@ -892,7 +892,7 @@ diagram = IDEF0.diagram("Operate Ben's Burgers") do
     produces("Suggestions for Expansion")
     produces("Communications with Top Management")
     produces("Local Management Communications")
-    produces("Orders Dand Payments")
+    produces("Orders and Payments")
     produces("Finance System")
     requires("Uniforms")
     requires("Stationary")
