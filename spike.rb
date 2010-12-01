@@ -898,5 +898,5 @@ XML
 
 end
 
-diagram = eval($<.read)
+diagram = eval("IDEF0.diagram #{$<.read}")
 puts diagram.to_svg
