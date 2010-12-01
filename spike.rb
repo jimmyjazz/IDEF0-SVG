@@ -616,6 +616,8 @@ XML
 
   class ProcessBox
 
+    extend Forwardable
+
     attr_reader :name
     attr_reader :inputs, :outputs, :guidances, :mechanisms
     attr_reader :top_side, :bottom_side, :left_side, :right_side
@@ -667,6 +669,7 @@ XML
     def receives(input)
       @inputs << input
     end
+    def_delegator :self, :receives, :translates
 
     def receives?(input)
       @inputs.include?(input)
@@ -675,6 +678,7 @@ XML
     def produces(output)
       @outputs << output
     end
+    def_delegator :self, :receives, :into
 
     def produces?(guidance)
       @outputs.include?(guidance)
