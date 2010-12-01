@@ -1,0 +1,67 @@
+IDEF0.diagram("Operate Ben's Burgers") do
+
+  receives("Hungry Customer")
+  produces("Satisfied Customer")
+  requires("Original Facility")
+  respects("Business Plan")
+  respects("Business Plan 2")
+  respects("Short Term Goals")
+  respects("Prices of Food and Supplies")
+
+  process("Oversee Business Operations") do
+    receives("Hungry Customer")
+    produces("Communications to Local Managers")
+    produces("Approvals and Commentary")
+    respects("Business Plan")
+    respects("Business Plan 2")
+    respects("Communications with Top Management")
+    respects("Expansion Plans and New Ideas")
+  end
+
+  process("Expand The Business") do
+    respects("Approvals and Commentary")
+    respects("Suggestions for Expansion")
+    produces("Expansion Plans and New Ideas")
+    produces("Transport")
+    produces("New Facility")
+  end
+
+  process("Manage Local Restaurant") do
+    respects("Communications to Local Managers")
+    respects("Short Term Goals")
+    respects("Status of Local Operations")
+    respects("Prices and Invoices")
+    produces("Suggestions for Expansion")
+    produces("Communications with Top Management")
+    produces("Local Management Communications")
+    produces("Orders and Payments")
+    produces("Finance System")
+    requires("Uniforms")
+    requires("Stationary")
+  end
+
+  process("Provide Supplies") do
+    produces("Prices and Invoices")
+    produces("Ingredients")
+    produces("Manchester")
+    produces("Uniforms")
+    produces("Stationary")
+    respects("Orders and Payments")
+    respects("Prices of Food and Supplies")
+    requires("Finance System")
+    requires("Transport")
+  end
+
+  process("Serve Customers") do
+    receives("Ingredients")
+    receives("Hungry Customer")
+    respects("Local Management Communications")
+    produces("Status of Local Operations")
+    produces("Satisfied Customer")
+    requires("Manchester")
+    requires("Uniforms")
+    requires("New Facility")
+    requires("Original Facility")
+  end
+
+end
