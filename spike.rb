@@ -607,9 +607,27 @@ XML
 
   class Side
 
+    attr_reader :margin
+
     def initialize(process, direction)
       @process = process
       @direction = direction
+      @margin = 0
+    end
+
+    def layout(lines)
+      grouped_lines = lines.select { |line| line.clear?(self) }
+        .sort_by { |line| line.precedence(self)}
+        .group_by(&:group)
+        .values
+
+      grouped_lines.each do |line_group|
+        line_group.each_with_index { |line, index| line.clear(self, 20 + index * 20) }
+      end
+
+      line_count = grouped_lines.map(&:count).max || 0
+
+      @margin = 20 + line_count * 20
     end
 
   end
@@ -698,6 +716,11 @@ XML
 
     def requires?(mechanism)
       @mechanisms.include?(mechanism)
+    end
+
+    def layout(lines)
+      [top_side, bottom_side, left_side, right_side].each { |side| side.layout(lines) }
+      translate(0, top_side.margin)
     end
 
   end
@@ -830,27 +853,9 @@ XML
 
     def layout
       @processes.inject(@top_left) do |point, process|
-
-        top_margin, bottom_margin, left_margin, right_margin =
-          [process.top_side, process.bottom_side, process.left_side, process.right_side]
-          .map do |side|
-            grouped_lines = @lines.select { |line| line.clear?(side) }
-              .sort_by { |line| line.precedence(side)}
-              .group_by(&:group)
-              .values
-
-            grouped_lines.each do |line_group|
-              line_group.each_with_index { |line, index| line.clear(side, 20 + index * 20) }
-            end
-
-            line_count = grouped_lines.map(&:count).max || 0
-
-            20 + line_count * 20
-          end
-
-        process.move_to(point.translate(0, top_margin))
-
-        Point.new(process.x2 + right_margin, process.y2 + bottom_margin)
+        process.move_to(point)
+        process.layout(@lines)
+        Point.new(process.x2 + process.right_side.margin, process.y2 + process.bottom_side.margin)
       end
 
       @lines.each { |line| line.avoid(@lines.delete(line)) }
