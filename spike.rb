@@ -248,7 +248,7 @@ module IDEF0
     end
 
     def group(side)
-      1
+      nil
     end
 
     def precedence(side)
@@ -287,10 +287,20 @@ module IDEF0
       [@source.right_side]
     end
 
+    def group(side)
+      case side
+      when @source.right_side
+        3
+      when @target.left_side
+        1
+      end
+    end
+
     def precedence(side)
       case side
       when @source.right_side
-        [2, -@target.sequence, 2, -target_anchor.sequence]
+        # [2, -@target.sequence, 2, -target_anchor.sequence]
+        [-@target.sequence, 2, -target_anchor.sequence]
       end
     end
 
@@ -343,15 +353,22 @@ XML
     end
 
     def group(side)
-      2
+      case side
+      when @source.right_side
+        1
+      when @target.top_side
+        3
+      end
     end
 
     def precedence(side)
       case side
-      when @target.top_side
-        [1, @source.sequence, -target_anchor.sequence]
       when @source.right_side
-        [1, -@target.sequence, source_anchor.sequence]
+        # [1, -@target.sequence, source_anchor.sequence]
+        [-@target.sequence, source_anchor.sequence]
+      when @target.top_side
+        # [1, @source.sequence, -target_anchor.sequence]
+        [@source.sequence, -target_anchor.sequence]
       end
     end
 
@@ -399,6 +416,13 @@ XML
       LeftAlignedLabel.new(@name, Point.new(source.x1+5, y1-5))
     end
 
+    def group(side)
+      case
+      when @target.left_side
+        2
+      end
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
@@ -421,6 +445,13 @@ XML
 
     def label
       RightAlignedLabel.new(@name, Point.new(target.x2-5, y2-5))
+    end
+
+    def group(side)
+      case
+      when @source.right_side
+        2
+      end
     end
 
     def to_svg
@@ -466,6 +497,13 @@ XML
       CentredLabel.new(@name, Point.new(x1, y1+20-5))
     end
 
+    def group(side)
+      case
+      when @target.top_side
+        2
+      end
+    end
+
     def to_svg
       <<-XML
 <line x1='#{x1}' y1='#{y1+20}' x2='#{x2}' y2='#{y2}' stroke='black' />
@@ -501,6 +539,13 @@ XML
 
     def label
       CentredLabel.new(@name, Point.new(x1, y1-5))
+    end
+
+    def group(side)
+      case
+      when @target.bottom_side
+        2
+      end
     end
 
     def avoid(lines)
@@ -549,12 +594,23 @@ XML
       [@source.right_side, @target.bottom_side]
     end
 
+    def group(side)
+      case side
+      when @source.right_side
+        3
+      when @target.bottom_side
+        1
+      end
+    end
+
     def precedence(side)
       case side
-      when @target.bottom_side
-        [1, -@source.sequence, target_anchor.sequence]
       when @source.right_side
-        [2, -@target.sequence, 1, -target_anchor.sequence]
+        # [2, -@target.sequence, 1, -target_anchor.sequence]
+        [-@target.sequence, 1, -target_anchor.sequence]
+      when @target.bottom_side
+        # [1, -@source.sequence, target_anchor.sequence]
+        [-@source.sequence, target_anchor.sequence]
       end
     end
 
@@ -582,12 +638,23 @@ XML
       [@source.right_side, @source.bottom_side]
     end
 
+    def group(side)
+      case side
+      when @source.right_side
+        3
+      when @target.bottom_side
+        3
+      when @source.bottom_side
+        1
+      end
+    end
+
     def precedence(side)
       case side
       when @source.bottom_side
-        [2, -@target.sequence, -target_anchor.sequence]
+        [-@target.sequence, -target_anchor.sequence]
       when @source.right_side
-        [1, -@target.sequence, -target_anchor.sequence]
+        [-@target.sequence, -target_anchor.sequence]
       end
     end
 
@@ -824,7 +891,7 @@ XML
     end
 
     def order_processes
-      @processes = @processes.sort_by(&:precedence)
+      # @processes = @processes.sort_by(&:precedence)
       @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
