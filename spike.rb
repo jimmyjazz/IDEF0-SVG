@@ -727,11 +727,18 @@ XML
 
   class ChildProcessBox < ProcessBox
 
-    attr_reader :sequence
+    attr_accessor :sequence
 
-    def initialize(name, sequence)
+    def initialize(name)
       super(name)
-      @sequence = sequence
+    end
+
+    def number_of_outgoings
+      @outputs.count
+    end
+
+    def number_of_incomings
+      @inputs.count + @guidances.count + @mechanisms.count
     end
 
     def width
@@ -784,6 +791,7 @@ XML
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
+      diagram.order
       diagram.connect
       diagram.layout
     end
@@ -806,7 +814,7 @@ XML
     end
 
     def process(name, &block)
-      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name, @processes.count)
+      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
       @processes << process
       process.instance_eval(&block) if block_given?
     end
@@ -817,6 +825,10 @@ XML
 
     def right_edge
       (@processes + @lines).map(&:right_edge).max || 0
+    end
+
+    def order
+      @processes = @processes.sort_by { |process| [-process.number_of_outgoings, process.number_of_incomings] }
     end
 
     def connect
@@ -852,6 +864,8 @@ XML
     end
 
     def layout
+      @processes.each_with_index { |process, sequence| process.sequence = sequence }
+
       @processes.inject(@top_left) do |point, process|
         process.move_to(point)
         process.layout(@lines)
