@@ -733,12 +733,8 @@ XML
       super(name)
     end
 
-    def number_of_outgoings
-      @outputs.count
-    end
-
-    def number_of_incomings
-      @inputs.count + @guidances.count + @mechanisms.count
+    def precedence
+      [-@outputs.count, @inputs.count + @guidances.count + @mechanisms.count]
     end
 
     def width
@@ -828,7 +824,8 @@ XML
     end
 
     def order_processes
-      @processes = @processes.sort_by { |process| [-process.number_of_outgoings, process.number_of_incomings] }
+      @processes = @processes.sort_by(&:precedence)
+      @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
     def connect
@@ -864,8 +861,6 @@ XML
     end
 
     def layout
-      @processes.each_with_index { |process, sequence| process.sequence = sequence }
-
       @processes.inject(@top_left) do |point, process|
         process.move_to(point)
         process.layout(@lines)
