@@ -791,7 +791,7 @@ XML
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.order
+      diagram.order_processes
       diagram.connect
       diagram.layout
     end
@@ -827,7 +827,7 @@ XML
       (@processes + @lines).map(&:right_edge).max || 0
     end
 
-    def order
+    def order_processes
       @processes = @processes.sort_by { |process| [-process.number_of_outgoings, process.number_of_incomings] }
     end
 
