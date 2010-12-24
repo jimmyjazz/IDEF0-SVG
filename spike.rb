@@ -239,16 +239,16 @@ module IDEF0
       [y1, y2].max
     end
 
-    def group
-      1
-    end
-
     def sides_to_clear
       []
     end
 
     def clear?(side)
       sides_to_clear.include?(side)
+    end
+
+    def group(side)
+      1
     end
 
     def precedence(side)
@@ -330,10 +330,6 @@ XML
 
   class BackwardGuidanceLine < InternalGuidanceLine
 
-    def group
-      2
-    end
-
     def top_edge
       y_horizontal
     end
@@ -344,6 +340,10 @@ XML
 
     def sides_to_clear
       [@target.top_side, @source.right_side]
+    end
+
+    def group(side)
+      2
     end
 
     def precedence(side)
@@ -618,7 +618,7 @@ XML
     def layout(lines)
       grouped_lines = lines.select { |line| line.clear?(self) }
         .sort_by { |line| line.precedence(self)}
-        .group_by(&:group)
+        .group_by { |line| line.group(self)}
         .values
 
       grouped_lines.each do |line_group|
