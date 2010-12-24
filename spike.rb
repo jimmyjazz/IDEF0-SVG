@@ -616,16 +616,16 @@ XML
     end
 
     def layout(lines)
-      grouped_lines = lines.select { |line| line.clear?(self) }
-        .sort_by { |line| line.precedence(self)}
+      groups = lines.select { |line| line.clear?(self) }
         .group_by { |line| line.group(self)}
         .values
 
-      grouped_lines.each do |line_group|
-        line_group.each_with_index { |line, index| line.clear(self, 20 + index * 20) }
+      groups.each do |lines|
+        lines.sort_by { |line| line.precedence(self) }
+          .each_with_index { |line, index| line.clear(self, 20 + index * 20) }
       end
 
-      line_count = grouped_lines.map(&:count).max || 0
+      line_count = groups.map(&:count).max || 0
 
       @margin = 20 + line_count * 20
     end
