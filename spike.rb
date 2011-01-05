@@ -299,8 +299,7 @@ module IDEF0
     def precedence(side)
       case side
       when @source.right_side
-        # [2, -@target.sequence, 2, -target_anchor.sequence]
-        [-@target.sequence, 2, -target_anchor.sequence]
+        [2, -@target.sequence, 2, -target_anchor.sequence]
       end
     end
 
@@ -364,11 +363,9 @@ XML
     def precedence(side)
       case side
       when @source.right_side
-        # [1, -@target.sequence, source_anchor.sequence]
-        [-@target.sequence, source_anchor.sequence]
+        [1, -@target.sequence, source_anchor.sequence]
       when @target.top_side
-        # [1, @source.sequence, -target_anchor.sequence]
-        [@source.sequence, -target_anchor.sequence]
+        [1, @source.sequence, -target_anchor.sequence]
       end
     end
 
@@ -606,11 +603,9 @@ XML
     def precedence(side)
       case side
       when @source.right_side
-        # [2, -@target.sequence, 1, -target_anchor.sequence]
-        [-@target.sequence, 1, -target_anchor.sequence]
+        [2, -@target.sequence, 1, -target_anchor.sequence]
       when @target.bottom_side
-        # [1, -@source.sequence, target_anchor.sequence]
-        [-@source.sequence, target_anchor.sequence]
+        [-@source.sequence, 1, target_anchor.sequence]
       end
     end
 
@@ -651,10 +646,10 @@ XML
 
     def precedence(side)
       case side
-      when @source.bottom_side
-        [-@target.sequence, -target_anchor.sequence]
       when @source.right_side
         [-@target.sequence, -target_anchor.sequence]
+      when @source.bottom_side
+        [-@target.sequence, 2, -target_anchor.sequence]
       end
     end
 
