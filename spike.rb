@@ -97,7 +97,8 @@ module IDEF0
 
   class Anchor
 
-    attr_reader :name, :sequence
+    attr_reader :name
+    attr_accessor :sequence
 
     def initialize(side, name)
       @side = side
@@ -116,6 +117,10 @@ module IDEF0
 
     def y
       (@side.y1 + @side.y2) / 2
+    end
+
+    def precedence
+      @lines.map { |line| [line.group(@side), line.precedence(@side), line.name] }.min
     end
 
   end
@@ -195,6 +200,7 @@ module IDEF0
   class Line
 
     attr_reader :source, :target, :name
+    attr_reader :source_anchor, :target_anchor
 
     def initialize(source, target, name)
       @source = source
@@ -208,10 +214,6 @@ module IDEF0
     end
 
     def avoid(lines)
-    end
-
-    def source_anchor
-      source.right_side.anchor_for(self)
     end
 
     def x1
@@ -259,11 +261,11 @@ module IDEF0
     end
 
     def group(side)
-      nil
+      -1
     end
 
     def precedence(side)
-      nil
+      []
     end
 
     def clear(side, distance)
@@ -290,8 +292,10 @@ module IDEF0
 
   class ForwardInputLine < Line
 
-    def target_anchor
-      target.left_side.anchor_for(self)
+    def initialize(*args)
+      super
+      @source_anchor = source.right_side.anchor_for(self)
+      @target_anchor = target.left_side.anchor_for(self)
     end
 
     def sides_to_clear
@@ -330,8 +334,10 @@ XML
 
   class InternalGuidanceLine < Line
 
-    def target_anchor
-      target.top_side.anchor_for(self)
+    def initialize(*args)
+      super
+      @source_anchor = source.right_side.anchor_for(self)
+      @target_anchor = target.top_side.anchor_for(self)
     end
 
   end
@@ -404,8 +410,9 @@ XML
 
   class ExternalInputLine < Line
 
-    def target_anchor
-      target.left_side.anchor_for(self)
+    def initialize(*args)
+      super
+      @target_anchor = target.left_side.anchor_for(self)
     end
 
     def x1
@@ -443,6 +450,11 @@ XML
 
   class ExternalOutputLine < Line
 
+    def initialize(*args)
+      super
+      @source_anchor = source.right_side.anchor_for(self)
+    end
+
     def x2
       [x1 + minimum_length, target.x2].max
     end
@@ -477,10 +489,7 @@ XML
     def initialize(*args)
       super
       clear(@target.top_side, 40)
-    end
-
-    def target_anchor
-      target.top_side.anchor_for(self)
+      @target_anchor = target.top_side.anchor_for(self)
     end
 
     def avoid(lines)
@@ -527,10 +536,7 @@ XML
     def initialize(*args)
       super
       clear(@target.bottom_side, 40)
-    end
-
-    def target_anchor
-      target.bottom_side.anchor_for(self)
+      @target_anchor = target.bottom_side.anchor_for(self)
     end
 
     def x1
@@ -574,8 +580,10 @@ XML
 
   class InternalMechanismLine < Line
 
-    def target_anchor
-      target.bottom_side.anchor_for(self)
+    def initialize(*args)
+      super
+      @source_anchor = source.right_side.anchor_for(self)
+      @target_anchor = target.bottom_side.anchor_for(self)
     end
 
     def x_vertical
@@ -696,7 +704,8 @@ XML
     end
 
     def sort_anchors
-
+      @anchors = @anchors.sort_by(&:precedence)
+      @anchors.each_with_index { |anchor, sequence| anchor.sequence = sequence }
     end
 
     def x1
