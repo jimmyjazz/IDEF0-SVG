@@ -677,6 +677,10 @@ XML
       @margin = 0
     end
 
+    def sort_anchors
+
+    end
+
     def layout(lines)
       groups = lines.select { |line| line.clear?(self) }
         .group_by { |line| line.group(self)}
@@ -780,8 +784,16 @@ XML
       @mechanisms.include?(mechanism)
     end
 
+    def sides
+      [top_side, bottom_side, left_side, right_side]
+    end
+
+    def sort_anchors
+      sides.each(&:sort_anchors)
+    end
+
     def layout(lines)
-      [top_side, bottom_side, left_side, right_side].each { |side| side.layout(lines) }
+      sides.each { |side| side.layout(lines) }
       translate(0, top_side.margin)
     end
 
@@ -924,7 +936,7 @@ XML
     end
 
     def sort_anchors
-
+      @processes.each(&:sort_anchors)
     end
 
     def layout
