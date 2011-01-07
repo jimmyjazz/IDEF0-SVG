@@ -10,57 +10,57 @@
 
   process "Oversee Business Operations" do
     receives "Hungry Customer"
-    produces "Communications to Local Managers"
     produces "Approvals and Commentary"
-    respects "Business Plan"
-    respects "Business Plan 2"
+    produces "Communications to Local Managers"
     respects "Communications with Top Management"
+    respects "Business Plan 2"
     respects "Expansion Plans and New Ideas"
+    respects "Business Plan"
   end
 
   process "Expand The Business" do
-    respects "Approvals and Commentary"
     respects "Suggestions for Expansion"
-    produces "Expansion Plans and New Ideas"
+    respects "Approvals and Commentary"
     produces "Transport"
     produces "New Facility"
+    produces "Expansion Plans and New Ideas"
   end
 
   process "Manage Local Restaurant" do
-    respects "Communications to Local Managers"
-    respects "Short Term Goals"
     respects "Status of Local Operations"
+    respects "Communications to Local Managers"
     respects "Prices and Invoices"
-    produces "Suggestions for Expansion"
-    produces "Communications with Top Management"
+    respects "Short Term Goals"
     produces "Local Management Communications"
+    produces "Communications with Top Management"
     produces "Orders and Payments"
+    produces "Suggestions for Expansion"
     produces "Finance System"
-    requires "Uniforms"
     requires "Stationary"
+    requires "Uniforms"
   end
 
   process "Provide Supplies" do
-    produces "Prices and Invoices"
     produces "Ingredients"
+    produces "Stationary"
     produces "Manchester"
     produces "Uniforms"
-    produces "Stationary"
-    respects "Orders and Payments"
+    produces "Prices and Invoices"
     respects "Prices of Food and Supplies"
-    requires "Finance System"
+    respects "Orders and Payments"
     requires "Transport"
+    requires "Finance System"
   end
 
   process "Serve Customers" do
-    receives "Ingredients"
-    receives "Hungry Customer"
     respects "Local Management Communications"
-    produces "Status of Local Operations"
+    receives "Hungry Customer"
+    receives "Ingredients"
     produces "Satisfied Customer"
-    requires "Manchester"
-    requires "Uniforms"
+    produces "Status of Local Operations"
     requires "New Facility"
+    requires "Uniforms"
+    requires "Manchester"
     requires "Original Facility"
   end
 
