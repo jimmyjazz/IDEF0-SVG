@@ -849,8 +849,9 @@ XML
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.order_processes
-      diagram.connect
+      diagram.sort_boxes
+      diagram.create_lines
+      diagram.sort_anchors
       diagram.layout
     end
   end
@@ -885,12 +886,12 @@ XML
       (@processes + @lines).map(&:right_edge).max || 0
     end
 
-    def order_processes
+    def sort_boxes
       @processes = @processes.sort_by(&:precedence)
       @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
-    def connect
+    def create_lines
       @lines = ArraySet.new
       @processes.each do |process|
         process.inputs.each do |input|
@@ -920,6 +921,10 @@ XML
           end
         end
       end
+    end
+
+    def sort_anchors
+
     end
 
     def layout
