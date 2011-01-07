@@ -791,9 +791,10 @@ XML
     def initialize(name)
       @name = name
       @top_left = Point::ORIGIN
-      [:top, :bottom, :left, :right].each do |direction|
-        instance_variable_set("@#{direction}_side", Side.new(self))
-      end
+      @top_side = TopSide.new(self)
+      @bottom_side = BottomSide.new(self)
+      @left_side = LeftSide.new(self)
+      @right_side = RightSide.new(self)
       @inputs = ArraySet.new
       @outputs = ArraySet.new
       @guidances = ArraySet.new
