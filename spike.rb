@@ -391,6 +391,8 @@ XML
       case side
       when @target.top_side
         [-@source.sequence]
+      when @source.right_side
+        [-@target.sequence]
       else
         super
       end
@@ -1072,7 +1074,7 @@ XML
     end
 
     def sort_boxes
-      @processes = @processes.sort_by(&:precedence)
+      # @processes = @processes.sort_by(&:precedence)
       @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
