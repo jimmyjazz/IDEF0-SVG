@@ -886,7 +886,7 @@ XML
     end
 
     def order_processes
-      # @processes = @processes.sort_by(&:precedence)
+      @processes = @processes.sort_by(&:precedence)
       @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
