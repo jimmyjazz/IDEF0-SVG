@@ -18,6 +18,14 @@ class Object
 
 end
 
+class Array
+
+  def -@
+    map(&:-@)
+  end
+
+end
+
 class Numeric
 
   def positive?
@@ -338,6 +346,10 @@ module IDEF0
       end
     end
 
+    def anchor_precedence(side)
+      -super
+    end
+
     def x_vertical #the x position of this line's single vertical segment
       x1 + clearance_from(@source.right_side)
     end
@@ -368,6 +380,17 @@ XML
       case side
       when @source.right_side
         2
+      when @target.top_side
+        1
+      else
+        super
+      end
+    end
+
+    def anchor_precedence(side)
+      case side
+      when @target.top_side
+        [-@source.sequence]
       else
         super
       end
@@ -414,6 +437,15 @@ XML
         [1, -@target.sequence, source_anchor.sequence]
       when @target.top_side
         [1, @source.sequence, -target_anchor.sequence]
+      else
+        super
+      end
+    end
+
+    def anchor_precedence(side)
+      case side
+      when @target.top_side
+        -super
       else
         super
       end
@@ -665,6 +697,15 @@ XML
       end
     end
 
+    def anchor_precedence(side)
+      case side
+      when @source.right_side
+        -super
+      else
+        super
+      end
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical+5} #{y_horizontal} #{x_vertical+10} #{y_horizontal}  L #{x2-10} #{y_horizontal} C #{x2-5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
@@ -708,6 +749,15 @@ XML
         [-@target.sequence, -target_anchor.sequence]
       when @source.bottom_side
         [-@target.sequence, 2, -target_anchor.sequence]
+      else
+        super
+      end
+    end
+
+    def anchor_precedence(side)
+      case side
+      when @target.bottom_side
+        [-@source.sequence]
       else
         super
       end
