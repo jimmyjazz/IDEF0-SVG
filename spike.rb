@@ -111,12 +111,16 @@ module IDEF0
       @lines << line
     end
 
+    def position
+      @side.anchor_point(@sequence)
+    end
+
     def x
-      (@side.x1 + @side.x2) / 2
+      position.x
     end
 
     def y
-      (@side.y1 + @side.y2) / 2
+      position.y
     end
 
     def precedence
@@ -724,6 +728,14 @@ XML
       @process.y2
     end
 
+    def width
+      x2 - x1
+    end
+
+    def height
+      y2 - y1
+    end
+
     def layout(lines)
       groups = lines.select { |line| line.clear?(self) }
         .group_by { |line| line.group(self)}
@@ -741,11 +753,35 @@ XML
 
   end
 
-  class TopSide < Side
+  class HorizontalSide < Side
 
-    def initialize(process)
-      super
+    def y
+      y1
     end
+
+    def anchor_point(n)
+      baseline = x1+width/2 - 20*(@anchors.count - 1)/2
+      x = baseline + n * 20
+      Point.new(x, y)
+    end
+
+  end
+
+  class VerticalSide < Side
+
+    def x
+      x1
+    end
+
+    def anchor_point(n)
+      baseline = y1+height/2 - 20*(@anchors.count - 1)/2
+      y = baseline + n * 20
+      Point.new(x, y)
+    end
+
+  end
+
+  class TopSide < HorizontalSide
 
     def y2
       @process.y1
@@ -753,11 +789,7 @@ XML
 
   end
 
-  class BottomSide < Side
-
-    def initialize(process)
-      super
-    end
+  class BottomSide < HorizontalSide
 
     def y1
       @process.y2
@@ -765,11 +797,7 @@ XML
 
   end
 
-  class LeftSide < Side
-
-    def initialize(process)
-      super
-    end
+  class LeftSide < VerticalSide
 
     def x2
       @process.x1
@@ -777,11 +805,7 @@ XML
 
   end
 
-  class RightSide < Side
-
-    def initialize(process)
-      super
-    end
+  class RightSide < VerticalSide
 
     def x1
       @process.x2
