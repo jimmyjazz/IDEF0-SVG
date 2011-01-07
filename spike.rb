@@ -10,6 +10,14 @@
 require 'forwardable'
 require 'set'
 
+class Object
+
+  def inspect
+    "#{self.class.name}:#{object_id}"
+  end
+
+end
+
 class Numeric
 
   def positive?
@@ -124,7 +132,7 @@ module IDEF0
     end
 
     def precedence
-      @lines.map { |line| [line.group(@side), line.precedence(@side).map(&:-@), line.name] }.min
+      @lines.map { |line| [line.group(@side), line.anchor_precedence(@side), line.name] }.min
     end
 
   end
@@ -268,8 +276,12 @@ module IDEF0
       -1
     end
 
-    def precedence(side)
+    def clearance_precedence(side)
       []
+    end
+
+    def anchor_precedence(side)
+      clearance_precedence(side)
     end
 
     def clear(side, distance)
@@ -317,7 +329,7 @@ module IDEF0
       end
     end
 
-    def precedence(side)
+    def clearance_precedence(side)
       case side
       when @source.right_side
         [2, -@target.sequence, 2, -target_anchor.sequence]
@@ -396,7 +408,7 @@ XML
       end
     end
 
-    def precedence(side)
+    def clearance_precedence(side)
       case side
       when @source.right_side
         [1, -@target.sequence, source_anchor.sequence]
@@ -642,7 +654,7 @@ XML
       end
     end
 
-    def precedence(side)
+    def clearance_precedence(side)
       case side
       when @source.right_side
         [2, -@target.sequence, 1, -target_anchor.sequence]
@@ -690,7 +702,7 @@ XML
       end
     end
 
-    def precedence(side)
+    def clearance_precedence(side)
       case side
       when @source.right_side
         [-@target.sequence, -target_anchor.sequence]
@@ -767,7 +779,7 @@ XML
         .values
 
       groups.each do |lines|
-        lines.sort_by { |line| line.precedence(self) }
+        lines.sort_by { |line| line.clearance_precedence(self) }
           .each_with_index { |line, index| line.clear(self, 20 + index * 20) }
       end
 
