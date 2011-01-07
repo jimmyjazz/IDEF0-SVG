@@ -124,7 +124,7 @@ module IDEF0
     end
 
     def precedence
-      @lines.map { |line| [line.group(@side), line.precedence(@side), line.name] }.min
+      @lines.map { |line| [line.group(@side), line.precedence(@side).map(&:-@), line.name] }.min
     end
 
   end
@@ -312,6 +312,8 @@ module IDEF0
         3
       when @target.left_side
         1
+      else
+        super
       end
     end
 
@@ -319,6 +321,8 @@ module IDEF0
       case side
       when @source.right_side
         [2, -@target.sequence, 2, -target_anchor.sequence]
+      else
+        super
       end
     end
 
@@ -387,6 +391,8 @@ XML
         1
       when @target.top_side
         3
+      else
+        super
       end
     end
 
@@ -396,6 +402,8 @@ XML
         [1, -@target.sequence, source_anchor.sequence]
       when @target.top_side
         [1, @source.sequence, -target_anchor.sequence]
+      else
+        super
       end
     end
 
@@ -629,6 +637,8 @@ XML
         3
       when @target.bottom_side
         1
+      else
+        super
       end
     end
 
@@ -638,6 +648,8 @@ XML
         [2, -@target.sequence, 1, -target_anchor.sequence]
       when @target.bottom_side
         [-@source.sequence, 1, target_anchor.sequence]
+      else
+        super
       end
     end
 
@@ -673,6 +685,8 @@ XML
         3
       when @source.bottom_side
         1
+      else
+        super
       end
     end
 
@@ -682,6 +696,8 @@ XML
         [-@target.sequence, -target_anchor.sequence]
       when @source.bottom_side
         [-@target.sequence, 2, -target_anchor.sequence]
+      else
+        super
       end
     end
 
