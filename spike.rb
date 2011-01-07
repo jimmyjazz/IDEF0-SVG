@@ -348,6 +348,15 @@ XML
 
   class ForwardGuidanceLine < InternalGuidanceLine
 
+    def group(side)
+      case side
+      when @source.right_side
+        2
+      else
+        super
+      end
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x2-10} #{y1} C #{x2-5} #{y1} #{x2} #{y1+5} #{x2} #{y1+10} L #{x2} #{y2}' />
