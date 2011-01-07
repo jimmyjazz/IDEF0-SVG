@@ -99,7 +99,8 @@ module IDEF0
 
     attr_reader :name, :sequence
 
-    def initialize(name)
+    def initialize(side, name)
+      @side = side
       @name = name
       @sequence = 1
       @lines = Set.new
@@ -110,11 +111,11 @@ module IDEF0
     end
 
     def x
-      0
+      (@side.x1 + @side.x2) / 2
     end
 
     def y
-      0
+      (@side.y1 + @side.y2) / 2
     end
 
   end
@@ -681,15 +682,14 @@ XML
 
     attr_reader :margin
 
-    def initialize(process, direction)
+    def initialize(process)
       @process = process
-      @direction = direction
       @anchors = ArraySet.new
       @margin = 0
     end
 
     def anchor_for(line)
-      anchor = @anchors.find { |a| a.name == line.name } || Anchor.new(line.name)
+      anchor = @anchors.find { |a| a.name == line.name } || Anchor.new(self, line.name)
       @anchors << anchor
       anchor.attach(line)
       anchor
@@ -697,6 +697,22 @@ XML
 
     def sort_anchors
 
+    end
+
+    def x1
+      @process.x1
+    end
+
+    def x2
+      @process.x2
+    end
+
+    def y1
+      @process.y1
+    end
+
+    def y2
+      @process.y2
     end
 
     def layout(lines)
@@ -716,6 +732,54 @@ XML
 
   end
 
+  class TopSide < Side
+
+    def initialize(process)
+      super
+    end
+
+    def y2
+      @process.y1
+    end
+
+  end
+
+  class BottomSide < Side
+
+    def initialize(process)
+      super
+    end
+
+    def y1
+      @process.y2
+    end
+
+  end
+
+  class LeftSide < Side
+
+    def initialize(process)
+      super
+    end
+
+    def x2
+      @process.x1
+    end
+
+  end
+
+  class RightSide < Side
+
+    def initialize(process)
+      super
+    end
+
+    def x1
+      @process.x2
+    end
+
+  end
+
   class ProcessBox
 
     extend Forwardable
@@ -728,7 +792,7 @@ XML
       @name = name
       @top_left = Point::ORIGIN
       [:top, :bottom, :left, :right].each do |direction|
-        instance_variable_set("@#{direction}_side", Side.new(self,direction))
+        instance_variable_set("@#{direction}_side", Side.new(self))
       end
       @inputs = ArraySet.new
       @outputs = ArraySet.new
