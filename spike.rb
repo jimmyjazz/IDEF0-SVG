@@ -8,6 +8,7 @@
 # TODO: Resize boxes to accommodate anchor points
 
 require 'forwardable'
+require 'set'
 
 class Numeric
 
@@ -96,16 +97,25 @@ module IDEF0
 
   class Anchor
 
-    extend Forwardable
+    attr_reader :name, :sequence
 
-    attr_reader :sequence
-
-    def initialize(point, sequence)
-      @point = point
-      @sequence = sequence
+    def initialize(name)
+      @name = name
+      @sequence = 1
+      @lines = Set.new
     end
 
-    def_delegators :@point, :x, :y
+    def attach(line)
+      @lines << line
+    end
+
+    def x
+      0
+    end
+
+    def y
+      0
+    end
 
   end
 
@@ -200,7 +210,7 @@ module IDEF0
     end
 
     def source_anchor
-      source.output_anchor_for(name)
+      source.right_side.anchor_for(self)
     end
 
     def x1
@@ -280,7 +290,7 @@ module IDEF0
   class ForwardInputLine < Line
 
     def target_anchor
-      target.input_anchor_for(name)
+      target.left_side.anchor_for(self)
     end
 
     def sides_to_clear
@@ -320,7 +330,7 @@ XML
   class InternalGuidanceLine < Line
 
     def target_anchor
-      target.guidance_anchor_for(name)
+      target.top_side.anchor_for(self)
     end
 
   end
@@ -394,7 +404,7 @@ XML
   class ExternalInputLine < Line
 
     def target_anchor
-      target.input_anchor_for(name)
+      target.left_side.anchor_for(self)
     end
 
     def x1
@@ -469,7 +479,7 @@ XML
     end
 
     def target_anchor
-      target.guidance_anchor_for(name)
+      target.top_side.anchor_for(self)
     end
 
     def avoid(lines)
@@ -519,7 +529,7 @@ XML
     end
 
     def target_anchor
-      target.mechanism_anchor_for(name)
+      target.bottom_side.anchor_for(self)
     end
 
     def x1
@@ -564,7 +574,7 @@ XML
   class InternalMechanismLine < Line
 
     def target_anchor
-      target.mechanism_anchor_for(name)
+      target.bottom_side.anchor_for(self)
     end
 
     def x_vertical
@@ -674,7 +684,15 @@ XML
     def initialize(process, direction)
       @process = process
       @direction = direction
+      @anchors = ArraySet.new
       @margin = 0
+    end
+
+    def anchor_for(line)
+      anchor = @anchors.find { |a| a.name == line.name } || Anchor.new(line.name)
+      @anchors << anchor
+      anchor.attach(line)
+      anchor
     end
 
     def sort_anchors
@@ -817,36 +835,6 @@ XML
 
     def height
       [60, [@inputs.count, @outputs.count].max*20+20].max
-    end
-
-    def vertical_anchor(set, x, name)
-      baseline = y1+height/2 - 20*(set.count - 1)/2
-      index = set.index(name)
-      y = baseline + index * 20
-      Anchor.new(Point.new(x, y), index)
-    end
-
-    def horizontal_anchor(set, name, y)
-      baseline = x1+width/2 - 20*(set.count - 1)/2
-      index = set.index(name)
-      x = baseline + index * 20
-      Anchor.new(Point.new(x, y), index)
-    end
-
-    def input_anchor_for(name)
-      vertical_anchor(@inputs, x1, name)
-    end
-
-    def output_anchor_for(name)
-      vertical_anchor(@outputs, x2, name)
-    end
-
-    def guidance_anchor_for(name)
-      horizontal_anchor(@guidances, name, y1)
-    end
-
-    def mechanism_anchor_for(name)
-      horizontal_anchor(@mechanisms, name, y2)
     end
 
     def to_svg
