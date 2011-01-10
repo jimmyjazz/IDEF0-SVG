@@ -6,6 +6,7 @@
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: unbundling
 # TODO: Resize boxes to accommodate anchor points
+# TODO: Remove alias #process for Diagram#box
 
 require 'forwardable'
 require 'set'
@@ -33,7 +34,6 @@ class Numeric
   end
 
 end
-
 
 module IDEF0
 
@@ -800,8 +800,8 @@ XML
 
     attr_reader :margin
 
-    def initialize(process)
-      @process = process
+    def initialize(box)
+      @box = box
       @anchors = ArraySet.new
       @margin = 0
     end
@@ -819,19 +819,19 @@ XML
     end
 
     def x1
-      @process.x1
+      @box.x1
     end
 
     def x2
-      @process.x2
+      @box.x2
     end
 
     def y1
-      @process.y1
+      @box.y1
     end
 
     def y2
-      @process.y2
+      @box.y2
     end
 
     def width
@@ -890,7 +890,7 @@ XML
   class TopSide < HorizontalSide
 
     def y2
-      @process.y1
+      @box.y1
     end
 
   end
@@ -898,7 +898,7 @@ XML
   class BottomSide < HorizontalSide
 
     def y1
-      @process.y2
+      @box.y2
     end
 
   end
@@ -906,7 +906,7 @@ XML
   class LeftSide < VerticalSide
 
     def x2
-      @process.x1
+      @box.x1
     end
 
   end
@@ -914,7 +914,7 @@ XML
   class RightSide < VerticalSide
 
     def x1
-      @process.x2
+      @box.x2
     end
 
   end
@@ -1066,7 +1066,7 @@ XML
 
     def initialize(name)
       super
-      @processes = ArraySet.new
+      @boxes = ArraySet.new
       @lines = ArraySet.new
       @width = @height = 0
     end
@@ -1076,66 +1076,67 @@ XML
       @height = height
     end
 
-    def process(name, &block)
-      process = @processes.find { |p| p.name == name } || ProcessBox.new(name)
-      @processes << process
-      process.instance_eval(&block) if block_given?
+    def box(name, &block)
+      box = @boxes.find { |p| p.name == name } || ProcessBox.new(name)
+      @boxes << box
+      box.instance_eval(&block) if block_given?
     end
+    alias_method :process, :box
 
     def bottom_edge
-      (@processes + @lines).map(&:bottom_edge).max || 0
+      (@boxes + @lines).map(&:bottom_edge).max || 0
     end
 
     def right_edge
-      (@processes + @lines).map(&:right_edge).max || 0
+      (@boxes + @lines).map(&:right_edge).max || 0
     end
 
     def sort_boxes
-      @processes = @processes.sort_by(&:precedence)
-      @processes.each_with_index { |process, sequence| process.sequence = sequence }
+      @boxes = @boxes.sort_by(&:precedence)
+      @boxes.each_with_index { |box, sequence| box.sequence = sequence }
     end
 
     def create_lines
       @lines = ArraySet.new
-      @processes.each do |process|
-        process.inputs.each do |input|
-          @lines << ExternalInputLine.new(self, process, input) if receives?(input)
+      @boxes.each do |box|
+        box.inputs.each do |input|
+          @lines << ExternalInputLine.new(self, box, input) if receives?(input)
         end
 
-        process.guidances.each do |guidance|
-          @lines << ExternalGuidanceLine.new(self, process, guidance) if respects?(guidance)
+        box.guidances.each do |guidance|
+          @lines << ExternalGuidanceLine.new(self, box, guidance) if respects?(guidance)
         end
 
-        process.mechanisms.each do |mechanism|
-          @lines << ExternalMechanismLine.new(self, process, mechanism) if requires?(mechanism)
+        box.mechanisms.each do |mechanism|
+          @lines << ExternalMechanismLine.new(self, box, mechanism) if requires?(mechanism)
         end
 
-        process.outputs.each do |output|
-          @lines << ExternalOutputLine.new(process, self, output) if produces?(output)
+        box.outputs.each do |output|
+          @lines << ExternalOutputLine.new(box, self, output) if produces?(output)
 
-          @processes.after(process).each do |target|
-            @lines << ForwardInputLine.new(process, target, output) if target.receives?(output)
-            @lines << ForwardGuidanceLine.new(process, target, output) if target.respects?(output)
-            @lines << ForwardMechanismLine.new(process, target, output) if target.requires?(output)
+          @boxes.after(box).each do |target|
+            @lines << ForwardInputLine.new(box, target, output) if target.receives?(output)
+            @lines << ForwardGuidanceLine.new(box, target, output) if target.respects?(output)
+            @lines << ForwardMechanismLine.new(box, target, output) if target.requires?(output)
           end
 
-          @processes.before(process).each do |target|
-            @lines << BackwardGuidanceLine.new(process, target, output) if target.respects?(output)
-            @lines << BackwardMechanismLine.new(process, target, output) if target.requires?(output)
+          @boxes.before(box).each do |target|
+            @lines << BackwardGuidanceLine.new(box, target, output) if target.respects?(output)
+            @lines << BackwardMechanismLine.new(box, target, output) if target.requires?(output)
           end
         end
       end
     end
 
     def sort_anchors
-      @processes.each(&:sort_anchors)
+      @boxes.each(&:sort_anchors)
     end
 
     def layout
-      @processes.inject(@top_left) do |point, process|
-        process.move_to(point)
-        process.layout(@lines)
-        Point.new(process.x2 + process.right_side.margin, process.y2 + process.bottom_side.margin)
+      @boxes.inject(@top_left) do |point, box|
+        box.move_to(point)
+        box.layout(@lines)
+        Point.new(box.x2 + box.right_side.margin, box.y2 + box.bottom_side.margin)
       end
 
       @lines.each { |line| line.avoid(@lines.delete(line)) }
@@ -1144,7 +1145,7 @@ XML
         set.reject(&:positive?).map(&:abs).max || 0
       end
 
-      @processes.each { |process| process.translate(dx, dy) }
+      @boxes.each { |box| box.translate(dx, dy) }
 
       resize(right_edge, bottom_edge)
     end
@@ -1168,15 +1169,15 @@ XML
     }
   </style>
   <g>
-    #{generate_processes}
+    #{generate_boxes}
     #{generate_lines}
   </g>
 </svg>
 XML
     end
 
-    def generate_processes
-      @processes.map(&:to_svg).join("\n")
+    def generate_boxes
+      @boxes.map(&:to_svg).join("\n")
     end
 
     def generate_lines
