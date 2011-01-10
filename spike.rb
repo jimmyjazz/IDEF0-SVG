@@ -322,8 +322,8 @@ module IDEF0
 
     def initialize(*args)
       super
-      @source_anchor = source.right_side.anchor_for(self)
-      @target_anchor = target.left_side.anchor_for(self)
+      @source_anchor = source.right_side.attach(self)
+      @target_anchor = target.left_side.attach(self)
     end
 
     def sides_to_clear
@@ -377,8 +377,8 @@ XML
 
     def initialize(*args)
       super
-      @source_anchor = source.right_side.anchor_for(self)
-      @target_anchor = target.top_side.anchor_for(self)
+      @source_anchor = source.right_side.attach(self)
+      @target_anchor = target.top_side.attach(self)
     end
 
   end
@@ -488,7 +488,7 @@ XML
 
     def initialize(*args)
       super
-      @target_anchor = target.left_side.anchor_for(self)
+      @target_anchor = target.left_side.attach(self)
     end
 
     def x1
@@ -530,7 +530,7 @@ XML
 
     def initialize(*args)
       super
-      @source_anchor = source.right_side.anchor_for(self)
+      @source_anchor = source.right_side.attach(self)
     end
 
     def x2
@@ -569,7 +569,7 @@ XML
     def initialize(*args)
       super
       clear(@target.top_side, 40)
-      @target_anchor = target.top_side.anchor_for(self)
+      @target_anchor = target.top_side.attach(self)
     end
 
     def avoid(lines)
@@ -618,7 +618,7 @@ XML
     def initialize(*args)
       super
       clear(@target.bottom_side, 40)
-      @target_anchor = target.bottom_side.anchor_for(self)
+      @target_anchor = target.bottom_side.attach(self)
     end
 
     def x1
@@ -666,8 +666,8 @@ XML
 
     def initialize(*args)
       super
-      @source_anchor = source.right_side.anchor_for(self)
-      @target_anchor = target.bottom_side.anchor_for(self)
+      @source_anchor = source.right_side.attach(self)
+      @target_anchor = target.bottom_side.attach(self)
     end
 
     def x_vertical
@@ -806,16 +806,27 @@ XML
       @margin = 0
     end
 
-    def anchor_for(line)
-      anchor = @anchors.find { |a| a.name == line.name } || Anchor.new(self, line.name)
+    def expects(name)
+      anchor = @anchors.find { |a| a.name == name } || Anchor.new(self, name)
       @anchors << anchor
-      anchor.attach(line)
       anchor
+    end
+
+    def expects?(name)
+      @anchors.any? { |a| a.name == name }
+    end
+
+    def attach(line)
+      expects(line.name).tap { |anchor| anchor.attach(line) }
     end
 
     def sort_anchors
       @anchors = @anchors.sort_by(&:precedence)
       @anchors.each_with_index { |anchor, sequence| anchor.sequence = sequence }
+    end
+
+    def anchor_count
+      @anchors.count
     end
 
     def x1
@@ -924,7 +935,6 @@ XML
     extend Forwardable
 
     attr_reader :name
-    attr_reader :inputs, :outputs, :guidances, :mechanisms
     attr_reader :top_side, :bottom_side, :left_side, :right_side
 
     def initialize(name)
@@ -934,10 +944,6 @@ XML
       @bottom_side = BottomSide.new(self)
       @left_side = LeftSide.new(self)
       @right_side = RightSide.new(self)
-      @inputs = ArraySet.new
-      @outputs = ArraySet.new
-      @guidances = ArraySet.new
-      @mechanisms = ArraySet.new
     end
 
     def move_to(top_left)
@@ -972,40 +978,6 @@ XML
       y2
     end
 
-    def receives(input)
-      @inputs << input
-    end
-    def_delegator :self, :receives, :translates
-
-    def receives?(input)
-      @inputs.include?(input)
-    end
-
-    def produces(output)
-      @outputs << output
-    end
-    def_delegator :self, :receives, :into
-
-    def produces?(guidance)
-      @outputs.include?(guidance)
-    end
-
-    def respects(guidance)
-      @guidances << guidance
-    end
-
-    def respects?(guidance)
-      @guidances.include?(guidance)
-    end
-
-    def requires(mechanism)
-      @mechanisms << mechanism
-    end
-
-    def requires?(mechanism)
-      @mechanisms.include?(mechanism)
-    end
-
     def sides
       [top_side, bottom_side, left_side, right_side]
     end
@@ -1019,6 +991,26 @@ XML
       translate(0, top_side.margin)
     end
 
+    # TODO: Wrong level of abstraction
+
+    def receives(name)
+      left_side.expects(name)
+    end
+    def_delegator :self, :receives, :translates
+
+    def produces(name)
+      right_side.expects(name)
+    end
+    def_delegator :self, :receives, :into
+
+    def respects(name)
+      top_side.expects(name)
+    end
+
+    def requires(name)
+      bottom_side.expects(name)
+    end
+
   end
 
   class ProcessBox < Box
@@ -1030,7 +1022,7 @@ XML
     end
 
     def precedence
-      [-@outputs.count, @inputs.count + @guidances.count + @mechanisms.count]
+      [-right_side.anchor_count, [left_side, top_side, bottom_side].map(&:anchor_count).reduce(&:+)]
     end
 
     def width
@@ -1038,7 +1030,7 @@ XML
     end
 
     def height
-      [60, [@inputs.count, @outputs.count].max*20+20].max
+      [60, [left_side.anchor_count, right_side.anchor_count].max*20+20].max
     end
 
     def to_svg
@@ -1097,32 +1089,31 @@ XML
     end
 
     def create_lines
-      @lines = ArraySet.new
       @boxes.each do |box|
-        box.inputs.each do |input|
-          @lines << ExternalInputLine.new(self, box, input) if receives?(input)
+        box.left_side.each do |input|
+          @lines << ExternalInputLine.new(self, box, input) if left_side.expects?(input)
         end
 
-        box.guidances.each do |guidance|
-          @lines << ExternalGuidanceLine.new(self, box, guidance) if respects?(guidance)
+        box.top_side.each do |guidance|
+          @lines << ExternalGuidanceLine.new(self, box, guidance) if top_side.expects?(guidance)
         end
 
-        box.mechanisms.each do |mechanism|
-          @lines << ExternalMechanismLine.new(self, box, mechanism) if requires?(mechanism)
+        box.bottom_side.each do |mechanism|
+          @lines << ExternalMechanismLine.new(self, box, mechanism) if bottom_side.expects?(mechanism)
         end
 
-        box.outputs.each do |output|
-          @lines << ExternalOutputLine.new(box, self, output) if produces?(output)
+        box.right_side.each do |output|
+          @lines << ExternalOutputLine.new(box, self, output) if right_side.expects?(output)
 
           @boxes.after(box).each do |target|
-            @lines << ForwardInputLine.new(box, target, output) if target.receives?(output)
-            @lines << ForwardGuidanceLine.new(box, target, output) if target.respects?(output)
-            @lines << ForwardMechanismLine.new(box, target, output) if target.requires?(output)
+            @lines << ForwardInputLine.new(box, target, output) if target.left_side.expects?(output)
+            @lines << ForwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
+            @lines << ForwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
           end
 
           @boxes.before(box).each do |target|
-            @lines << BackwardGuidanceLine.new(box, target, output) if target.respects?(output)
-            @lines << BackwardMechanismLine.new(box, target, output) if target.requires?(output)
+            @lines << BackwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
+            @lines << BackwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
           end
         end
       end
