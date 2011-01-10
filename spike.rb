@@ -806,6 +806,11 @@ XML
       @margin = 0
     end
 
+    # TODO: This is a fudge to make stuff work
+    def each
+      @anchors.each { |anchor| yield(anchor.name) }
+    end
+
     def expects(name)
       anchor = @anchors.find { |a| a.name == name } || Anchor.new(self, name)
       @anchors << anchor
