@@ -281,7 +281,7 @@ module IDEF0
     end
 
     def clearance_group(side)
-      -1
+      raise "No clearance group defined"
     end
 
     def clearance_precedence(side)
@@ -502,6 +502,8 @@ XML
       case
       when @target.left_side
         2
+      else
+        super
       end
     end
 
@@ -538,6 +540,8 @@ XML
       case
       when @source.right_side
         2
+      else
+        super
       end
     end
 
@@ -585,6 +589,8 @@ XML
       case
       when @target.top_side
         2
+      else
+        super
       end
     end
 
@@ -626,6 +632,8 @@ XML
       case
       when @target.bottom_side
         2
+      else
+        super
       end
     end
 
@@ -1074,7 +1082,7 @@ XML
     end
 
     def sort_boxes
-      # @processes = @processes.sort_by(&:precedence)
+      @processes = @processes.sort_by(&:precedence)
       @processes.each_with_index { |process, sequence| process.sequence = sequence }
     end
 
