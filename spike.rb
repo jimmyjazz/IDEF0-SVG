@@ -13,7 +13,7 @@ require 'set'
 class Object
 
   def inspect
-    "#{self.class.name}:#{object_id}"
+    object_id
   end
 
 end
@@ -280,12 +280,8 @@ module IDEF0
       sides_to_clear.include?(side)
     end
 
-    def clearance_group(side)
-      raise "No clearance group defined"
-    end
-
     def clearance_precedence(side)
-      []
+      raise "#{self.class.name}: No clearance precedence specified for #{side.class.name}"
     end
 
     def anchor_precedence(side)
@@ -310,6 +306,14 @@ module IDEF0
 
     def svg_up_arrow(x,y)
       "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />"
+    end
+
+  end
+
+  class ExternalLine < Line
+
+    def anchor_precedence(side)
+      []
     end
 
   end
@@ -347,7 +351,12 @@ module IDEF0
     end
 
     def anchor_precedence(side)
-      -super
+      case side
+      when @target.left_side
+        [-@source.sequence]
+      else
+        -super
+      end
     end
 
     def x_vertical #the x position of this line's single vertical segment
@@ -475,7 +484,7 @@ XML
 
   end
 
-  class ExternalInputLine < Line
+  class ExternalInputLine < ExternalLine
 
     def initialize(*args)
       super
@@ -517,7 +526,7 @@ XML
 
   end
 
-  class ExternalOutputLine < Line
+  class ExternalOutputLine < ExternalLine
 
     def initialize(*args)
       super
@@ -555,7 +564,7 @@ XML
 
   end
 
-  class ExternalGuidanceLine < Line
+  class ExternalGuidanceLine < ExternalLine
 
     def initialize(*args)
       super
@@ -604,7 +613,7 @@ XML
 
   end
 
-  class ExternalMechanismLine < Line
+  class ExternalMechanismLine < ExternalLine
 
     def initialize(*args)
       super
