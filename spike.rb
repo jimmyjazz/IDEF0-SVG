@@ -18,7 +18,7 @@ class Object
 
 end
 
-class Array
+module Enumerable
 
   def -@
     map(&:-@)
@@ -53,7 +53,7 @@ module IDEF0
     def_delegator :self, :union, :+
 
     def union!(other)
-      other.each {|item| @items << item }
+      other.each { |item| @items << item }
       self
     end
 
@@ -89,7 +89,7 @@ module IDEF0
     end
 
     def partition(&block)
-      @items.partition(&block).map {|items| self.class.new(items) }
+      @items.partition(&block).map { |items| self.class.new(items) }
     end
 
   end
@@ -140,7 +140,7 @@ module IDEF0
     end
 
     def precedence
-      @lines.map { |line| [line.group(@side), line.anchor_precedence(@side), line.name] }.min
+      @lines.map { |line| [line.clearance_group(@side), line.anchor_precedence(@side), line.name] }.min
     end
 
   end
@@ -280,7 +280,7 @@ module IDEF0
       sides_to_clear.include?(side)
     end
 
-    def group(side)
+    def clearance_group(side)
       -1
     end
 
@@ -326,7 +326,7 @@ module IDEF0
       [@source.right_side]
     end
 
-    def group(side)
+    def clearance_group(side)
       case side
       when @source.right_side
         3
@@ -376,7 +376,7 @@ XML
 
   class ForwardGuidanceLine < InternalGuidanceLine
 
-    def group(side)
+    def clearance_group(side)
       case side
       when @source.right_side
         2
@@ -422,7 +422,7 @@ XML
       [@target.top_side, @source.right_side]
     end
 
-    def group(side)
+    def clearance_group(side)
       case side
       when @source.right_side
         1
@@ -498,7 +498,7 @@ XML
       LeftAlignedLabel.new(@name, Point.new(source.x1+5, y1-5))
     end
 
-    def group(side)
+    def clearance_group(side)
       case
       when @target.left_side
         2
@@ -534,7 +534,7 @@ XML
       RightAlignedLabel.new(@name, Point.new(target.x2-5, y2-5))
     end
 
-    def group(side)
+    def clearance_group(side)
       case
       when @source.right_side
         2
@@ -560,7 +560,7 @@ XML
     end
 
     def avoid(lines)
-      while lines.any?{|other| label.overlaps?(other.label)} do
+      while lines.any?{ |other| label.overlaps?(other.label) } do
         clear(@target.top_side, 20+clearance_from(@target.top_side))
       end
     end
@@ -581,7 +581,7 @@ XML
       CentredLabel.new(@name, Point.new(x1, y1+20-5))
     end
 
-    def group(side)
+    def clearance_group(side)
       case
       when @target.top_side
         2
@@ -622,7 +622,7 @@ XML
       CentredLabel.new(@name, Point.new(x1, y1-5))
     end
 
-    def group(side)
+    def clearance_group(side)
       case
       when @target.bottom_side
         2
@@ -630,7 +630,7 @@ XML
     end
 
     def avoid(lines)
-      while lines.any?{|other| label.overlaps?(other.label)} do
+      while lines.any?{ |other| label.overlaps?(other.label) } do
         clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
       end
     end
@@ -677,7 +677,7 @@ XML
       [@source.right_side, @target.bottom_side]
     end
 
-    def group(side)
+    def clearance_group(side)
       case side
       when @source.right_side
         3
@@ -732,7 +732,7 @@ XML
       [@source.right_side, @source.bottom_side]
     end
 
-    def group(side)
+    def clearance_group(side)
       case side
       when @source.right_side
         3
@@ -826,16 +826,16 @@ XML
     end
 
     def layout(lines)
-      groups = lines.select { |line| line.clear?(self) }
-        .group_by { |line| line.group(self)}
+      clearance_groups = lines.select { |line| line.clear?(self) }
+        .group_by { |line| line.clearance_group(self) }
         .values
 
-      groups.each do |lines|
+      clearance_groups.each do |lines|
         lines.sort_by { |line| line.clearance_precedence(self) }
           .each_with_index { |line, index| line.clear(self, 20 + index * 20) }
       end
 
-      line_count = groups.map(&:count).max || 0
+      line_count = clearance_groups.map(&:count).max || 0
 
       @margin = 20 + line_count * 20
     end
