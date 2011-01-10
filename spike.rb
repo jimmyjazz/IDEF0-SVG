@@ -1022,10 +1022,6 @@ XML
 
     attr_accessor :sequence
 
-    def initialize(name)
-      super(name)
-    end
-
     def precedence
       [-right_side.anchor_count, [left_side, top_side, bottom_side].map(&:anchor_count).reduce(&:+)]
     end
