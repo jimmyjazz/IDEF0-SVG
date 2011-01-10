@@ -919,7 +919,7 @@ XML
 
   end
 
-  class ProcessBox
+  class Box
 
     extend Forwardable
 
@@ -1021,7 +1021,7 @@ XML
 
   end
 
-  class ChildProcessBox < ProcessBox
+  class ProcessBox < Box
 
     attr_accessor :sequence
 
@@ -1060,7 +1060,7 @@ XML
     end
   end
 
-  class Diagram < ProcessBox
+  class Diagram < Box
 
     attr_reader :width, :height
 
@@ -1077,7 +1077,7 @@ XML
     end
 
     def process(name, &block)
-      process = @processes.find { |p| p.name == name } || ChildProcessBox.new(name)
+      process = @processes.find { |p| p.name == name } || ProcessBox.new(name)
       @processes << process
       process.instance_eval(&block) if block_given?
     end
