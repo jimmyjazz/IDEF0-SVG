@@ -6,6 +6,8 @@ Operate Ben's Burgers respects Business Plan 2
 Operate Ben's Burgers respects Short Term Goals
 Operate Ben's Burgers respects Prices of Food and Supplies
 
+Operate Ben's Burgers is composed of Oversee Business Operations
+
 Oversee Business Operations receives Hungry Customer
 Oversee Business Operations produces Approvals and Commentary
 Oversee Business Operations produces Communications to Local Managers
@@ -14,11 +16,15 @@ Oversee Business Operations respects Business Plan 2
 Oversee Business Operations respects Expansion Plans and New Ideas
 Oversee Business Operations respects Business Plan
 
+Operate Ben's Burgers is composed of Expand The Business
+
 Expand The Business respects Suggestions for Expansion
 Expand The Business respects Approvals and Commentary
 Expand The Business produces Transport
 Expand The Business produces New Facility
 Expand The Business produces Expansion Plans and New Ideas
+
+Operate Ben's Burgers is composed of Manage Local Restaurant
 
 Manage Local Restaurant respects Status of Local Operations
 Manage Local Restaurant respects Communications to Local Managers
@@ -32,6 +38,8 @@ Manage Local Restaurant produces Finance System
 Manage Local Restaurant requires Stationary
 Manage Local Restaurant requires Uniforms
 
+Operate Ben's Burgers is composed of Provide Supplies
+
 Provide Supplies produces Ingredients
 Provide Supplies produces Stationary
 Provide Supplies produces Manchester
@@ -41,6 +49,8 @@ Provide Supplies respects Prices of Food and Supplies
 Provide Supplies respects Orders and Payments
 Provide Supplies requires Transport
 Provide Supplies requires Finance System
+
+Operate Ben's Burgers is composed of Serve Customers
 
 Serve Customers respects Local Management Communications
 Serve Customers receives Hungry Customer
