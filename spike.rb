@@ -1180,5 +1180,65 @@ XML
 
 end
 
+class Noun
+
+  PATTERN = "[^a-z; ][^; ]*?(?: [^a-z; ][^; ]*?)*"
+
+  def self.parse(text)
+    normalised_text = text.to_s.squish.gsub(/(^|\s)[a-z]/) { |l| l.upcase }
+    raise(ArgumentError, "Invalid noun: #{text.inspect}") unless /^#{PATTERN}$/ === normalised_text
+    normalised_text
+  end
+
+end
+
+class Verb
+
+  PATTERN = "[a-z][^ ]*?(?: [a-z][^ ]*?)*"
+
+  def self.parse(text)
+    normalised_text = text.to_s.squish.downcase
+    raise(ArgumentError, "Invalid verb: #{text.inspect}") unless /^#{PATTERN}$/ === normalised_text
+    normalised_text
+  end
+
+end
+
+class Statement
+
+  FORMAT = /^(#{Noun::PATTERN}) (#{Verb::PATTERN}) (#{Noun::PATTERN})$/
+
+  attr_reader :subject, :predicate, :object
+
+  def self.assemble(subject, predicate, object)
+    new(Noun.parse(subject), Verb.parse(predicate), Noun.parse(object))
+  end
+
+  def self.parse(text)
+    text.each_line
+      .map(&:squish)
+      .map{ |line| assemble($1, $2, $3) if line =~ FORMAT }
+      .compact
+  end
+
+  def initialize(subject, predicate, object)
+    @subject = subject
+    @predicate = predicate
+    @object = object
+  end
+
+  def eql?(other)
+    @subject == other.subject &&
+      @predicate == other.predicate &&
+      @object == other.object
+  end
+  alias_method :==, :eql?
+
+  def hash
+    @hash ||= @subject.hash ^ @predicate.hash ^ @object.hash
+  end
+
+end
+
 diagram = eval("IDEF0.diagram #{$<.read}")
 puts diagram.to_svg
