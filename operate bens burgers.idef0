@@ -1,67 +1,53 @@
-"Operate Ben's Burgers" do
+Operate Ben's Burgers receives Hungry Customer
+Operate Ben's Burgers produces Satisfied Customer
+Operate Ben's Burgers requires Original Facility
+Operate Ben's Burgers respects Business Plan
+Operate Ben's Burgers respects Business Plan 2
+Operate Ben's Burgers respects Short Term Goals
+Operate Ben's Burgers respects Prices of Food and Supplies
 
-  receives "Hungry Customer"
-  produces "Satisfied Customer"
-  requires "Original Facility"
-  respects "Business Plan"
-  respects "Business Plan 2"
-  respects "Short Term Goals"
-  respects "Prices of Food and Supplies"
+Oversee Business Operations receives Hungry Customer
+Oversee Business Operations produces Approvals and Commentary
+Oversee Business Operations produces Communications to Local Managers
+Oversee Business Operations respects Communications with Top Management
+Oversee Business Operations respects Business Plan 2
+Oversee Business Operations respects Expansion Plans and New Ideas
+Oversee Business Operations respects Business Plan
 
-  process "Oversee Business Operations" do
-    receives "Hungry Customer"
-    produces "Approvals and Commentary"
-    produces "Communications to Local Managers"
-    respects "Communications with Top Management"
-    respects "Business Plan 2"
-    respects "Expansion Plans and New Ideas"
-    respects "Business Plan"
-  end
+Expand The Business respects Suggestions for Expansion
+Expand The Business respects Approvals and Commentary
+Expand The Business produces Transport
+Expand The Business produces New Facility
+Expand The Business produces Expansion Plans and New Ideas
 
-  process "Expand The Business" do
-    respects "Suggestions for Expansion"
-    respects "Approvals and Commentary"
-    produces "Transport"
-    produces "New Facility"
-    produces "Expansion Plans and New Ideas"
-  end
+Manage Local Restaurant respects Status of Local Operations
+Manage Local Restaurant respects Communications to Local Managers
+Manage Local Restaurant respects Prices and Invoices
+Manage Local Restaurant respects Short Term Goals
+Manage Local Restaurant produces Local Management Communications
+Manage Local Restaurant produces Communications with Top Management
+Manage Local Restaurant produces Orders and Payments
+Manage Local Restaurant produces Suggestions for Expansion
+Manage Local Restaurant produces Finance System
+Manage Local Restaurant requires Stationary
+Manage Local Restaurant requires Uniforms
 
-  process "Manage Local Restaurant" do
-    respects "Status of Local Operations"
-    respects "Communications to Local Managers"
-    respects "Prices and Invoices"
-    respects "Short Term Goals"
-    produces "Local Management Communications"
-    produces "Communications with Top Management"
-    produces "Orders and Payments"
-    produces "Suggestions for Expansion"
-    produces "Finance System"
-    requires "Stationary"
-    requires "Uniforms"
-  end
+Provide Supplies produces Ingredients
+Provide Supplies produces Stationary
+Provide Supplies produces Manchester
+Provide Supplies produces Uniforms
+Provide Supplies produces Prices and Invoices
+Provide Supplies respects Prices of Food and Supplies
+Provide Supplies respects Orders and Payments
+Provide Supplies requires Transport
+Provide Supplies requires Finance System
 
-  process "Provide Supplies" do
-    produces "Ingredients"
-    produces "Stationary"
-    produces "Manchester"
-    produces "Uniforms"
-    produces "Prices and Invoices"
-    respects "Prices of Food and Supplies"
-    respects "Orders and Payments"
-    requires "Transport"
-    requires "Finance System"
-  end
-
-  process "Serve Customers" do
-    respects "Local Management Communications"
-    receives "Hungry Customer"
-    receives "Ingredients"
-    produces "Satisfied Customer"
-    produces "Status of Local Operations"
-    requires "New Facility"
-    requires "Uniforms"
-    requires "Manchester"
-    requires "Original Facility"
-  end
-
-end
+Serve Customers respects Local Management Communications
+Serve Customers receives Hungry Customer
+Serve Customers receives Ingredients
+Serve Customers produces Satisfied Customer
+Serve Customers produces Status of Local Operations
+Serve Customers requires New Facility
+Serve Customers requires Uniforms
+Serve Customers requires Manchester
+Serve Customers requires Original Facility
