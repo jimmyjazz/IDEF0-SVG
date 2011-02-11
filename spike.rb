@@ -19,6 +19,15 @@ class Object
 
 end
 
+class String
+
+  def squish
+    x = self.gsub(/\s+/, ' ').strip
+    x unless x.empty?
+  end
+
+end
+
 module Enumerable
 
   def -@
@@ -1217,8 +1226,11 @@ class Statement
   def self.parse(text)
     text.each_line
       .map(&:squish)
-      .map{ |line| assemble($1, $2, $3) if line =~ FORMAT }
       .compact
+      .map{ |line|
+        raise line.inspect unless line =~ FORMAT
+        assemble($1, $2, $3)
+      }
   end
 
   def initialize(subject, predicate, object)
@@ -1241,3 +1253,21 @@ class Statement
 end
 
 statements = Statement.parse($<.read)
+
+diagram_names = statements.select{ |s| s.predicate == "is composed of" }.map(&:subject).uniq
+raise "One root process required (#{diagram_names.inspect})" if diagram_names.count != 1
+
+diagram = IDEF0.diagram(diagram_names.first) do |diagram|
+  statements.each do |statement|
+    next unless ["receives", "produces", "respects", "requires"].include?(statement.predicate)
+    if statement.subject == diagram.name
+      diagram.send(statement.predicate, statement.object)
+    else
+      diagram.process(statement.subject) do |process|
+        process.send(statement.predicate, statement.object)
+      end
+    end
+  end
+end
+
+puts diagram.to_svg
