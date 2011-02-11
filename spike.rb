@@ -1240,5 +1240,4 @@ class Statement
 
 end
 
-diagram = eval("IDEF0.diagram #{$<.read}")
-puts diagram.to_svg
+statements = Statement.parse($<.read)
