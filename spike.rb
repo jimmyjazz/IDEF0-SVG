@@ -149,7 +149,7 @@ module IDEF0
     end
 
     def precedence
-      raise "Unattached anchor: #{@name.inspect}" if @lines.empty?
+      raise "Unattached anchor on #{@side.name}: #{@name.inspect}" if @lines.empty?
       @lines.map { |line| [line.clearance_group(@side), line.anchor_precedence(@side), line.name] }.min
     end
 
@@ -816,6 +816,10 @@ XML
       @margin = 0
     end
 
+    def name
+      "#{@box.name}.#{self.class.name}"
+    end
+
     # TODO: This is a fudge to make stuff work
     def each
       @anchors.each { |anchor| yield(anchor.name) }
@@ -1117,6 +1121,7 @@ XML
           @lines << ExternalOutputLine.new(box, self, output) if right_side.expects?(output)
 
           @boxes.after(box).each do |target|
+            $stderr.puts "left side input: #{output} (#{target.left_side.expects?(output)})"
             @lines << ForwardInputLine.new(box, target, output) if target.left_side.expects?(output)
             @lines << ForwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
             @lines << ForwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
@@ -1127,6 +1132,9 @@ XML
             @lines << BackwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
           end
         end
+      end
+      @lines.each do |line|
+        $stderr.puts line.name
       end
     end
 
@@ -1240,6 +1248,10 @@ class Statement
     @object = object
   end
 
+  def to_s
+    [@subject, @predicate, @object].join(" ")
+  end
+
   def eql?(other)
     @subject == other.subject &&
       @predicate == other.predicate &&
@@ -1260,12 +1272,17 @@ raise "One root process required (#{diagram_names.inspect})" if diagram_names.co
 
 diagram = IDEF0.diagram(diagram_names.first) do |diagram|
   statements.each do |statement|
-    next unless ["receives", "produces", "respects", "requires"].include?(statement.predicate)
-    if statement.subject == diagram.name
-      diagram.send(statement.predicate, statement.object)
-    else
-      diagram.process(statement.subject) do |process|
-        process.send(statement.predicate, statement.object)
+    $stderr.puts statement.to_s
+    case statement.predicate
+    when "is composed of"
+      # diagram.process(statement.object)
+    when "receives", "produces", "respects", "requires"
+      if statement.subject == diagram.name
+        diagram.send(statement.predicate, statement.object)
+      else
+        diagram.process(statement.subject) do |process|
+          process.send(statement.predicate, statement.object)
+        end
       end
     end
   end
