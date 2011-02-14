@@ -638,6 +638,10 @@ XML
       @source.bottom_edge + clearance_from(@source.bottom_side)
     end
 
+    def label
+      LeftAlignedLabel.new(@name, Point.new(x2+10, y_horizontal-5))
+    end
+
     def to_svg
       <<-XML
 <path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
