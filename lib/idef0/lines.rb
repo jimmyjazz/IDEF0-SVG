@@ -107,8 +107,7 @@ module IDEF0
 
   class ForwardInputLine < Line
 
-    def initialize(*args)
-      super
+    def connect
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.left_side.attach(self)
     end
@@ -162,8 +161,7 @@ XML
 
   class InternalGuidanceLine < Line
 
-    def initialize(*args)
-      super
+    def connect
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.top_side.attach(self)
     end
@@ -273,8 +271,7 @@ XML
 
   class ExternalInputLine < ExternalLine
 
-    def initialize(*args)
-      super
+    def connect
       @target_anchor = target.left_side.attach(self)
     end
 
@@ -315,8 +312,7 @@ XML
 
   class ExternalOutputLine < ExternalLine
 
-    def initialize(*args)
-      super
+    def connect
       @source_anchor = source.right_side.attach(self)
     end
 
@@ -356,6 +352,9 @@ XML
     def initialize(*args)
       super
       clear(@target.top_side, 40)
+    end
+
+    def connect
       @target_anchor = target.top_side.attach(self)
     end
 
@@ -405,6 +404,9 @@ XML
     def initialize(*args)
       super
       clear(@target.bottom_side, 40)
+    end
+
+    def connect
       @target_anchor = target.bottom_side.attach(self)
     end
 
@@ -451,8 +453,7 @@ XML
 
   class InternalMechanismLine < Line
 
-    def initialize(*args)
-      super
+    def connect
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.bottom_side.attach(self)
     end
@@ -585,8 +586,7 @@ XML
 
   class BackwardInputLine < Line
 
-    def initialize(*args)
-      super
+    def connect
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.left_side.attach(self)
     end

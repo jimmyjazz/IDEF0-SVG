@@ -12,6 +12,7 @@ module IDEF0
       diagram.instance_eval(&block)
       diagram.sequence_boxes
       diagram.create_lines
+      diagram.connect_lines
       diagram.sequence_anchors
       diagram.layout
     end
@@ -79,6 +80,10 @@ module IDEF0
           end
         end
       end
+    end
+
+    def connect_lines
+      @lines.each(&:connect)
     end
 
     def sequence_anchors
