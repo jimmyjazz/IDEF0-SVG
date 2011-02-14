@@ -34,8 +34,7 @@ module IDEF0
     end
 
     def box(name, &block)
-      box = @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }
-      box.instance_eval(&block) if block_given?
+      @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }.instance_eval(&block)
     end
 
     def bottom_edge
@@ -74,6 +73,7 @@ module IDEF0
           end
 
           @boxes.before(box).each do |target|
+            @lines << BackwardInputLine.new(box, target, output) if target.left_side.expects?(output)
             @lines << BackwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
             @lines << BackwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
           end

@@ -10,13 +10,14 @@ Get Customer Live On Authority 6 is composed of Roll Test Into Live
 Get Customer Live On Authority 6 is composed of Build Test Environment
 
 Get Customer Live On Authority 6 receives Customer Live On Authority 5
-Get Customer Live On Authority 6 produces Customer Live On Authority 6
-
-Roll Test Into Live produces Customer Live On Authority 6
+Acceptance Test receives Customer Live On Authority 5
 Copy Live To Test receives Customer Live On Authority 5
+
+Get Customer Live On Authority 6 produces Customer Live On Authority 6
+Roll Test Into Live produces Customer Live On Authority 6
+
 Acceptance Test produces Customer Willing To Go Live
 Roll Test Into Live receives Customer Willing To Go Live
-Acceptance Test requires Authority 6 Test Environment
-Build Test Environment produces Authority 6 Test Environment
 
-Acceptance Test receives Customer Live On Authority 5
+Build Test Environment produces Authority 6 Test Environment
+Acceptance Test requires Authority 6 Test Environment
