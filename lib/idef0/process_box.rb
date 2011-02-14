@@ -18,6 +18,14 @@ module IDEF0
       [60, [left_side.anchor_count, right_side.anchor_count].max*20+20].max
     end
 
+    def after?(other)
+      sequence > other.sequence
+    end
+
+    def before?(other)
+      sequence < other.sequence
+    end
+
     def to_svg
       <<-XML
 <rect x='#{x1}' y='#{y1}' width='#{width}' height='#{height}' fill='none' stroke='black' />

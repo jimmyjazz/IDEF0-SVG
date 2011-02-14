@@ -47,14 +47,6 @@ module IDEF0
       self
     end
 
-    def before(pattern)
-      self.class.new(@items.take_while { |item| item != pattern })
-    end
-
-    def after(pattern)
-      self.class.new(@items.drop_while { |item| item != pattern }[1..-1])
-    end
-
     def select(&block)
       self.class.new(@items.select(&block))
     end

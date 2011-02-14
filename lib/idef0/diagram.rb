@@ -67,13 +67,15 @@ module IDEF0
         box.right_side.each do |output|
           @lines << ExternalOutputLine.new(box, self, output) if right_side.expects?(output)
 
-          @boxes.after(box).each do |target|
+          @boxes.each do |target|
+            next unless target.after?(box)
             @lines << ForwardInputLine.new(box, target, output) if target.left_side.expects?(output)
             @lines << ForwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
             @lines << ForwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
           end
 
-          @boxes.before(box).each do |target|
+          @boxes.each do |target|
+            next unless target.before?(box)
             @lines << BackwardInputLine.new(box, target, output) if target.left_side.expects?(output)
             @lines << BackwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
             @lines << BackwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)

@@ -7,6 +7,7 @@
 # TODO: unbundling
 # TODO: Resize boxes to accommodate anchor points
 # TODO: Remove alias #process for Diagram#box
+# TODO: Construct lines with anchors rather than targets
 
 require_relative 'lib/idef0/statement'
 require_relative 'lib/idef0/diagram'
