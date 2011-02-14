@@ -1,0 +1,63 @@
+# Upgrade Customer To Authority V6 is composed of Project Initiation
+# Upgrade Customer To Authority V6 is composed of Build
+# Upgrade Customer To Authority V6 is composed of Acceptance
+# Upgrade Customer To Authority V6 is composed of Roll Out
+
+Upgrade Customer To Authority V6 is composed of Draft And Agree Suitable Project Outcomes And Schedule
+Upgrade Customer To Authority V6 is composed of Advise On Server Infrastructure For Authority V6 Platform
+Upgrade Customer To Authority V6 is composed of ProvisionServer Infrastructure
+Upgrade Customer To Authority V6 is composed of Review Server Infrastructure Provided By Council
+Upgrade Customer To Authority V6 is composed of Authority Portal Data Analysis And Conversion
+Upgrade Customer To Authority V6 is composed of Authority V6 Database, Application And Web Server Builds
+Upgrade Customer To Authority V6 is composed of Authority Mobile Build
+Upgrade Customer To Authority V6 is composed of Migration And Upgrade Of Database From Authority V5 To Authority V6
+Upgrade Customer To Authority V6 is composed of IT System Administration Training
+Upgrade Customer To Authority V6 is composed of Civica System Validation
+Upgrade Customer To Authority V6 is composed of AWP Administration Training
+Upgrade Customer To Authority V6 is composed of AIM Security And Classification
+Upgrade Customer To Authority V6 is composed of Module Specialist Navigation Training
+Upgrade Customer To Authority V6 is composed of Council Acceptance Testing
+Upgrade Customer To Authority V6 is composed of Go Live Planning And Preparation
+Upgrade Customer To Authority V6 is composed of End User Training Client Deployment
+Upgrade Customer To Authority V6 is composed of Go Live Migration And Upgrade
+Upgrade Customer To Authority V6 is composed of Go Live Support
+Upgrade Customer To Authority V6 is composed of Post Go Live Technical Support
+Upgrade Customer To Authority V6 is composed of Issue Management
+Upgrade Customer To Authority V6 is composed of Handover To Support
+Upgrade Customer To Authority V6 is composed of Project Closure
+
+Upgrade Customer To Authority V6 receives Customer Live On Authority V5
+Upgrade Customer To Authority V6 produces Customer Live On Authority V6
+
+# # Project Initiation
+Draft And Agree Suitable Project Outcomes And Schedule produces Authority V6 Upgrade Schedule
+Schedule Staff requires Authority V6 Upgrade Schedule
+# Advise On Server Infrastructure For Authority V6 Platform
+# Provision Server Infrastructure
+# Review Server Infrastructure Provided By Council
+
+# Build
+# Authority Portal Data Analysis And Conversion
+# Authority V6 Database, Application And Web Server Builds
+# Authority Mobile Build
+# Migration And Upgrade Of Database From Authority V5 To Authority V6
+# IT System Administration Training
+
+# Acceptance
+# Civica System Validation
+# AWP Administration Training
+# AIM Security And Classification
+# Module Specialist Navigation Training
+# Council Acceptance Testing
+
+# Roll out
+# Go Live Planning And Preparation
+# End User Training Client Deployment
+# Go Live Migration And Upgrade
+# Go Live Support
+# Post Go Live Technical Support
+
+# Post Deployment
+# Issue Management
+# Handover To Support
+Project Closure produces Customer Live On Authority V6
