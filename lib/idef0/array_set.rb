@@ -10,7 +10,7 @@ module IDEF0
       @items = items
     end
 
-    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?, :group_by
+    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?
 
     def union(other)
       self.class.new(@items.dup).union!(other)
@@ -63,8 +63,21 @@ module IDEF0
       self.class.new(@items.sort_by(&block))
     end
 
+    def group_by(&block)
+      @items.reduce(Hash.new { |h, k| h[k] = self.class.new }) do |groups, item|
+        groups[yield(item)].add(item)
+        groups
+      end
+    end
+
     def partition(&block)
       @items.partition(&block).map { |items| self.class.new(items) }
+    end
+
+    def sequence_by(&block)
+      sort_by(&block).tap do |set|
+        set.each_with_index { |item, index| item.sequence = index }
+      end
     end
 
   end

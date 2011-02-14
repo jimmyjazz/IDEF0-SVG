@@ -35,9 +35,8 @@ module IDEF0
       expects(line.name).tap { |anchor| anchor.attach(line) }
     end
 
-    def sort_anchors
-      @anchors = @anchors.sort_by(&:precedence)
-      @anchors.each_with_index { |anchor, sequence| anchor.sequence = sequence }
+    def sequence_anchors
+      @anchors = @anchors.sequence_by(&:precedence)
     end
 
     def anchor_count

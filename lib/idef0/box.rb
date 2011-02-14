@@ -55,8 +55,8 @@ module IDEF0
       [top_side, bottom_side, left_side, right_side]
     end
 
-    def sort_anchors
-      sides.each(&:sort_anchors)
+    def sequence_anchors
+      sides.each(&:sequence_anchors)
     end
 
     def layout(lines)

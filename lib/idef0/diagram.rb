@@ -10,9 +10,9 @@ module IDEF0
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.sort_boxes
+      diagram.sequence_boxes
       diagram.create_lines
-      diagram.sort_anchors
+      diagram.sequence_anchors
       diagram.layout
     end
   end
@@ -46,9 +46,8 @@ module IDEF0
       (@boxes + @lines).map(&:right_edge).max || 0
     end
 
-    def sort_boxes
-      @boxes = @boxes.sort_by(&:precedence)
-      @boxes.each_with_index { |box, sequence| box.sequence = sequence }
+    def sequence_boxes
+      @boxes = @boxes.sequence_by(&:precedence)
     end
 
     def create_lines
@@ -82,8 +81,8 @@ module IDEF0
       end
     end
 
-    def sort_anchors
-      @boxes.each(&:sort_anchors)
+    def sequence_anchors
+      @boxes.each(&:sequence_anchors)
     end
 
     def layout

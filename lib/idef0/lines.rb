@@ -1,4 +1,4 @@
-require_relative 'collection_item_negation'
+require_relative 'collection_negation'
 require_relative 'point'
 require_relative 'labels'
 

@@ -11,13 +11,13 @@
 require_relative 'lib/idef0/statement'
 require_relative 'lib/idef0/diagram'
 
-class Object
-
-  def inspect
-    object_id
-  end
-
-end
+# class Object
+#
+#   def inspect
+#     object_id
+#   end
+#
+# end
 
 statements = IDEF0::Statement.parse($<.read)
 
