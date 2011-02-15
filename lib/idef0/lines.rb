@@ -1,113 +1,11 @@
 require_relative 'collection_negation'
 require_relative 'point'
 require_relative 'labels'
+require_relative 'line'
+require_relative 'external_mechanism_line'
+
 
 module IDEF0
-
-  class Line
-
-    attr_reader :source, :target, :name
-    attr_reader :source_anchor, :target_anchor
-
-    def initialize(source, target, name)
-      @source = source
-      @target = target
-      @name = name
-      @clearance = {}
-    end
-
-    def backward?
-      self.class.name =~ /::Backward.*$/
-    end
-
-    def label
-      LeftAlignedLabel.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5))
-    end
-
-    def avoid(lines)
-    end
-
-    def x1
-      source_anchor.x
-    end
-
-    def y1
-      source_anchor.y
-    end
-
-    def x2
-      target_anchor.x
-    end
-
-    def y2
-      target_anchor.y
-    end
-
-    def minimum_length
-      10 + label.length
-    end
-
-    def left_edge
-      [x1, x2].min
-    end
-
-    def top_edge
-      [y1, y2].min
-    end
-
-    def right_edge
-      [x1, x2].max
-    end
-
-    def bottom_edge
-      [y1, y2].max
-    end
-
-    def sides_to_clear
-      []
-    end
-
-    def clear?(side)
-      sides_to_clear.include?(side)
-    end
-
-    def clearance_precedence(side)
-      raise "#{self.class.name}: No clearance precedence specified for #{side.class.name}"
-    end
-
-    def anchor_precedence(side)
-      clearance_precedence(side)
-    end
-
-    def clear(side, distance)
-      @clearance[side] = distance
-    end
-
-    def clearance_from(side)
-      @clearance[side] || 0
-    end
-
-    def svg_right_arrow(x,y)
-      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-6},#{y+3} #{x-6},#{y-3} #{x},#{y}' />"
-    end
-
-    def svg_down_arrow(x,y)
-      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y-6} #{x+3},#{y-6} #{x},#{y}' />"
-    end
-
-    def svg_up_arrow(x,y)
-      "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />"
-    end
-
-  end
-
-  class ExternalLine < Line
-
-    def anchor_precedence(side)
-      []
-    end
-
-  end
 
   class ForwardInputLine < Line
 
@@ -436,64 +334,6 @@ XML
       <<-XML
 <line x1='#{x1}' y1='#{y1+20}' x2='#{x2}' y2='#{y2}' stroke='black' />
 #{svg_down_arrow(x2, y2)}
-#{label.to_svg}
-XML
-    end
-
-  end
-
-  class ExternalMechanismLine < ExternalLine
-
-    def self.make_line(source, target)
-      source.bottom_side.each do |name|
-        yield(new(source, target, name)) if target.bottom_side.expects?(name)
-      end
-    end
-
-    def initialize(*args)
-      super
-      clear(@target.bottom_side, 40)
-    end
-
-    def connect
-      @target_anchor = target.bottom_side.attach(self)
-    end
-
-    def x1
-      target_anchor.x
-    end
-
-    def y1
-      [source.y2, y2+clearance_from(@target.bottom_side)].max
-    end
-
-    def x2
-      x1
-    end
-
-    def label
-      CentredLabel.new(@name, Point.new(x1, y1-5))
-    end
-
-    def clearance_group(side)
-      case
-      when @target.bottom_side
-        2
-      else
-        super
-      end
-    end
-
-    def avoid(lines)
-      while lines.any?{ |other| label.overlapping?(other.label) } do
-        clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
-      end
-    end
-
-    def to_svg
-      <<-XML
-<line x1='#{x1}' y1='#{y1-20}' x2='#{x2}' y2='#{y2}' stroke='black' />
-#{svg_up_arrow(x2, y2)}
 #{label.to_svg}
 XML
     end
