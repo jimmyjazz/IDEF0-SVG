@@ -16,6 +16,10 @@ module IDEF0
       @clearance = {}
     end
 
+    def backward?
+      self.class.name =~ /::Backward.*$/
+    end
+
     def label
       LeftAlignedLabel.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5))
     end

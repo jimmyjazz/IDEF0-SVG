@@ -71,10 +71,13 @@ module IDEF0
       @items.partition(&block).map { |items| self.class.new(items) }
     end
 
-    def sequence_by(&block)
-      sort_by(&block).tap do |set|
-        set.each_with_index { |item, index| item.sequence = index }
-      end
+    def sequence!
+      @items.each_with_index { |item, index| item.sequence = index }
+      self
+    end
+
+    def each_permutation
+      yield(self)
     end
 
   end

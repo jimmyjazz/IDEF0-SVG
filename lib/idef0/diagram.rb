@@ -10,7 +10,6 @@ module IDEF0
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.sequence_boxes
       diagram.create_lines
       diagram.connect_lines
       diagram.sequence_anchors
@@ -46,32 +45,37 @@ module IDEF0
       (@boxes + @lines).map(&:right_edge).max || 0
     end
 
-    def sequence_boxes
-      @boxes = @boxes.sequence_by(&:precedence)
-    end
-
     def create_lines
+      backward_count = nil
 
-
-
-      @lines = @boxes.reduce(ArraySet.new) do |lines, target|
-        [
-          ExternalInputLine, ExternalOutputLine,
-          ExternalGuidanceLine, ExternalMechanismLine
-        ].each do |line_type|
-          line_type.make_line(self, target) { |line| lines.add(line) }
-        end
-
-        @boxes.each do |source|
+      @boxes.sort_by(&:precedence).each_permutation do |boxes|
+        boxes = boxes.sequence!
+        lines = @boxes.reduce(ArraySet.new) do |lines, target|
           [
-            ForwardInputLine, ForwardGuidanceLine, ForwardMechanismLine,
-            BackwardInputLine, BackwardGuidanceLine, BackwardMechanismLine
+            ExternalInputLine, ExternalOutputLine,
+            ExternalGuidanceLine, ExternalMechanismLine
           ].each do |line_type|
-            line_type.make_line(source, target) { |line| lines.add(line) }
+            line_type.make_line(self, target) { |line| lines.add(line) }
           end
+
+          @boxes.each do |source|
+            [
+              ForwardInputLine, ForwardGuidanceLine, ForwardMechanismLine,
+              BackwardInputLine, BackwardGuidanceLine, BackwardMechanismLine
+            ].each do |line_type|
+              line_type.make_line(source, target) { |line| lines.add(line) }
+            end
+          end
+
+          lines
         end
 
-        lines
+        count = lines.count(&:backward?)
+        if backward_count.nil? || count < backward_count
+          @boxes = boxes
+          @lines = lines
+        end
+
       end
     end
 

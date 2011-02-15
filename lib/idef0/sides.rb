@@ -36,7 +36,7 @@ module IDEF0
     end
 
     def sequence_anchors
-      @anchors = @anchors.sequence_by(&:precedence)
+      @anchors = @anchors.sort_by(&:precedence).sequence!
     end
 
     def anchor_count
