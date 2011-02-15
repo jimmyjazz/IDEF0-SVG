@@ -51,18 +51,12 @@ module IDEF0
       @boxes.sort_by(&:precedence).permutation do |boxes|
         boxes = boxes.sequence!
         lines = @boxes.reduce(ArraySet.new) do |lines, target|
-          [
-            ExternalInputLine, ExternalOutputLine,
-            ExternalGuidanceLine, ExternalMechanismLine
-          ].each do |line_type|
+          EXTERNAL_LINE_TYPES.each do |line_type|
             line_type.make_line(self, target) { |line| lines.add(line) }
           end
 
           @boxes.each do |source|
-            [
-              ForwardInputLine, ForwardGuidanceLine, ForwardMechanismLine,
-              BackwardInputLine, BackwardGuidanceLine, BackwardMechanismLine
-            ].each do |line_type|
+            INTERNAL_LINE_TYPES.each do |line_type|
               line_type.make_line(source, target) { |line| lines.add(line) }
             end
           end
