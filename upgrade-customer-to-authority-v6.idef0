@@ -28,19 +28,32 @@ Upgrade Customer To Authority V6 is composed of Project Closure
 
 Upgrade Customer To Authority V6 receives Customer Live On Authority V5
 Upgrade Customer To Authority V6 produces Customer Live On Authority V6
+Upgrade Customer To Authority V6 receives Authority V5 Live Environment
 
 
 Project Initiation receives Customer Live On Authority V5
 Project Initiation produces Authority V6 Server Infrastructure
+Project Initiation produces Project Schedule
+
+Build receives Authority V5 Live Environment
 Build receives Authority V6 Server Infrastructure
 Build produces Authority V6 Test Environment
 Build produces Authority V6 Live Environment
+Build produces Council Staff Ready To Administer Authority V6
+Build respects Project Schedule
+
 Acceptance receives Authority V6 Test Environment
-Acceptance produces Customer Ready To Go Live On Authority V6
-Roll Out receives Customer Ready To Go Live On Authority V6
+Acceptance produces Customer Willing To Go Live On Authority V6
+Acceptance respects Project Schedule
+
+Roll Out receives Customer Willing To Go Live On Authority V6
 Roll Out requires Authority V6 Live Environment
+Roll Out requires Council Staff Ready To Administer Authority V6
 Roll Out produces Customer Live On Authority V6
+Roll Out respects Project Schedule
+
 Post Deployment receives Customer Live On Authority V6
+Post Deployment respects Project Schedule
 
 # Project Initiation
 # Draft And Agree Suitable Project Outcomes And Schedule

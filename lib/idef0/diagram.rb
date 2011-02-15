@@ -51,8 +51,10 @@ module IDEF0
     end
 
     def create_lines
-      @lines = @boxes.reduce(ArraySet.new) do |lines, target|
 
+
+
+      @lines = @boxes.reduce(ArraySet.new) do |lines, target|
         [
           ExternalInputLine, ExternalOutputLine,
           ExternalGuidanceLine, ExternalMechanismLine
@@ -70,7 +72,6 @@ module IDEF0
         end
 
         lines
-
       end
     end
 
