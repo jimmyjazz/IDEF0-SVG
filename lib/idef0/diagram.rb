@@ -51,22 +51,15 @@ module IDEF0
     end
 
     def create_lines
+      @lines = @boxes.reduce(ArraySet.new) do |lines, target|
+        [ExternalInputLine, ExternalOutputLine,ExternalGuidanceLine, ExternalMechanismLine].each do |line_type|
+          line_type.make_line(self, target) { |line| lines.add(line) }
+        end
+        lines
+      end
+
       @boxes.each do |box|
-        box.left_side.each do |input|
-          @lines << ExternalInputLine.new(self, box, input) if left_side.expects?(input)
-        end
-
-        box.top_side.each do |guidance|
-          @lines << ExternalGuidanceLine.new(self, box, guidance) if top_side.expects?(guidance)
-        end
-
-        box.bottom_side.each do |mechanism|
-          @lines << ExternalMechanismLine.new(self, box, mechanism) if bottom_side.expects?(mechanism)
-        end
-
         box.right_side.each do |output|
-          @lines << ExternalOutputLine.new(box, self, output) if right_side.expects?(output)
-
           @boxes.each do |target|
             next unless target.after?(box)
             @lines << ForwardInputLine.new(box, target, output) if target.left_side.expects?(output)

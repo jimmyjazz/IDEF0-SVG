@@ -7,6 +7,7 @@ module IDEF0
     extend Forwardable
 
     def initialize(items = [])
+      boom! unless items.is_a?(Array)
       @items = items
     end
 
@@ -18,7 +19,7 @@ module IDEF0
     def_delegator :self, :union, :+
 
     def union!(other)
-      other.each { |item| @items << item }
+      other.each { |item| @items.push(item) }
       self
     end
 
@@ -33,7 +34,7 @@ module IDEF0
     end
 
     def add(item)
-      @items << item unless include?(item)
+      @items.push(item) unless include?(item)
       self
     end
     def_delegator :self, :add, :<<
@@ -45,6 +46,10 @@ module IDEF0
     def delete!(item)
       @items.delete(item)
       self
+    end
+
+    def reduce(initial = nil, &block)
+      @items.reduce(initial, &block)
     end
 
     def select(&block)

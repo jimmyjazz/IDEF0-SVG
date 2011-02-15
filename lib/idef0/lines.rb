@@ -271,6 +271,12 @@ XML
 
   class ExternalInputLine < ExternalLine
 
+    def self.make_line(source, target)
+      source.left_side.each do |name|
+        yield(new(source, target, name)) if target.left_side.expects?(name)
+      end
+    end
+
     def connect
       @target_anchor = target.left_side.attach(self)
     end
@@ -312,6 +318,12 @@ XML
 
   class ExternalOutputLine < ExternalLine
 
+    def self.make_line(target, source)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.right_side.expects?(name)
+      end
+    end
+
     def connect
       @source_anchor = source.right_side.attach(self)
     end
@@ -348,6 +360,12 @@ XML
   end
 
   class ExternalGuidanceLine < ExternalLine
+
+    def self.make_line(source, target)
+      source.top_side.each do |name|
+        yield(new(source, target, name)) if target.top_side.expects?(name)
+      end
+    end
 
     def initialize(*args)
       super
@@ -400,6 +418,12 @@ XML
   end
 
   class ExternalMechanismLine < ExternalLine
+
+    def self.make_line(source, target)
+      source.bottom_side.each do |name|
+        yield(new(source, target, name)) if target.bottom_side.expects?(name)
+      end
+    end
 
     def initialize(*args)
       super
