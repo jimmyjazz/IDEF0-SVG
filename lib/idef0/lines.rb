@@ -402,7 +402,7 @@ XML
     end
 
     def avoid(lines)
-      while lines.any?{ |other| label.overlaps?(other.label) } do
+      while lines.any?{ |other| label.overlapping?(other.label) } do
         clear(@target.top_side, 20+clearance_from(@target.top_side))
       end
     end
@@ -485,7 +485,7 @@ XML
     end
 
     def avoid(lines)
-      while lines.any?{ |other| label.overlaps?(other.label) } do
+      while lines.any?{ |other| label.overlapping?(other.label) } do
         clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
       end
     end

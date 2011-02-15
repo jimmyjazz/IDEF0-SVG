@@ -23,7 +23,7 @@ module IDEF0
       left_edge + length
     end
 
-    def overlaps?(other)
+    def overlapping?(other)
       left_edge < other.right_edge &&
       right_edge > other.left_edge &&
       top_edge < other.bottom_edge &&
