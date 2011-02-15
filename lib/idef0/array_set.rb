@@ -76,8 +76,9 @@ module IDEF0
       self
     end
 
-    def each_permutation
-      yield(self)
+    def permutation
+      @items.permutation { |items| yield(self.class.new(items)) }
+      self
     end
 
   end

@@ -48,7 +48,7 @@ module IDEF0
     def create_lines
       backward_count = nil
 
-      @boxes.sort_by(&:precedence).each_permutation do |boxes|
+      @boxes.sort_by(&:precedence).permutation do |boxes|
         boxes = boxes.sequence!
         lines = @boxes.reduce(ArraySet.new) do |lines, target|
           [
@@ -72,11 +72,13 @@ module IDEF0
 
         count = lines.count(&:backward?)
         if backward_count.nil? || count < backward_count
+          backward_count = count
           @boxes = boxes
           @lines = lines
         end
-
       end
+
+      @boxes.sequence!
     end
 
     def connect_lines
