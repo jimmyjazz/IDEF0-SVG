@@ -1,88 +1,69 @@
-# Upgrade Customer To Authority V6 is composed of Project Initiation
-# Upgrade Customer To Authority V6 is composed of Build
-# Upgrade Customer To Authority V6 is composed of Acceptance
-# Upgrade Customer To Authority V6 is composed of Roll Out
-
-Upgrade Customer To Authority V6 is composed of Draft And Agree Suitable Project Outcomes And Schedule
-Upgrade Customer To Authority V6 is composed of Advise On Server Infrastructure For Authority V6 Platform
-Upgrade Customer To Authority V6 is composed of ProvisionServer Infrastructure
-Upgrade Customer To Authority V6 is composed of Review Server Infrastructure Provided By Council
-Upgrade Customer To Authority V6 is composed of Authority Portal Data Analysis And Conversion
-Upgrade Customer To Authority V6 is composed of Authority V6 Database, Application And Web Server Builds
-Upgrade Customer To Authority V6 is composed of Authority Mobile Build
-Upgrade Customer To Authority V6 is composed of Migration And Upgrade Of Database From Authority V5 To Authority V6
-Upgrade Customer To Authority V6 is composed of IT System Administration Training
-Upgrade Customer To Authority V6 is composed of Civica System Validation
-Upgrade Customer To Authority V6 is composed of AWP Administration Training
-Upgrade Customer To Authority V6 is composed of AIM Security And Classification
-Upgrade Customer To Authority V6 is composed of Module Specialist Navigation Training
-Upgrade Customer To Authority V6 is composed of Council Acceptance Testing
-Upgrade Customer To Authority V6 is composed of Go Live Planning And Preparation
-Upgrade Customer To Authority V6 is composed of End User Training Client Deployment
-Upgrade Customer To Authority V6 is composed of Go Live Migration And Upgrade
-Upgrade Customer To Authority V6 is composed of Go Live Support
-Upgrade Customer To Authority V6 is composed of Post Go Live Technical Support
-Upgrade Customer To Authority V6 is composed of Issue Management
-Upgrade Customer To Authority V6 is composed of Handover To Support
-Upgrade Customer To Authority V6 is composed of Project Closure
+Upgrade Customer To Authority V6 is composed of Initiate Project
+Upgrade Customer To Authority V6 is composed of Build Environment
+Upgrade Customer To Authority V6 is composed of Acceptance Test
+Upgrade Customer To Authority V6 is composed of Roll Out
 
 Upgrade Customer To Authority V6 receives Customer Live On Authority V5
+Upgrade Customer To Authority V6 receives Council Staff
 Upgrade Customer To Authority V6 produces Customer Live On Authority V6
-Upgrade Customer To Authority V6 receives Authority V5 Live Environment
+Upgrade Customer To Authority V6 requires Authority V5 Live Environment
+Upgrade Customer To Authority V6 respects Test Plans
+Upgrade Customer To Authority V6 requires Civica Project Manager
+Upgrade Customer To Authority V6 requires Technical Consultant
+Upgrade Customer To Authority V6 requires Council Staff
+Upgrade Customer To Authority V6 respects System Requirements
+Upgrade Customer To Authority V6 respects Deployment Guides
+Upgrade Customer To Authority V6 requires Training Materials
+Upgrade Customer To Authority V6 requires Software
+Upgrade Customer To Authority V6 produces Unresolved Issues
 
+Initiate Project receives Customer Live On Authority V5
+Initiate Project produces Authority V6 Server Infrastructure
+Initiate Project produces Project Schedule
+Initiate Project produces Customer Committed To Authority V6
+Initiate Project requires Civica Project Manager
+Initiate Project respects System Requirements
 
-Project Initiation receives Customer Live On Authority V5
-Project Initiation produces Authority V6 Server Infrastructure
-Project Initiation produces Project Schedule
+Build Environment requires Authority V5 Live Environment
+Build Environment receives Authority V6 Server Infrastructure
+Build Environment produces Authority V6 Test Environment
+Build Environment produces Authority V6 Live Environment
+Build Environment produces Council Staff Ready To Administer Authority V6 Infrastructure
+Build Environment respects Project Schedule
+Build Environment receives Council Staff
+Build Environment requires Technical Consultant
+Build Environment requires Training Materials
+Build Environment respects Deployment Guides
+Build Environment requires Software
 
-Build receives Authority V5 Live Environment
-Build receives Authority V6 Server Infrastructure
-Build produces Authority V6 Test Environment
-Build produces Authority V6 Live Environment
-Build produces Council Staff Ready To Administer Authority V6
-Build respects Project Schedule
-
-Acceptance receives Authority V6 Test Environment
-Acceptance produces Customer Willing To Go Live On Authority V6
-Acceptance respects Project Schedule
+Acceptance Test receives Customer Committed To Authority V6
+Acceptance Test receives Authority V6 Test Environment
+Acceptance Test produces Customer Willing To Go Live On Authority V6
+Acceptance Test respects Project Schedule
+Acceptance Test respects Test Plans
+Acceptance Test produces Council Staff Ready To Administer Authority V6 Configuration
+Acceptance Test produces Council Staff Ready To Train Authority V6 End Users
+Acceptance Test receives Council Staff
+Acceptance Test produces Module Configuration
+Acceptance Test requires Training Materials
+Acceptance Test requires Technical Consultant
+Acceptance Test produces Issues
 
 Roll Out receives Customer Willing To Go Live On Authority V6
 Roll Out requires Authority V6 Live Environment
-Roll Out requires Council Staff Ready To Administer Authority V6
+Roll Out requires Council Staff Ready To Administer Authority V6 Infrastructure
+Roll Out requires Council Staff Ready To Administer Authority V6 Configuration
+Roll Out requires Council Staff Ready To Train Authority V6 End Users
 Roll Out produces Customer Live On Authority V6
 Roll Out respects Project Schedule
+Roll Out respects Module Configuration
+Roll Out requires Technical Consultant
+Roll Out requires Software
+Roll Out respects Deployment Guides
+Roll Out produces Issues
 
-Post Deployment receives Customer Live On Authority V6
-Post Deployment respects Project Schedule
-
-# Project Initiation
-# Draft And Agree Suitable Project Outcomes And Schedule
-# Advise On Server Infrastructure For Authority V6 Platform
-# Provision Server Infrastructure
-# Review Server Infrastructure Provided By Council
-
-# Build
-# Authority Portal Data Analysis And Conversion
-# Authority V6 Database, Application And Web Server Builds
-# Authority Mobile Build
-# Migration And Upgrade Of Database From Authority V5 To Authority V6
-# IT System Administration Training
-
-# Acceptance
-# Civica System Validation
-# AWP Administration Training
-# AIM Security And Classification
-# Module Specialist Navigation Training
-# Council Acceptance Testing
-
-# Roll out
-# Go Live Planning And Preparation
-# End User Training Client Deployment
-# Go Live Migration And Upgrade
-# Go Live Support
-# Post Go Live Technical Support
-
-# Post Deployment
-# Issue Management
-# Handover To Support
-# Project Closure
+Close Project receives Customer Live On Authority V6
+Close Project respects Project Schedule
+Close Project requires Civica Project Manager
+Close Project receives Issues
+Close Project produces Unresolved Issues
