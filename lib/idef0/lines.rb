@@ -107,6 +107,13 @@ module IDEF0
 
   class ForwardInputLine < Line
 
+    def self.make_line(source, target)
+      return unless source.before?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.left_side.expects?(name)
+      end
+    end
+
     def connect
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.left_side.attach(self)
@@ -169,6 +176,13 @@ XML
   end
 
   class ForwardGuidanceLine < InternalGuidanceLine
+
+    def self.make_line(source, target)
+      return unless source.before?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.top_side.expects?(name)
+      end
+    end
 
     def clearance_group(side)
       case side
@@ -493,6 +507,13 @@ XML
   end
 
   class ForwardMechanismLine < InternalMechanismLine
+
+    def self.make_line(source, target)
+      return unless source.before?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.bottom_side.expects?(name)
+      end
+    end
 
     def y_horizontal
       y2 + clearance_from(@target.bottom_side)

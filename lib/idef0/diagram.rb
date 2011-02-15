@@ -55,18 +55,18 @@ module IDEF0
         [ExternalInputLine, ExternalOutputLine,ExternalGuidanceLine, ExternalMechanismLine].each do |line_type|
           line_type.make_line(self, target) { |line| lines.add(line) }
         end
+
+        @boxes.each do |source|
+          [ForwardInputLine, ForwardGuidanceLine, ForwardMechanismLine].each do |line_type|
+            line_type.make_line(source, target) { |line| lines.add(line) }
+          end
+        end
+
         lines
       end
 
       @boxes.each do |box|
         box.right_side.each do |output|
-          @boxes.each do |target|
-            next unless target.after?(box)
-            @lines << ForwardInputLine.new(box, target, output) if target.left_side.expects?(output)
-            @lines << ForwardGuidanceLine.new(box, target, output) if target.top_side.expects?(output)
-            @lines << ForwardMechanismLine.new(box, target, output) if target.bottom_side.expects?(output)
-          end
-
           @boxes.each do |target|
             next unless target.before?(box)
             @lines << BackwardInputLine.new(box, target, output) if target.left_side.expects?(output)
