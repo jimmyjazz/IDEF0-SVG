@@ -218,6 +218,13 @@ XML
 
   class BackwardGuidanceLine < InternalGuidanceLine
 
+    def self.make_line(source, target)
+      return unless source.after?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.top_side.expects?(name)
+      end
+    end
+
     def top_edge
       y_horizontal
     end
@@ -570,6 +577,13 @@ XML
 
   class BackwardMechanismLine < InternalMechanismLine
 
+    def self.make_line(source, target)
+      return unless source.after?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.bottom_side.expects?(name)
+      end
+    end
+
     def y_horizontal
       @source.bottom_edge + clearance_from(@source.bottom_side)
     end
@@ -630,6 +644,13 @@ XML
   end
 
   class BackwardInputLine < Line
+
+    def self.make_line(source, target)
+      return unless source.after?(target)
+      source.right_side.each do |name|
+        yield(new(source, target, name)) if target.left_side.expects?(name)
+      end
+    end
 
     def connect
       @source_anchor = source.right_side.attach(self)
