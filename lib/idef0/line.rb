@@ -23,7 +23,7 @@ module IDEF0
       LeftAlignedLabel.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5))
     end
 
-    def bounding_box(p1, p2)
+    def bounds(bounds)
     end
 
     def avoid(lines)
@@ -83,6 +83,10 @@ module IDEF0
 
     def clear(side, distance)
       @clearance[side] = distance
+    end
+
+    def add_clearance_from(side, distance)
+      clear(side, clearance_from(side) + distance)
     end
 
     def clearance_from(side)

@@ -21,13 +21,13 @@ module IDEF0
       @target_anchor = target.top_side.attach(self)
     end
 
-    def bounding_box(p1, p2)
-      clear(@target.top_side, y1-p1.y+40+clearance_from(@target.top_side))
+    def bounds(bounds)
+      add_clearance_from(@target.top_side, y1 - bounds.y1 + 40)
     end
 
     def avoid(lines)
       while lines.any?{ |other| label.overlapping?(other.label) } do
-        clear(@target.top_side, 20+clearance_from(@target.top_side))
+        add_clearance_from(@target.top_side, 20)
       end
     end
 

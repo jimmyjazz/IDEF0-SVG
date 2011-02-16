@@ -29,14 +29,14 @@ module IDEF0
       y1
     end
 
-    def bounding_box(p1, p2)
-      clear(@source.right_side, p2.x-x2+clearance_from(@source.right_side))
+    def bounds(bounds)
+      add_clearance_from(@source.right_side, bounds.x2 - x2)
     end
 
     def avoid(lines)
       clear(@source.right_side, 40+[minimum_length, clearance_from(@source.right_side)].max)
       while lines.any?{ |other| label.overlapping?(other.label) } do
-        clear(@source.right_side, 20+clearance_from(@source.right_side))
+        add_clearance_from(@source.right_side, 20)
       end
     end
 

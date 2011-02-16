@@ -4,6 +4,7 @@ require_relative 'point'
 require_relative 'box'
 require_relative 'process_box'
 require_relative 'lines'
+require_relative 'bounds'
 
 module IDEF0
 
@@ -98,8 +99,10 @@ module IDEF0
         Point.new(box.x2 + box.right_side.margin, box.y2 + box.bottom_side.margin)
       end
 
-      bounding_box = [Point.new(left_edge, top_edge), Point.new(right_edge, bottom_edge)]
-      @lines.each { |line| line.bounding_box(*bounding_box) }
+      bounds = Bounds.new(left_edge, top_edge, right_edge, bottom_edge)
+
+      @lines.each { |line| line.bounds(bounds) }
+
       @lines.each { |line| line.avoid(@lines.delete(line)) }
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|

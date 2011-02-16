@@ -33,8 +33,8 @@ module IDEF0
       y1
     end
 
-    def bounding_box(p1, p2)
-      clear(@target.left_side, x1-p1.x+clearance_from(@target.left_side))
+    def bounds(bounds)
+      add_clearance_from(@target.left_side, x1 - bounds.x1)
     end
 
     def avoid(lines)
