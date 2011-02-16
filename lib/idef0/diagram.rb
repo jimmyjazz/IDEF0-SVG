@@ -11,7 +11,7 @@ module IDEF0
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
       diagram.create_lines
-      diagram.connect_lines
+      diagram.attach_lines
       diagram.sequence_anchors
       diagram.layout
     end
@@ -83,8 +83,8 @@ module IDEF0
       @boxes.sequence!
     end
 
-    def connect_lines
-      @lines.each(&:connect)
+    def attach_lines
+      @lines.each(&:attach)
     end
 
     def sequence_anchors

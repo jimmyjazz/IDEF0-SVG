@@ -17,7 +17,7 @@ module IDEF0
       clear(@target.left_side, 20)
     end
 
-    def connect
+    def attach
       @target_anchor = target.left_side.attach(self)
     end
 

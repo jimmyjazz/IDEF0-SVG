@@ -17,7 +17,7 @@ module IDEF0
       clear(@target.top_side, 20)
     end
 
-    def connect
+    def attach
       @target_anchor = target.top_side.attach(self)
     end
 
@@ -41,6 +41,14 @@ module IDEF0
 
     def x2
       x1
+    end
+
+    def left_edge
+      label.left_edge
+    end
+
+    def right_edge
+      label.right_edge
     end
 
     def label

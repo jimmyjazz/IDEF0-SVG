@@ -17,7 +17,7 @@ module IDEF0
       clear(@source.right_side, 20)
     end
 
-    def connect
+    def attach
       @source_anchor = source.right_side.attach(self)
     end
 

@@ -15,8 +15,18 @@ module IDEF0
       clear(@target.bottom_side, 20)
     end
 
-    def connect
+    def attach
       @target_anchor = target.bottom_side.attach(self)
+    end
+
+    def bounding_box(p1, p2)
+      clear(@target.bottom_side, p2.y-y1+40+clearance_from(@target.bottom_side))
+    end
+
+    def avoid(lines)
+      while lines.any?{ |other| label.overlapping?(other.label) } do
+        clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
+      end
     end
 
     def x1
@@ -31,6 +41,14 @@ module IDEF0
       x1
     end
 
+    def left_edge
+      label.left_edge
+    end
+
+    def right_edge
+      label.right_edge
+    end
+
     def label
       CentredLabel.new(@name, Point.new(x1, y1-5))
     end
@@ -41,16 +59,6 @@ module IDEF0
         2
       else
         super
-      end
-    end
-
-    def bounding_box(p1, p2)
-      clear(@target.bottom_side, p2.y-y1+40+clearance_from(@target.bottom_side))
-    end
-
-    def avoid(lines)
-      while lines.any?{ |other| label.overlapping?(other.label) } do
-        clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))
       end
     end
 
