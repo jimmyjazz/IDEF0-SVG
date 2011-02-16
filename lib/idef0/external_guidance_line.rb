@@ -32,7 +32,7 @@ module IDEF0
     end
 
     def y1
-      [source.y1, y2 - clearance_from(@target.top_side)].min
+      y2 - clearance_from(@target.top_side)
     end
 
     def x2

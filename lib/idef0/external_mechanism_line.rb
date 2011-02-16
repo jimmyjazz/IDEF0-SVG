@@ -24,7 +24,7 @@ module IDEF0
     end
 
     def y1
-      [source.y2, y2+clearance_from(@target.bottom_side)].max
+      y2+clearance_from(@target.bottom_side)
     end
 
     def x2
