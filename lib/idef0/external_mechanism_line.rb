@@ -44,6 +44,10 @@ module IDEF0
       end
     end
 
+    def bounding_box(p1, p2)
+      clear(@target.bottom_side, p2.y-y1+clearance_from(@target.bottom_side))
+    end
+
     def avoid(lines)
       while lines.any?{ |other| label.overlapping?(other.label) } do
         clear(@target.bottom_side, 20+clearance_from(@target.bottom_side))

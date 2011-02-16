@@ -29,6 +29,10 @@ module IDEF0
       y1
     end
 
+    def bounding_box(p1, p2)
+      clear(@source.right_side, p2.x-x2+clearance_from(@source.right_side))
+    end
+
     def label
       RightAlignedLabel.new(@name, Point.new(x2-5, y2-5))
     end

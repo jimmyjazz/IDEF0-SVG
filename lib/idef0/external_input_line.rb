@@ -33,6 +33,10 @@ module IDEF0
       y1
     end
 
+    def bounding_box(p1, p2)
+      clear(@target.left_side, x1-p1.x+clearance_from(@target.left_side))
+    end
+
     def label
       LeftAlignedLabel.new(@name, Point.new(x1+5, y1-5))
     end
