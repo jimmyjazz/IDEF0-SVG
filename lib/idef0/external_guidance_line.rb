@@ -27,7 +27,7 @@ module IDEF0
 
     def avoid(lines)
       while lines.any?{ |other| label.overlapping?(other.label) } do
-        add_clearance_from(@target.top_side, 20)
+        add_clearance_from(@target.top_side, -20)
       end
     end
 
