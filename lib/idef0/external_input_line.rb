@@ -37,7 +37,7 @@ module IDEF0
       add_clearance_from(@target.left_side, x1 - bounds.x1)
     end
 
-    def avoid(lines)
+    def avoid(lines, bounds_extension)
       clear(@target.left_side, 40+[minimum_length, clearance_from(@target.left_side)].max)
     end
 

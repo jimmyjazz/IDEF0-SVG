@@ -23,10 +23,17 @@ module IDEF0
       add_clearance_from(@target.bottom_side, bounds.y2 - y1 + 40)
     end
 
-    def avoid(lines)
+    def avoid(lines, bounds_extension)
+      claim = 0
       while lines.any?{ |other| label.overlapping?(other.label) } do
+        claim += 20
         add_clearance_from(@target.bottom_side, -20)
       end
+      bounds_extension.south = claim
+    end
+
+    def extend_bounds(extension)
+       add_clearance_from(@target.bottom_side, extension.south)
     end
 
     def x1

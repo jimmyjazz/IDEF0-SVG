@@ -33,7 +33,7 @@ module IDEF0
       add_clearance_from(@source.right_side, bounds.x2 - x2)
     end
 
-    def avoid(lines)
+    def avoid(lines, bounds_extension)
       clear(@source.right_side, 40+[minimum_length, clearance_from(@source.right_side)].max)
       while lines.any?{ |other| label.overlapping?(other.label) } do
         add_clearance_from(@source.right_side, 20)

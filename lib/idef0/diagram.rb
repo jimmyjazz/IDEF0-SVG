@@ -5,6 +5,7 @@ require_relative 'box'
 require_relative 'process_box'
 require_relative 'lines'
 require_relative 'bounds'
+require_relative 'bounds_extension'
 
 module IDEF0
 
@@ -103,7 +104,10 @@ module IDEF0
 
       @lines.each { |line| line.bounds(bounds) }
 
-      @lines.each { |line| line.avoid(@lines.delete(line)) }
+      extension = BoundsExtension.new
+      @lines.each { |line| line.avoid(@lines.delete(line), extension) }
+
+      @lines.each { |line| line.extend_bounds(extension) }
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
         set.reject(&:positive?).map(&:abs).max || 0

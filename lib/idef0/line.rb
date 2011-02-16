@@ -26,7 +26,10 @@ module IDEF0
     def bounds(bounds)
     end
 
-    def avoid(lines)
+    def avoid(lines, bounds_extension)
+    end
+
+    def extend_bounds(extension)
     end
 
     def x1
