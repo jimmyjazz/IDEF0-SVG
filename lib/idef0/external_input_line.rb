@@ -12,12 +12,17 @@ module IDEF0
       end
     end
 
+    def initialize(*args)
+      super
+      clear(@target.left_side, 20)
+    end
+
     def connect
       @target_anchor = target.left_side.attach(self)
     end
 
     def x1
-      [source.x1, x2 - minimum_length].min
+      x2 - clearance_from(@target.left_side)
     end
 
     def y1
@@ -29,7 +34,7 @@ module IDEF0
     end
 
     def label
-      LeftAlignedLabel.new(@name, Point.new(source.x1+5, y1-5))
+      LeftAlignedLabel.new(@name, Point.new(x1+5, y1-5))
     end
 
     def clearance_group(side)

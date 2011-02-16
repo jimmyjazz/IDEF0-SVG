@@ -43,8 +43,16 @@ module IDEF0
       y1 + height
     end
 
+    def left_edge
+      x1
+    end
+
     def right_edge
       x2
+    end
+
+    def top_edge
+      y1
     end
 
     def bottom_edge

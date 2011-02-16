@@ -23,6 +23,9 @@ module IDEF0
       LeftAlignedLabel.new(@name, Point.new(source_anchor.x+5, source_anchor.y-5))
     end
 
+    def bounding_box(p1, p2)
+    end
+
     def avoid(lines)
     end
 
