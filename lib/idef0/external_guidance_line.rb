@@ -27,7 +27,7 @@ module IDEF0
 
     def avoid(lines, bounds_extension)
       claim = 0
-      while lines.any?{ |other| label.overlapping?(other.label) } do
+      while lines.any? { |other| label.overlapping?(other.label) } do
         claim += 20
         add_clearance_from(@target.top_side, -20)
       end

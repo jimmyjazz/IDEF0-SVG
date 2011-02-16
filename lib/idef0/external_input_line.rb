@@ -34,15 +34,15 @@ module IDEF0
     end
 
     def bounds(bounds)
-      add_clearance_from(@target.left_side, x1 - bounds.x1)
+      add_clearance_from(@target.left_side, x1 - bounds.x1 + 40)
     end
 
     def avoid(lines, bounds_extension)
-      bounds_extension.west = 40+[minimum_length, clearance_from(@target.left_side)].max - clearance_from(@target.left_side)
+      bounds_extension.west = minimum_length
     end
 
     def extend_bounds(extension)
-       add_clearance_from(@target.left_side, extension.west)
+      add_clearance_from(@target.left_side, extension.west)
     end
 
     def label

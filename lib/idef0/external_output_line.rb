@@ -30,14 +30,21 @@ module IDEF0
     end
 
     def bounds(bounds)
-      add_clearance_from(@source.right_side, bounds.x2 - x2)
+      add_clearance_from(@source.right_side, bounds.x2 - x2 + 40)
     end
 
     def avoid(lines, bounds_extension)
-      clear(@source.right_side, 40+[minimum_length, clearance_from(@source.right_side)].max)
-      while lines.any?{ |other| label.overlapping?(other.label) } do
+      claim = 0
+      while lines.any? { |other| label.overlapping?(other.label) } do
+        claim += 20
         add_clearance_from(@source.right_side, 20)
       end
+      add_clearance_from(@source.right_side, -claim)
+      bounds_extension.east = [minimum_length, claim].max
+    end
+
+    def extend_bounds(extension)
+      add_clearance_from(@source.right_side, extension.east)
     end
 
     def label
