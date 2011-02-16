@@ -12,7 +12,7 @@ module IDEF0
 
     def initialize(*args)
       super
-      clear(@target.bottom_side, 40)
+      clear(@target.bottom_side, 20)
     end
 
     def connect
@@ -45,7 +45,7 @@ module IDEF0
     end
 
     def bounding_box(p1, p2)
-      clear(@target.bottom_side, p2.y-y1+clearance_from(@target.bottom_side))
+      clear(@target.bottom_side, p2.y-y1+40+clearance_from(@target.bottom_side))
     end
 
     def avoid(lines)

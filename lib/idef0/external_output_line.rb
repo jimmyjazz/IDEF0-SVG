@@ -34,7 +34,7 @@ module IDEF0
     end
 
     def avoid(lines)
-      clear(@source.right_side, [minimum_length, clearance_from(@source.right_side)].max)
+      clear(@source.right_side, 40+[minimum_length, clearance_from(@source.right_side)].max)
       while lines.any?{ |other| label.overlapping?(other.label) } do
         clear(@source.right_side, 20+clearance_from(@source.right_side))
       end

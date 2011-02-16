@@ -38,7 +38,7 @@ module IDEF0
     end
 
     def avoid(lines)
-      clear(@target.left_side, [minimum_length, clearance_from(@target.left_side)].max)
+      clear(@target.left_side, 40+[minimum_length, clearance_from(@target.left_side)].max)
     end
 
     def label

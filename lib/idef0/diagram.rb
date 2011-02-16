@@ -98,7 +98,8 @@ module IDEF0
         Point.new(box.x2 + box.right_side.margin, box.y2 + box.bottom_side.margin)
       end
 
-      @lines.each { |line| line.bounding_box(Point.new(left_edge, top_edge), Point.new(right_edge, bottom_edge)) }
+      bounding_box = [Point.new(left_edge, top_edge), Point.new(right_edge, bottom_edge)]
+      @lines.each { |line| line.bounding_box(*bounding_box) }
       @lines.each { |line| line.avoid(@lines.delete(line)) }
 
       dx, dy = [@lines.map(&:left_edge), @lines.map(&:top_edge)].map do |set|
