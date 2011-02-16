@@ -9,8 +9,8 @@
 # TODO: Remove alias #process for Diagram#box
 # TODO: Construct lines with anchors rather than targets
 
-require_relative 'lib/idef0/statement'
-require_relative 'lib/idef0/diagram'
+require_relative '../lib/idef0/statement'
+require_relative '../lib/idef0/diagram'
 
 class Object
 
