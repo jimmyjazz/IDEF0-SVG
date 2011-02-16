@@ -105,9 +105,9 @@ module IDEF0
         set.reject(&:positive?).map(&:abs).max || 0
       end
 
-      @boxes.each { |box| box.translate(dx, dy) }
+      @boxes.each { |box| box.translate(dx + 20, dy + 20) }
 
-      resize(right_edge, bottom_edge)
+      resize(right_edge + 20, bottom_edge + 20)
     end
 
     def to_svg
