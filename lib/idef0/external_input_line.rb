@@ -37,6 +37,10 @@ module IDEF0
       clear(@target.left_side, x1-p1.x+clearance_from(@target.left_side))
     end
 
+    def avoid(lines)
+      clear(@target.left_side, [minimum_length, clearance_from(@target.left_side)].max)
+    end
+
     def label
       LeftAlignedLabel.new(@name, Point.new(x1+5, y1-5))
     end

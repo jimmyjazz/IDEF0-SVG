@@ -8,7 +8,7 @@ module IDEF0
     end
 
     def length
-      @text.length * 7
+      @text.length * 6
     end
 
     def top_edge

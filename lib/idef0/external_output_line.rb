@@ -33,6 +33,13 @@ module IDEF0
       clear(@source.right_side, p2.x-x2+clearance_from(@source.right_side))
     end
 
+    def avoid(lines)
+      clear(@source.right_side, [minimum_length, clearance_from(@source.right_side)].max)
+      while lines.any?{ |other| label.overlapping?(other.label) } do
+        clear(@source.right_side, 20+clearance_from(@source.right_side))
+      end
+    end
+
     def label
       RightAlignedLabel.new(@name, Point.new(x2-5, y2-5))
     end
