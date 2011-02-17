@@ -28,7 +28,7 @@ diagram = IDEF0.diagram(diagram_names.first) do |diagram|
   statements.each do |statement|
     case statement.predicate
     when "is composed of"
-      # diagram.box(statement.object)
+      diagram.box(statement.object)
     when "receives", "produces", "respects", "requires"
       if statement.subject == diagram.name
         diagram.send(statement.predicate, statement.object)

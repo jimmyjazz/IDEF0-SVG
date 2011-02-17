@@ -36,7 +36,9 @@ module IDEF0
     end
 
     def box(name, &block)
-      @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }.instance_eval(&block)
+      box = @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }
+      box.instance_eval(&block) if block_given?
+      box
     end
 
     def top_edge
