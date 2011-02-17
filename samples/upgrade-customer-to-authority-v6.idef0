@@ -67,3 +67,19 @@ Close Project respects Project Schedule
 Close Project requires Civica Project Manager
 Close Project receives Issues
 Close Project produces Unresolved Issues
+
+# Initiate Project is composed of Schedule Project
+# Initiate Project is composed of Provision Authority V6 Server Infrastructure
+#
+# Initiate Project receives Customer Live On Authority V5
+# Initiate Project produces Authority V6 Server Infrastructure
+# Initiate Project produces Project Schedule
+# Initiate Project produces Customer Committed To Authority V6
+# Initiate Project requires Civica Project Manager
+# Initiate Project respects System Requirements
+#
+# Schedule Project requires Civica Project Manager
+# Schedule Project produces Project Schedule
+#
+# Provision Authority V6 Server Infrastructure produces Authority V6 Server Infrastructure
+# Provision Authority V6 Server Infrastructure respects Project Schedule
