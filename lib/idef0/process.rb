@@ -8,8 +8,6 @@ module IDEF0
 
     attr_reader :name
 
-    SIDES = { "receives" => :left_side, "produces" => :right_side, "respects" => :top_side, "requires" => :bottom_side }
-
     def self.parse(io)
       statements = IDEF0::Statement.parse(io)
 
@@ -17,11 +15,14 @@ module IDEF0
 
       statements.each do |statement|
         process = processes[statement.subject]
-        if statement.predicate == "is composed of"
+        case statement.predicate
+        when "is composed of"
           child = processes[statement.object]
           process.add_child(child)
+        when "receives", "produces", "respects", "requires"
+          process.send(statement.predicate, statement.object)
         else
-          process.add_dependency(statement.predicate, statement.object)
+          raise "Unknown dependency #{statement.predicate}"
         end
       end
 
@@ -52,17 +53,15 @@ module IDEF0
       @parent = other
     end
 
-    def add_child(child)
-      raise "Cyclic composition" if child.ancestor_of?(self)
-      @children.add(child)
-      child.parent = self
+    def add_child(other)
+      raise "Cyclic composition" if other.ancestor_of?(self)
+      @children.add(other)
+      other.parent = self
     end
 
-    def add_dependency(type, name)
-      if side = SIDES[type]
+    { :receives => :left_side, :produces => :right_side, :respects => :top_side, :requires => :bottom_side }.each do |type, side|
+      define_method(type) do |name|
         @dependencies[side].add(name)
-      else
-        raise "Unknown dependency #{statement.predicate}"
       end
     end
 
