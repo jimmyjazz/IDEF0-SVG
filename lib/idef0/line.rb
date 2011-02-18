@@ -108,6 +108,10 @@ module IDEF0
       "<polygon fill='black' stroke='black' points='#{x},#{y} #{x-3},#{y+6} #{x+3},#{y+6} #{x},#{y}' />"
     end
 
+    def svg_line(x1, y1, x2, y2)
+      "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />"
+    end
+
   end
 
 end

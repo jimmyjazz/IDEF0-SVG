@@ -61,7 +61,7 @@ module IDEF0
 
     def to_svg
       <<-XML
-<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />
+#{svg_line(x1, y1, x2, y2)}
 #{svg_right_arrow(x2, y2)}
 #{label.to_svg}
 XML
