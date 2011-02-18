@@ -1,6 +1,6 @@
 module IDEF0
 
-  class UnattachedGuidanceLine < ExternalGuidanceLine
+  class UnsatisfiedGuidanceLine < ExternalGuidanceLine
 
     def self.make_line(source, target)
       target.top_side.each_unattached_anchor do |anchor|

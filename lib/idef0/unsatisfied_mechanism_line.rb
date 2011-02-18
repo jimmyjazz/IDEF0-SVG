@@ -1,6 +1,6 @@
 module IDEF0
 
-  class UnattachedMechanismLine < ExternalMechanismLine
+  class UnsatisfiedMechanismLine < ExternalMechanismLine
 
     def self.make_line(source, target)
       target.bottom_side.each_unattached_anchor do |anchor|

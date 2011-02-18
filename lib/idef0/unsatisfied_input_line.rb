@@ -1,6 +1,6 @@
 module IDEF0
 
-  class UnattachedInputLine < ExternalInputLine
+  class UnsatisfiedInputLine < ExternalInputLine
 
     def self.make_line(source, target)
       target.left_side.each_unattached_anchor do |anchor|
