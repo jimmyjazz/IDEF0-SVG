@@ -9,6 +9,8 @@ module IDEF0
       end
     end
 
+    alias_method :svg_line, :svg_dashed_line
+
   end
 
 end

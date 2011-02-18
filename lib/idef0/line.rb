@@ -112,6 +112,10 @@ module IDEF0
       "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' />"
     end
 
+    def svg_dashed_line(x1, y1, x2, y2)
+      "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' stroke-dasharray='5,5' />"
+    end
+
   end
 
 end

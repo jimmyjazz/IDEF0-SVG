@@ -3,19 +3,19 @@ Upgrade Customer To Authority V6 is composed of Build Environment
 Upgrade Customer To Authority V6 is composed of Acceptance Test
 Upgrade Customer To Authority V6 is composed of Roll Out
 
-Upgrade Customer To Authority V6 receives Customer Live On Authority V5
-Upgrade Customer To Authority V6 receives Council Staff
+# Upgrade Customer To Authority V6 receives Customer Live On Authority V5
+# Upgrade Customer To Authority V6 receives Council Staff
 Upgrade Customer To Authority V6 produces Customer Live On Authority V6
-Upgrade Customer To Authority V6 requires Authority V5 Live Environment
-Upgrade Customer To Authority V6 respects Test Plans
-Upgrade Customer To Authority V6 requires Civica Project Manager
-Upgrade Customer To Authority V6 requires Technical Consultant
-Upgrade Customer To Authority V6 requires Council Staff
-Upgrade Customer To Authority V6 respects System Requirements
-Upgrade Customer To Authority V6 respects Deployment Guides
-Upgrade Customer To Authority V6 requires Training Materials
-Upgrade Customer To Authority V6 requires Software
-Upgrade Customer To Authority V6 produces Unresolved Issues
+# Upgrade Customer To Authority V6 requires Authority V5 Live Environment
+# Upgrade Customer To Authority V6 respects Test Plans
+# Upgrade Customer To Authority V6 requires Civica Project Manager
+# Upgrade Customer To Authority V6 requires Technical Consultant
+# Upgrade Customer To Authority V6 requires Council Staff
+# Upgrade Customer To Authority V6 respects System Requirements
+# Upgrade Customer To Authority V6 respects Deployment Guides
+# Upgrade Customer To Authority V6 requires Training Materials
+# Upgrade Customer To Authority V6 requires Software
+# Upgrade Customer To Authority V6 produces Unresolved Issues
 
 Initiate Project receives Customer Live On Authority V5
 Initiate Project produces Authority V6 Server Infrastructure

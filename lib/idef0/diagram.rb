@@ -83,8 +83,8 @@ module IDEF0
 
       @lines.each(&:attach)
 
-      @boxes.each do |box|
-        (EXTERNAL_LINE_TYPES + UNATTACHED_LINE_TYPES).each do |line_type|
+      (EXTERNAL_LINE_TYPES + UNATTACHED_LINE_TYPES).each do |line_type|
+        @boxes.each do |box|
           line_type.make_line(self, box) { |line| @lines.add(line.attach) }
         end
       end
