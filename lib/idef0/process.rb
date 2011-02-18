@@ -1,4 +1,5 @@
 require_relative 'array_set'
+require_relative 'statement'
 require_relative 'diagram'
 
 module IDEF0
@@ -6,6 +7,37 @@ module IDEF0
   class Process
 
     attr_reader :name
+
+    def self.parse(io)
+      statements = IDEF0::Statement.parse(io)
+
+      processes = Hash.new { |hash, name| hash[name] = IDEF0::Process.new(name) }
+
+      statements.each do |statement|
+
+        process = processes[statement.subject]
+
+        case statement.predicate
+        when "is composed of"
+          child = processes[statement.object]
+          process.add_child(child)
+        when "receives", "produces", "respects", "requires"
+          process.add_dependency(statement.predicate, statement.object)
+        else
+          raise "Unknown predicate #{statement.predicate.inspect}"
+        end
+
+      end
+
+      candidate_root_processes = processes.values.select(&:root?)
+
+      if candidate_root_processes.count == 1
+        candidate_root_processes.first
+      else
+        IDEF0::Process.new("__root__", candidate_root_processes)
+      end
+
+    end
 
     def initialize(name, children = [])
       @name = name
