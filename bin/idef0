@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 
-# TODO: alert reader to issues with the model, such as an input that is received but not produced by any process
 # TODO: sharing external concepts (they appear twice currently)
 # TODO: unbundling
-# TODO: Resize boxes to accommodate anchor points
+# TODO: Resize boxes based on text length (abstraction text vs label)
 # TODO: Remove alias #process for Diagram#box
-# TODO: Construct lines with anchors rather than targets
+# TODO: Construct lines with anchors rather than targets?
 # TODO: Work out what the issue is with inspection so we can remove the blanket override.
 
 require_relative '../lib/idef0/statement'

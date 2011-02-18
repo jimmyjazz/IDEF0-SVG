@@ -49,7 +49,7 @@ module IDEF0
     end
 
     def minimum_length
-      10 + label.length
+      10 + Label.length(@name)
     end
 
     def left_edge

@@ -2,13 +2,17 @@ module IDEF0
 
   class Label
 
+    def self.length(text)
+      text.length * 6
+    end
+
     def initialize(text, point)
       @text = text
       @point = point
     end
 
     def length
-      @text.length * 6
+      self.class.length(@text)
     end
 
     def top_edge
