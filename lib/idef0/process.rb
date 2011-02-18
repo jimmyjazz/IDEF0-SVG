@@ -5,6 +5,8 @@ module IDEF0
 
   class Process
 
+    attr_reader :name
+
     def initialize(name, children = [])
       @name = name
       @parent = nil
@@ -32,8 +34,12 @@ module IDEF0
       @dependencies[type].add(name)
     end
 
-    def each_dependency(&block)
-      @dependencies.each(&block)
+    def each_dependency
+      @dependencies.each do |type, names|
+        names.each do |name|
+          yield(type, name)
+        end
+      end
     end
 
     def ancestor_of?(other)
@@ -50,37 +56,28 @@ module IDEF0
 
     def decomposition_diagram
       focus_diagram unless decomposable?
-
       diagram = IDEF0.diagram(@name) do |diagram|
-        each_dependency do |type, name|
-
+        render(diagram)
+        @children.each do |child|
+          diagram.box(child.name) do |box|
+            child.render(box)
+          end
         end
-
       end
-
     end
-
-
-      #   statements.each do |statement|
-      #     case statement.predicate
-      #     when "is composed of"
-      #       diagram.box(statement.object)
-      #     when "receives", "produces", "respects", "requires"
-      #       if statement.subject == diagram.name
-      #         diagram.send(statement.predicate, statement.object)
-      #       else
-      #         diagram.box(statement.subject) do |box|
-      #           box.send(statement.predicate, statement.object)
-      #         end
-      #       end
-      #     end
-      #   end
-      # end
 
     def focus_diagram
       raise "TODO: Not implemented yet"
     end
 
+    def render(box)
+      each_dependency do |type, name|
+        box.send(type, name)
+      end
+    end
+
   end
 
 end
+
+
