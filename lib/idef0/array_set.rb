@@ -11,7 +11,7 @@ module IDEF0
       @items = items
     end
 
-    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?
+    def_delegators :@items, :index, :[], :count, :each, :include?, :find, :inject, :each_with_index, :map, :any?, :empty?
 
     def union(other)
       self.class.new(@items.dup).union!(other)

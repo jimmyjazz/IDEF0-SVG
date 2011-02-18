@@ -9,9 +9,9 @@ require_relative 'bounds_extension'
 
 module IDEF0
 
-  def self.diagram(name, &block)
+  def self.diagram(name)
     Diagram.new(name).tap do |diagram|
-      diagram.instance_eval(&block)
+      yield(diagram)
       diagram.create_lines
       diagram.sequence_boxes
       diagram.sequence_anchors
@@ -35,9 +35,9 @@ module IDEF0
       @height = height
     end
 
-    def box(name, &block)
+    def box(name)
       box = @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }
-      box.instance_eval(&block) if block_given?
+      yield(box)
       box
     end
 

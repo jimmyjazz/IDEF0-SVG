@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+# TODO: sharing external concepts (they appear twice currently)
+# TODO: unbundling
+# TODO: Resize boxes based on text length (abstraction text vs label)
+# TODO: Remove alias #process for Diagram#box
+# TODO: Construct lines with anchors rather than targets?
+# TODO: Work out what the issue is with inspection so we can remove the blanket override.
+
+require_relative '../lib/idef0/statement'
+require_relative '../lib/idef0/process'
+
+class Object
+
+  def inspect
+    "<#{self.class.name}:#{object_id}>"
+  end
+
+end
+
+statements = IDEF0::Statement.parse($<.read)
+# statements = IDEF0::Statement.parse($stdin.read)
+
+processes = Hash.new { |hash, name| hash[name] = IDEF0::Process.new(name) }
+
+statements.each do |statement|
+
+  process = processes[statement.subject]
+
+  case statement.predicate
+  when "is composed of"
+    child = processes[statement.object]
+    process.add_child(child)
+  when "receives", "produces", "respects", "requires"
+    process.add_dependency(statement.predicate, statement.object)
+  else
+    raise "Unknown predicate #{statement.predicate.inspect}"
+  end
+
+end
+
+candidate_root_processes = processes.values.select(&:root?)
+root_process = if candidate_root_processes.count == 1
+  candidate_root_processes.first
+else
+  IDEF0::Process.new("__root__", candidate_root_processes)
+end
+
+puts root_process.decomposition_diagram.to_svg
