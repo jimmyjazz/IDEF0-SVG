@@ -8,25 +8,21 @@ module IDEF0
 
     attr_reader :name
 
+    SIDES = { "receives" => :left_side, "produces" => :right_side, "respects" => :top_side, "requires" => :bottom_side }
+
     def self.parse(io)
       statements = IDEF0::Statement.parse(io)
 
       processes = Hash.new { |hash, name| hash[name] = IDEF0::Process.new(name) }
 
       statements.each do |statement|
-
         process = processes[statement.subject]
-
-        case statement.predicate
-        when "is composed of"
+        if statement.predicate == "is composed of"
           child = processes[statement.object]
           process.add_child(child)
-        when "receives", "produces", "respects", "requires"
-          process.add_dependency(statement.predicate, statement.object)
         else
-          raise "Unknown predicate #{statement.predicate.inspect}"
+          process.add_dependency(statement.predicate, statement.object)
         end
-
       end
 
       candidate_root_processes = processes.values.select(&:root?)
@@ -43,7 +39,7 @@ module IDEF0
       @name = name
       @parent = nil
       @children = ArraySet.new
-      @dependencies = Hash.new { |hash, type| hash[type] = ArraySet.new }
+      @dependencies = Hash.new { |hash, side| hash[side] = ArraySet.new }
       children.each { |child| add_child(child) }
     end
 
@@ -63,13 +59,17 @@ module IDEF0
     end
 
     def add_dependency(type, name)
-      @dependencies[type].add(name)
+      if side = SIDES[type]
+        @dependencies[side].add(name)
+      else
+        raise "Unknown dependency #{statement.predicate}"
+      end
     end
 
     def each_dependency
-      @dependencies.each do |type, names|
+      @dependencies.each do |side, names|
         names.each do |name|
-          yield(type, name)
+          yield(side, name)
         end
       end
     end
@@ -105,8 +105,8 @@ module IDEF0
     end
 
     def render(box)
-      each_dependency do |type, name|
-        box.send(type, name)
+      each_dependency do |side, name|
+        box.send(side).expects(name)
       end
     end
 

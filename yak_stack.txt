@@ -3,4 +3,4 @@ unbundling
 Resize boxes based on text length (abstraction text vs label)
 Construct lines with anchors rather than targets?
 Work out what the issue is with inspection so we can remove the blanket override.
-Remove respects, receives, etc.. methods from Box - thats process's problem to convert into sides
+Rename ProcessBox to ChildBox

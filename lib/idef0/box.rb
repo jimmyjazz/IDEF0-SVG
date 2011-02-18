@@ -72,24 +72,6 @@ module IDEF0
       translate(0, top_side.margin)
     end
 
-    # TODO: Wrong level of abstraction
-
-    def receives(name)
-      left_side.expects(name)
-    end
-
-    def produces(name)
-      right_side.expects(name)
-    end
-
-    def respects(name)
-      top_side.expects(name)
-    end
-
-    def requires(name)
-      bottom_side.expects(name)
-    end
-
   end
 
 end
