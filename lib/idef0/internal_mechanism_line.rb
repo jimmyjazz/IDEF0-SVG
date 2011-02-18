@@ -7,6 +7,7 @@ module IDEF0
     def attach
       @source_anchor = source.right_side.attach(self)
       @target_anchor = target.bottom_side.attach(self)
+      self
     end
 
     def x_vertical

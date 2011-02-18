@@ -23,6 +23,10 @@ module IDEF0
       @anchors.each(&block)
     end
 
+    def each_unattached_anchor(&block)
+      @anchors.reject(&:attached?).each(&block)
+    end
+
     def expects(name)
       @anchors.get(lambda { |a| a.name == name }) { Anchor.new(self, name) }
     end

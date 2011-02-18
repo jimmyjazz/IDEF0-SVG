@@ -56,6 +56,10 @@ module IDEF0
       self.class.new(@items.select(&block))
     end
 
+    def reject(&block)
+      self.class.new(@items.reject(&block))
+    end
+
     def sort_by(&block)
       self.class.new(@items.sort_by(&block))
     end

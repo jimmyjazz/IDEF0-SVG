@@ -19,6 +19,7 @@ module IDEF0
 
     def attach
       @target_anchor = target.left_side.attach(self)
+      self
     end
 
     def x1

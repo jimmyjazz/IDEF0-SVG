@@ -12,8 +12,8 @@ module IDEF0
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.create_lines
-      diagram.attach_lines
+      diagram.connect_anchors
+      diagram.sequence_boxes
       diagram.sequence_anchors
       diagram.layout
     end
@@ -57,22 +57,17 @@ module IDEF0
       (@boxes + @lines).map(&:right_edge).max || 0
     end
 
-    def create_lines
+    def connect_anchors
       backward_count = nil
 
       @boxes.sort_by(&:precedence).permutation do |boxes|
         boxes = boxes.sequence!
         lines = @boxes.reduce(ArraySet.new) do |lines, target|
-          EXTERNAL_LINE_TYPES.each do |line_type|
-            line_type.make_line(self, target) { |line| lines.add(line) }
-          end
-
           @boxes.each do |source|
             INTERNAL_LINE_TYPES.each do |line_type|
               line_type.make_line(source, target) { |line| lines.add(line) }
             end
           end
-
           lines
         end
 
@@ -82,13 +77,21 @@ module IDEF0
           @boxes = boxes
           @lines = lines
         end
+
+        break if backward_count == 0
       end
 
-      @boxes.sequence!
+      @lines.each(&:attach)
+
+      @boxes.each do |box|
+        (EXTERNAL_LINE_TYPES + UNATTACHED_LINE_TYPES).each do |line_type|
+          line_type.make_line(self, box) { |line| @lines.add(line.attach) }
+        end
+      end
     end
 
-    def attach_lines
-      @lines.each(&:attach)
+    def sequence_boxes
+      @boxes.sequence!
     end
 
     def sequence_anchors

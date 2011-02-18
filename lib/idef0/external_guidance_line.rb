@@ -19,6 +19,7 @@ module IDEF0
 
     def attach
       @target_anchor = target.top_side.attach(self)
+      self
     end
 
     def bounds(bounds)
