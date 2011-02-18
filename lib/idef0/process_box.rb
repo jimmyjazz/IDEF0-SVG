@@ -1,4 +1,5 @@
 require_relative 'box'
+require_relative 'labels'
 
 module IDEF0
 
@@ -11,7 +12,7 @@ module IDEF0
     end
 
     def width
-      180
+      [Label.length(@name)+40, [top_side.anchor_count, bottom_side.anchor_count].max*20+20].max
     end
 
     def height
