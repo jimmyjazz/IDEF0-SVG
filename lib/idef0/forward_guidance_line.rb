@@ -7,8 +7,8 @@ module IDEF0
 
     def self.make_line(source, target)
       return unless source.before?(target)
-      source.right_side.each do |name|
-        yield(new(source, target, name)) if target.top_side.expects?(name)
+      source.right_side.each_anchor do |anchor|
+        yield(new(source, target, anchor.name)) if target.top_side.expects?(anchor.name)
       end
     end
 

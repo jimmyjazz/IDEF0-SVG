@@ -7,8 +7,8 @@ module IDEF0
   class ExternalGuidanceLine < ExternalLine
 
     def self.make_line(source, target)
-      source.top_side.each do |name|
-        yield(new(source, target, name)) if target.top_side.expects?(name)
+      source.top_side.each_anchor do |anchor|
+        yield(new(source, target, anchor.name)) if target.top_side.expects?(anchor.name)
       end
     end
 

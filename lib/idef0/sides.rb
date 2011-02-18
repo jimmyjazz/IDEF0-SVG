@@ -19,8 +19,8 @@ module IDEF0
     end
 
     # TODO: This is a fudge to make stuff work
-    def each
-      @anchors.each { |anchor| yield(anchor.name) }
+    def each_anchor(&block)
+      @anchors.each(&block)
     end
 
     def expects(name)

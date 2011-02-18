@@ -7,8 +7,8 @@ module IDEF0
   class ExternalOutputLine < ExternalLine
 
     def self.make_line(target, source)
-      source.right_side.each do |name|
-        yield(new(source, target, name)) if target.right_side.expects?(name)
+      source.right_side.each_anchor do |anchor|
+        yield(new(source, target, anchor.name)) if target.right_side.expects?(anchor.name)
       end
     end
 
