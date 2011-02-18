@@ -14,7 +14,7 @@ require_relative '../lib/idef0/diagram'
 class Object
 
   def inspect
-    object_id
+    "<#{self.class.name}:#{object_id}>"
   end
 
 end
