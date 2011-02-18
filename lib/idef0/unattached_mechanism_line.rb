@@ -1,0 +1,14 @@
+module IDEF0
+
+  class UnattachedMechanismLine < ExternalMechanismLine
+
+    def self.make_line(source, target)
+      target.bottom_side.each_unattached_anchor do |anchor|
+        source.bottom_side.expects(anchor.name)
+        yield(new(source, target, anchor.name))
+      end
+    end
+
+  end
+
+end

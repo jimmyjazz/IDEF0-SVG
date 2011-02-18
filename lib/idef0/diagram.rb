@@ -12,7 +12,7 @@ module IDEF0
   def self.diagram(name, &block)
     Diagram.new(name).tap do |diagram|
       diagram.instance_eval(&block)
-      diagram.connect_anchors
+      diagram.create_lines
       diagram.sequence_boxes
       diagram.sequence_anchors
       diagram.layout
@@ -57,7 +57,7 @@ module IDEF0
       (@boxes + @lines).map(&:right_edge).max || 0
     end
 
-    def connect_anchors
+    def create_lines
       backward_count = nil
 
       @boxes.sort_by(&:precedence).permutation do |boxes|

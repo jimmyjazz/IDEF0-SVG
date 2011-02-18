@@ -8,7 +8,10 @@ require_relative 'external_input_line'
 require_relative 'external_output_line'
 require_relative 'external_guidance_line'
 require_relative 'external_mechanism_line'
+require_relative 'unattached_input_line'
+require_relative 'unattached_output_line'
 require_relative 'unattached_guidance_line'
+require_relative 'unattached_mechanism_line'
 
 module IDEF0
 
@@ -19,7 +22,6 @@ module IDEF0
 
   EXTERNAL_LINE_TYPES = [ExternalInputLine, ExternalOutputLine, ExternalGuidanceLine, ExternalMechanismLine]
 
-  # UNATTACHED_LINE_TYPES = [UnattachedInputLine, UnattachedOutputLine, UnattachedGuidanceLine, UnattachedMechanismLine]
-  UNATTACHED_LINE_TYPES = [UnattachedGuidanceLine]
+  UNATTACHED_LINE_TYPES = [UnattachedInputLine, UnattachedOutputLine, UnattachedGuidanceLine, UnattachedMechanismLine]
 
 end
