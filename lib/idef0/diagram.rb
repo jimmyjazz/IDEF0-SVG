@@ -36,9 +36,7 @@ module IDEF0
     end
 
     def box(name)
-      box = @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }
-      yield(box)
-      box
+      @boxes.get(lambda { |p| p.name == name }) { ProcessBox.new(name) }
     end
 
     def top_edge

@@ -91,15 +91,17 @@ module IDEF0
       diagram = IDEF0.diagram(@name) do |diagram|
         render(diagram)
         @children.each do |child|
-          diagram.box(child.name) do |box|
-            child.render(box)
-          end
+          child.render(diagram.box(child.name))
         end
       end
     end
 
     def focus_diagram
-      raise "TODO: Not implemented yet"
+      parent = @parent || self
+      diagram = IDEF0.diagram(parent.name) do |diagram|
+        parent.render(diagram)
+        render(diagram.box(@name))
+      end
     end
 
     def render(box)
