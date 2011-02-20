@@ -36,7 +36,7 @@ module IDEF0
 
     def precedence
       raise "Unattached anchor on #{@side.name}: #{@name.inspect}" if @lines.empty?
-      @lines.map { |line| [line.clearance_group(@side), line.anchor_precedence(@side), line.name] }.min || [0]
+      @lines.map { |line| [line.clearance_group(@side), line.anchor_precedence(@side), line.name] }.min
     end
 
   end
