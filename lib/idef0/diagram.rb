@@ -56,15 +56,14 @@ module IDEF0
     end
 
     def create_lines
-
       boxes = ArraySet.new
       lines = ArraySet.new
 
-      @boxes.each do |box|
+      @boxes.sort_by(&:precedence).each do |box|
 
         boxes.count.next.times do |index|
 
-          backward_count = nil
+          backward_line_count = nil
 
           candidate_boxes = boxes.insert(index, box).sequence!
 
@@ -77,16 +76,15 @@ module IDEF0
             lines
           end
 
-          count = candidate_lines.count(&:backward?)
-          if backward_count.nil? || count < backward_count
-            backward_count = count
+          candidate_backward_line_count = candidate_lines.count(&:backward?)
+
+          if backward_line_count.nil? || candidate_backward_line_count < backward_line_count
+            backward_line_count = candidate_backward_line_count
             boxes = candidate_boxes
             lines = candidate_lines
           end
 
-          # break if backward_count == 0
         end
-
       end
 
       @boxes = boxes
