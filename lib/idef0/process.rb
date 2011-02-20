@@ -91,33 +91,37 @@ module IDEF0
 
     def decompose
       focus unless decomposable?
-      diagram = IDEF0.diagram(@name) do |diagram|
+      IDEF0.diagram(@name) do |diagram|
         render(diagram)
         @children.each do |child|
-          child.render(diagram.box(child.name))
+          child.render_box(diagram)
         end
       end
     end
 
     def focus
       parent = @parent || self
-      diagram = IDEF0.diagram(parent.name) do |diagram|
+      IDEF0.diagram(parent.name) do |diagram|
         parent.render(diagram)
-        render(diagram.box(@name))
+        render_box(diagram)
       end
     end
 
     def schematic
-      diagram = IDEF0.diagram(@name) do |diagram|
+      IDEF0.diagram(@name) do |diagram|
         each_leaf do |leaf|
-          leaf.render(diagram.box(leaf.name))
+          leaf.render_box(diagram)
         end
       end
     end
 
-    def render(box)
+    def render_box(diagram)
+      render(diagram.box(@name))
+    end
+
+    def render(box_or_diagram)
       each_dependency do |side, name|
-        box.send(side).expects(name)
+        box_or_diagram.send(side).expects(name)
       end
     end
 
