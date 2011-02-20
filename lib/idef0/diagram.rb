@@ -56,28 +56,41 @@ module IDEF0
     end
 
     def create_lines
-      backward_count = nil
 
-      @boxes.sort_by(&:precedence).permutation do |boxes|
-        boxes = boxes.sequence!
-        lines = @boxes.reduce(ArraySet.new) do |lines, target|
-          @boxes.each do |source|
-            INTERNAL_LINE_TYPES.each do |line_type|
-              line_type.make_line(source, target) { |line| lines.add(line) }
+      boxes = ArraySet.new
+      lines = ArraySet.new
+
+      @boxes.each do |box|
+
+        boxes.count.next.times do |index|
+
+          backward_count = nil
+
+          candidate_boxes = boxes.insert(index, box).sequence!
+
+          candidate_lines = candidate_boxes.reduce(ArraySet.new) do |lines, target|
+            candidate_boxes.each do |source|
+              INTERNAL_LINE_TYPES.each do |line_type|
+                line_type.make_line(source, target) { |line| lines.add(line) }
+              end
             end
+            lines
           end
-          lines
+
+          count = candidate_lines.count(&:backward?)
+          if backward_count.nil? || count < backward_count
+            backward_count = count
+            boxes = candidate_boxes
+            lines = candidate_lines
+          end
+
+          # break if backward_count == 0
         end
 
-        count = lines.count(&:backward?)
-        if backward_count.nil? || count < backward_count
-          backward_count = count
-          @boxes = boxes
-          @lines = lines
-        end
-
-        break if backward_count == 0
       end
+
+      @boxes = boxes
+      @lines = lines
 
       @lines.each(&:attach)
 

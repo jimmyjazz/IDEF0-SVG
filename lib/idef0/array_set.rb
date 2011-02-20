@@ -40,11 +40,21 @@ module IDEF0
     def_delegator :self, :add, :<<
 
     def delete(item)
-      self.class.new(@items.dup).delete!(item)
+      dup.delete!(item)
     end
 
     def delete!(item)
       @items.delete(item)
+      self
+    end
+
+    def insert(index, object)
+      dup.insert!(index, object)
+    end
+
+    def insert!(index, object)
+      @items.delete(object)
+      @items.insert(index, object)
       self
     end
 
@@ -83,6 +93,10 @@ module IDEF0
     def permutation
       @items.permutation { |items| yield(self.class.new(items)) }
       self
+    end
+
+    def dup
+      self.class.new(@items.dup)
     end
 
   end

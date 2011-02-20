@@ -8,7 +8,7 @@ module IDEF0
     attr_accessor :sequence
 
     def precedence
-      [-right_side.anchor_count, [left_side, top_side, bottom_side].map(&:anchor_count).reduce(&:+)]
+      -[right_side.anchor_count, [left_side, top_side, bottom_side].map(&:anchor_count).reduce(&:+)]
     end
 
     def width
