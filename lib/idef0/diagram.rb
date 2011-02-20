@@ -58,6 +58,7 @@ module IDEF0
     def create_lines
       boxes = ArraySet.new
       lines = ArraySet.new
+      overall_backward_line_count = 0
 
       @boxes.sort_by(&:precedence).each do |box|
         backward_line_count = nil
@@ -80,6 +81,9 @@ module IDEF0
             backward_line_count = candidate_backward_line_count
             boxes = candidate_boxes
             lines = candidate_lines
+
+            break if backward_line_count == overall_backward_line_count
+            overall_backward_line_count = backward_line_count
           end
         end
       end
