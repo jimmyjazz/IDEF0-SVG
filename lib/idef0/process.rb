@@ -89,8 +89,8 @@ module IDEF0
       !@children.empty?
     end
 
-    def decomposition
-      focus_diagram unless decomposable?
+    def decompose
+      focus unless decomposable?
       diagram = IDEF0.diagram(@name) do |diagram|
         render(diagram)
         @children.each do |child|
@@ -99,7 +99,7 @@ module IDEF0
       end
     end
 
-    def focus_diagram
+    def focus
       parent = @parent || self
       diagram = IDEF0.diagram(parent.name) do |diagram|
         parent.render(diagram)

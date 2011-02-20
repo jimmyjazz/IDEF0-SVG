@@ -10,4 +10,4 @@ class Object
 
 end
 
-puts IDEF0::Process.parse($<).decomposition.to_svg
+puts IDEF0::Process.parse($<).decompose.to_svg

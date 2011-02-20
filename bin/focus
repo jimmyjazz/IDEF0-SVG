@@ -10,4 +10,4 @@ class Object
 
 end
 
-puts IDEF0::Process.parse($<).focus_diagram.to_svg
+puts IDEF0::Process.parse($<).focus.to_svg
