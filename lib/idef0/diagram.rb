@@ -60,11 +60,9 @@ module IDEF0
       lines = ArraySet.new
 
       @boxes.sort_by(&:precedence).each do |box|
+        backward_line_count = nil
 
         boxes.count.next.times do |index|
-
-          backward_line_count = nil
-
           candidate_boxes = boxes.insert(index, box).sequence!
 
           candidate_lines = candidate_boxes.reduce(ArraySet.new) do |lines, target|
@@ -83,7 +81,6 @@ module IDEF0
             boxes = candidate_boxes
             lines = candidate_lines
           end
-
         end
       end
 
