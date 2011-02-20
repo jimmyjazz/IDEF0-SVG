@@ -48,6 +48,10 @@ module IDEF0
       @parent.nil?
     end
 
+    def leaf?
+      @children.empty?
+    end
+
     def parent=(other)
       raise "Already a child" unless root?
       @parent = other
@@ -85,7 +89,7 @@ module IDEF0
       !@children.empty?
     end
 
-    def decomposition_diagram
+    def decomposition
       focus_diagram unless decomposable?
       diagram = IDEF0.diagram(@name) do |diagram|
         render(diagram)
@@ -103,9 +107,24 @@ module IDEF0
       end
     end
 
+    def schematic
+      diagram = IDEF0.diagram(@name) do |diagram|
+        each_leaf do |leaf|
+          leaf.render(diagram.box(leaf.name))
+        end
+      end
+    end
+
     def render(box)
       each_dependency do |side, name|
         box.send(side).expects(name)
+      end
+    end
+
+    def each_leaf(&block)
+      yield(self) and return if leaf?
+      @children.each do |child|
+        child.each_leaf(&block)
       end
     end
 
