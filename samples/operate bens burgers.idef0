@@ -77,4 +77,29 @@ Report To Management receives Status Information
 Report To Management receives Tracking Records
 Report To Management produces Management Communications
 
+Order Supplies is composed of Evaluate Suppliers
+Order Supplies is composed of Select Supplier For Order
+Order Supplies is composed of Generate Order Form
+Order Supplies is composed of Submit Order
+Order Supplies is composed of Track Orders
 
+Evaluate Suppliers respects Short Term Goals
+Evaluate Suppliers produces Approved Supplier List
+
+Select Supplier For Order respects Approved Supplier List
+Select Supplier For Order respects Available Funds
+Select Supplier For Order respects Status Of Local Operations
+Select Supplier For Order produces Selected Supplier
+
+Generate Order Form respects Selected Supplier
+Generate Order Form respects Status Of Local Operations
+Generate Order Form respects Status Of Local Operations
+Generate Order Form produces Completed Order Form
+
+Submit Order respects Selected Supplier
+Submit Order receives Completed Order Form
+Submit Order produces Orders
+
+Track Orders respects Status Of Local Operations
+Track Orders respects Orders
+Track Orders produces Tracking Records
