@@ -1,5 +1,4 @@
 require_relative 'array_set'
-require_relative 'statement'
 require_relative 'diagram'
 
 module IDEF0
@@ -8,10 +7,8 @@ module IDEF0
 
     attr_reader :name
 
-    def self.parse(io)
-      statements = IDEF0::Statement.parse(io)
-
-      processes = Hash.new { |hash, name| hash[name] = IDEF0::Process.new(name) }
+    def self.parse(statements)
+      processes = Hash.new { |hash, name| hash[name] = new(name) }
 
       statements.each do |statement|
         process = processes[statement.subject]
@@ -31,9 +28,8 @@ module IDEF0
       if candidate_root_processes.count == 1
         candidate_root_processes.first
       else
-        IDEF0::Process.new("__root__", candidate_root_processes)
+        new("__root__", candidate_root_processes)
       end
-
     end
 
     def initialize(name, children = [])
@@ -42,6 +38,16 @@ module IDEF0
       @children = ArraySet.new
       @dependencies = Hash.new { |hash, side| hash[side] = ArraySet.new }
       children.each { |child| add_child(child) }
+    end
+
+    def find(name)
+      return self if @name == name
+      @children.each do |child|
+        if process = child.find(name)
+          return process
+        end
+      end
+      nil
     end
 
     def root?

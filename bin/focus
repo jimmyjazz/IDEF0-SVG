@@ -1,13 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/idef0/process'
+require_relative '../lib/idef0/cli'
 
-class Object
-
-  def inspect
-    "<#{self.class.name}:#{object_id}>"
-  end
-
-end
-
-puts IDEF0::Process.parse($<).focus.to_svg
+puts IDEF0::CLI.process($stdin, ARGV).focus.to_svg
