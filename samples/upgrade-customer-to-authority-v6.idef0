@@ -48,7 +48,6 @@ Provision Authority V6 Server Infrastructure respects Project Schedule
 Review Authority V6 Server Infrastructure respects Recommended Authority V6 Server Infrastructure
 Review Authority V6 Server Infrastructure receives Candidate Authority V6 Server Infrastructure
 Review Authority V6 Server Infrastructure respects Project Schedule
-Review Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
 Review Authority V6 Server Infrastructure produces Reviewed Authority V6 Server Infrastructure
 
 Build Environment requires Authority V5 Live Environment
