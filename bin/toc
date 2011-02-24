@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/idef0/cli'
+
+IDEF0::CLI.process($stdin, ARGV).toc($stdout)

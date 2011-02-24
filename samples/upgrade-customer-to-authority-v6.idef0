@@ -50,7 +50,6 @@ Review Authority V6 Server Infrastructure receives Candidate Authority V6 Server
 Review Authority V6 Server Infrastructure respects Project Schedule
 Review Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
 
-
 Build Environment requires Authority V5 Live Environment
 Build Environment receives Authority V6 Server Infrastructure
 Build Environment produces Authority V6 Test Environment
@@ -62,6 +61,8 @@ Build Environment requires Technical Consultant
 Build Environment requires Training Materials
 Build Environment respects Deployment Guides
 Build Environment requires Software
+
+Build Environment is composed of Convert Authority Portal Data Analysis
 
 Acceptance Test receives Customer Committed To Authority V6
 Acceptance Test receives Authority V6 Test Environment

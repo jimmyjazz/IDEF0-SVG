@@ -95,6 +95,14 @@ module IDEF0
       !@children.empty?
     end
 
+    def toc(io, indent = "")
+      io.print indent
+      io.puts @name
+      @children.each do |child|
+        child.toc(io, indent + "  ")
+      end
+    end
+
     def decompose
       focus unless decomposable?
       IDEF0.diagram(@name) do |diagram|
