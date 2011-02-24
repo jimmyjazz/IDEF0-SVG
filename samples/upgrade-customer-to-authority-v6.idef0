@@ -40,7 +40,7 @@ Define Required Authority V6 Server Infrastructure respects System Requirements
 Define Required Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
 Define Required Authority V6 Server Infrastructure respects Project Schedule
 
-Provision Authority V6 Server Infrastructure receives Candidate Authority V6 Server Infrastructure
+Provision Authority V6 Server Infrastructure receives Reviewed Authority V6 Server Infrastructure
 Provision Authority V6 Server Infrastructure respects Recommended Authority V6 Server Infrastructure
 Provision Authority V6 Server Infrastructure produces Candidate Authority V6 Server Infrastructure
 Provision Authority V6 Server Infrastructure respects Project Schedule
@@ -49,6 +49,7 @@ Review Authority V6 Server Infrastructure respects Recommended Authority V6 Serv
 Review Authority V6 Server Infrastructure receives Candidate Authority V6 Server Infrastructure
 Review Authority V6 Server Infrastructure respects Project Schedule
 Review Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
+Review Authority V6 Server Infrastructure produces Reviewed Authority V6 Server Infrastructure
 
 Build Environment requires Authority V5 Live Environment
 Build Environment receives Authority V6 Server Infrastructure
