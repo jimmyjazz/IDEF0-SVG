@@ -8,7 +8,7 @@ module IDEF0
   class BackwardGuidanceLine < InternalGuidanceLine
 
     def self.make_line(source, target)
-      return unless source.after?(target)
+      return unless source.after?(target) || source == target
       source.right_side.each_anchor do |anchor|
         yield(new(source, target, anchor.name)) if target.top_side.expects?(anchor.name)
       end

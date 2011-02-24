@@ -1,9 +1,3 @@
-Upgrade Customer To Authority V6 is composed of Initiate Project
-Upgrade Customer To Authority V6 is composed of Build Environment
-Upgrade Customer To Authority V6 is composed of Acceptance Test
-Upgrade Customer To Authority V6 is composed of Roll Out
-Upgrade Customer To Authority V6 is composed of Close Project
-
 Upgrade Customer To Authority V6 receives Customer Live On Authority V5
 Upgrade Customer To Authority V6 receives Council Staff
 Upgrade Customer To Authority V6 produces Customer Live On Authority V6
@@ -18,12 +12,44 @@ Upgrade Customer To Authority V6 requires Training Materials
 Upgrade Customer To Authority V6 requires Software
 Upgrade Customer To Authority V6 produces Unresolved Issues
 
+Upgrade Customer To Authority V6 is composed of Initiate Project
+Upgrade Customer To Authority V6 is composed of Build Environment
+Upgrade Customer To Authority V6 is composed of Acceptance Test
+Upgrade Customer To Authority V6 is composed of Roll Out
+Upgrade Customer To Authority V6 is composed of Close Project
+
 Initiate Project receives Customer Live On Authority V5
 Initiate Project produces Authority V6 Server Infrastructure
 Initiate Project produces Project Schedule
 Initiate Project produces Customer Committed To Authority V6
 Initiate Project requires Civica Project Manager
 Initiate Project respects System Requirements
+
+Initiate Project is composed of Schedule Project
+Initiate Project is composed of Define Required Authority V6 Server Infrastructure
+Initiate Project is composed of Provision Authority V6 Server Infrastructure
+Initiate Project is composed of Review Authority V6 Server Infrastructure
+
+Review Authority V6 Server Infrastructure produces Authority V6 Server Infrastructure
+
+Schedule Project receives Customer Live On Authority V5
+Schedule Project produces Project Schedule
+Schedule Project produces Customer Committed To Authority V6
+
+Define Required Authority V6 Server Infrastructure respects System Requirements
+Define Required Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
+Define Required Authority V6 Server Infrastructure respects Project Schedule
+
+Provision Authority V6 Server Infrastructure receives Candidate Authority V6 Server Infrastructure
+Provision Authority V6 Server Infrastructure respects Recommended Authority V6 Server Infrastructure
+Provision Authority V6 Server Infrastructure produces Candidate Authority V6 Server Infrastructure
+Provision Authority V6 Server Infrastructure respects Project Schedule
+
+Review Authority V6 Server Infrastructure respects Recommended Authority V6 Server Infrastructure
+Review Authority V6 Server Infrastructure receives Candidate Authority V6 Server Infrastructure
+Review Authority V6 Server Infrastructure respects Project Schedule
+Review Authority V6 Server Infrastructure produces Recommended Authority V6 Server Infrastructure
+
 
 Build Environment requires Authority V5 Live Environment
 Build Environment receives Authority V6 Server Infrastructure
@@ -68,19 +94,3 @@ Close Project respects Project Schedule
 Close Project requires Civica Project Manager
 Close Project receives Issues
 Close Project produces Unresolved Issues
-
-# Initiate Project is composed of Schedule Project
-# Initiate Project is composed of Provision Authority V6 Server Infrastructure
-#
-# Initiate Project receives Customer Live On Authority V5
-# Initiate Project produces Authority V6 Server Infrastructure
-# Initiate Project produces Project Schedule
-# Initiate Project produces Customer Committed To Authority V6
-# Initiate Project requires Civica Project Manager
-# Initiate Project respects System Requirements
-#
-# Schedule Project requires Civica Project Manager
-# Schedule Project produces Project Schedule
-#
-# Provision Authority V6 Server Infrastructure produces Authority V6 Server Infrastructure
-# Provision Authority V6 Server Infrastructure respects Project Schedule
