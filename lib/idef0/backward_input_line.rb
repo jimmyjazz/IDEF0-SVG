@@ -59,7 +59,11 @@ module IDEF0
       end
     end
 
-    def x_vertical #the x position of this line's single vertical segment
+    def left_x_vertical #the x position of this line's left vertical segment
+      x2 - clearance_from(@target.left_side)
+    end
+
+    def right_x_vertical #the x position of this line's right vertical segment
       x1 + clearance_from(@source.right_side)
     end
 
@@ -68,13 +72,13 @@ module IDEF0
     end
 
     def label
-      LeftAlignedLabel.new(@name, Point.new(x2+10, y_horizontal-5))
+      LeftAlignedLabel.new(@name, Point.new(left_x_vertical+10, y_horizontal-5))
     end
 
     def to_svg
       <<-XML
-<path stroke='black' fill='none' d='M #{x1} #{y1} L #{x_vertical-10} #{y1} C #{x_vertical-5} #{y1} #{x_vertical} #{y1+5} #{x_vertical} #{y1+10} L #{x_vertical} #{y_horizontal-10} C #{x_vertical} #{y_horizontal-5} #{x_vertical-5} #{y_horizontal} #{x_vertical-10} #{y_horizontal} L #{x2+10} #{y_horizontal} C #{x2+5} #{y_horizontal} #{x2} #{y_horizontal-5} #{x2} #{y_horizontal-10} L #{x2} #{y2}' />
-#{svg_up_arrow(x2, y2)}
+<path stroke='black' fill='none' d='M #{x1} #{y1} L #{right_x_vertical-10} #{y1} C #{right_x_vertical-5} #{y1} #{right_x_vertical} #{y1+5} #{right_x_vertical} #{y1+10} L #{right_x_vertical} #{y_horizontal-10} C #{right_x_vertical} #{y_horizontal-5} #{right_x_vertical-5} #{y_horizontal} #{right_x_vertical-10} #{y_horizontal} L #{left_x_vertical+10} #{y_horizontal} C #{left_x_vertical+5} #{y_horizontal} #{left_x_vertical} #{y_horizontal-5} #{left_x_vertical} #{y_horizontal-10} L #{left_x_vertical} #{y2+10} C #{left_x_vertical} #{y2+5} #{left_x_vertical+5} #{y2} #{left_x_vertical+10} #{y2} L #{x2} #{y2}' />
+#{svg_right_arrow(x2, y2)}
 #{label.to_svg}
 XML
     end
