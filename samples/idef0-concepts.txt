@@ -1,0 +1,6 @@
+Process receives Input
+Process produces Output
+Process requires Mechanism
+Process requires Enabler
+Process respects Guidance
+Process respects Control
