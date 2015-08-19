@@ -1,0 +1,8 @@
+Cook Pizza receives Ingredients
+Cook Pizza respects Customer Order
+Cook Pizza respects Recipe
+Cook Pizza requires Chef
+Cook Pizza requires Kitchen
+Cook Pizza produces Pizza
+Cook Pizza receives Hungry Customer
+Cook Pizza produces Satisfied Customer
