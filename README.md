@@ -1,6 +1,6 @@
 Produce [IDEF0](https://en.wikipedia.org/wiki/IDEF0) process diagrams from a simple DSL.
 
-The DSL is a list of predicates of the form `Subject verb Object` where `Subject` and `Object` are both space-separated camel-cased nouns, and `verb` is one of:
+The DSL is a list of statements of the form `Subject predicate Object` where `Subject` and `Object` are both space-separated camel-cased nouns, and `predicate` is one of:
 
 * `receives` indicating an Input
 * `respects` indicating a Control
