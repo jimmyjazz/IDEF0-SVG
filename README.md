@@ -6,7 +6,7 @@ The DSL is a list of predicates of the form `Subject verb Object` where `Subject
 * `respects` indicating a Control
 * `produces` indicating an Output
 * `requires` indicating a Mechanism
-* `is composed of` indicating a nested process
+* `is composed of` indicating a nested Process
 
 For example, a DSL representation of IDEF0 (aka ICOM) might look like:
 
