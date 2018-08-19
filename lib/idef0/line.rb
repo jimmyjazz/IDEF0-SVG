@@ -2,9 +2,7 @@ require_relative 'point'
 require_relative 'labels'
 
 module IDEF0
-
   class Line
-
     attr_reader :source, :target, :name
     attr_reader :source_anchor, :target_anchor
 
@@ -115,7 +113,5 @@ module IDEF0
     def svg_dashed_line(x1, y1, x2, y2)
       "<line x1='#{x1}' y1='#{y1}' x2='#{x2}' y2='#{y2}' stroke='black' stroke-dasharray='5,5' />"
     end
-
   end
-
 end

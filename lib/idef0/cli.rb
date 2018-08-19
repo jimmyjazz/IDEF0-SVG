@@ -2,17 +2,14 @@ require_relative 'statement'
 require_relative 'process'
 
 class Object
-
+  # TODO Work out what the issue is with inspection and why we used a blanket override.
   def inspect
     "<#{self.class.name}:#{object_id}>"
   end
-
 end
 
 module IDEF0
-
   module CLI
-
     def self.process(io, args)
       statements = IDEF0::Statement.parse(io)
       process = IDEF0::Process.parse(statements)
@@ -24,8 +21,5 @@ module IDEF0
       end
       process
     end
-
   end
-
 end
-

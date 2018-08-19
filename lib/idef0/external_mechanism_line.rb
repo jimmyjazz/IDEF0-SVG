@@ -1,9 +1,7 @@
 require_relative 'external_line'
 
 module IDEF0
-
   class ExternalMechanismLine < ExternalLine
-
     def self.make_line(source, target)
       source.bottom_side.each_anchor do |anchor|
         yield(new(source, target, anchor.name)) if target.bottom_side.expects?(anchor.name)
@@ -77,7 +75,5 @@ module IDEF0
 #{label.to_svg}
 XML
     end
-
   end
-
 end

@@ -1,7 +1,5 @@
 module IDEF0
-
   class Label
-
     def self.length(text)
       text.length * 6
     end
@@ -37,11 +35,9 @@ module IDEF0
     def to_svg
       "<text text-anchor='#{text_anchor}' x='#{@point.x}' y='#{@point.y}'>#{@text}</text>"
     end
-
   end
 
   class LeftAlignedLabel < Label
-
     def left_edge
       @point.x
     end
@@ -49,11 +45,9 @@ module IDEF0
     def text_anchor
       "start"
     end
-
   end
 
   class RightAlignedLabel < Label
-
     def left_edge
       @point.x - length
     end
@@ -61,11 +55,9 @@ module IDEF0
     def text_anchor
       "end"
     end
-
   end
 
   class CentredLabel < Label
-
     def left_edge
       @point.x - length / 2
     end
@@ -73,7 +65,5 @@ module IDEF0
     def text_anchor
       "middle"
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 require 'set'
 
 module IDEF0
-
   class Anchor
-
     attr_reader :name
     attr_accessor :sequence
 
@@ -11,7 +9,7 @@ module IDEF0
       @side = side
       @name = name
       @sequence = 1
-      @lines = Set.new
+      @lines = Set.new  # TODO: Why didn't I use an ArraySet here?
     end
 
     def attach(line)
@@ -38,7 +36,5 @@ module IDEF0
       raise "Unattached anchor on #{@side.name}: #{@name.inspect}" if @lines.empty?
       @lines.map { |line| [line.clearance_group(@side), line.anchor_precedence(@side), line.name] }.min
     end
-
   end
-
 end

@@ -4,9 +4,7 @@ require_relative 'labels'
 require_relative 'internal_mechanism_line'
 
 module IDEF0
-
   class ForwardMechanismLine < InternalMechanismLine
-
     def self.make_line(source, target)
       return unless source.before?(target)
       source.right_side.each_anchor do |anchor|
@@ -64,7 +62,5 @@ module IDEF0
 #{label.to_svg}
 XML
     end
-
   end
-
 end

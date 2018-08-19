@@ -1,9 +1,8 @@
 require 'forwardable'
 
+# TODO: Why did we want this and surely I could have used a Set under the covers?
 module IDEF0
-
   class ArraySet
-
     extend Forwardable
 
     def initialize(items = [])
@@ -98,7 +97,5 @@ module IDEF0
     def dup
       self.class.new(@items.dup)
     end
-
   end
-
 end

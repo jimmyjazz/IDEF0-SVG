@@ -1,10 +1,9 @@
 require_relative 'box'
 require_relative 'labels'
 
+# TODO: Probably could just call this a ChildBox?
 module IDEF0
-
   class ProcessBox < Box
-
     attr_accessor :sequence
 
     def precedence
@@ -33,7 +32,5 @@ module IDEF0
 <text text-anchor='middle' x='#{x1 + (width / 2)}' y='#{y1 + (height / 2)}'>#{name}</text>
 XML
     end
-
   end
-
 end

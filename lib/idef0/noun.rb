@@ -1,7 +1,5 @@
 module IDEF0
-
   class Noun
-
     PATTERN = "[^a-z; ][^; ]*?(?: [^a-z; ][^; ]*?)*"
 
     def self.parse(text)
@@ -9,7 +7,5 @@ module IDEF0
       raise(ArgumentError, "Invalid noun: #{text.inspect}") unless /^#{PATTERN}$/ === normalised_text
       normalised_text
     end
-
   end
-
 end

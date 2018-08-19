@@ -2,9 +2,7 @@ require_relative 'array_set'
 require_relative 'diagram'
 
 module IDEF0
-
   class Process
-
     attr_reader :name
 
     def self.parse(statements)
@@ -145,9 +143,5 @@ module IDEF0
         child.each_leaf(&block)
       end
     end
-
   end
-
 end
-
-

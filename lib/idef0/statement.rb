@@ -4,9 +4,7 @@ require_relative 'string_squishing'
 require_relative 'string_comment_detection'
 
 module IDEF0
-
   class Statement
-
     FORMAT = /^(#{Noun::PATTERN}) (#{Verb::PATTERN}) (#{Noun::PATTERN})$/
 
     attr_reader :subject, :predicate, :object
@@ -46,7 +44,5 @@ module IDEF0
     def hash
       @hash ||= @subject.hash ^ @predicate.hash ^ @object.hash
     end
-
   end
-
 end

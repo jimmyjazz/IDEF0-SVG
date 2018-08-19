@@ -3,9 +3,7 @@ require_relative 'labels'
 require_relative 'external_line'
 
 module IDEF0
-
   class ExternalOutputLine < ExternalLine
-
     def self.make_line(target, source)
       source.right_side.each_anchor do |anchor|
         yield(new(source, target, anchor.name)) if target.right_side.expects?(anchor.name)
@@ -68,7 +66,5 @@ module IDEF0
 #{label.to_svg}
 XML
     end
-
   end
-
 end

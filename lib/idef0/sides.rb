@@ -3,9 +3,7 @@ require_relative 'point'
 require_relative 'anchor'
 
 module IDEF0
-
   class Side
-
     attr_reader :margin
 
     def initialize(box)
@@ -89,7 +87,6 @@ module IDEF0
   end
 
   class HorizontalSide < Side
-
     def y
       y1
     end
@@ -99,11 +96,9 @@ module IDEF0
       x = baseline + n * 20
       Point.new(x, y)
     end
-
   end
 
   class VerticalSide < Side
-
     def x
       x1
     end
@@ -113,39 +108,29 @@ module IDEF0
       y = baseline + n * 20
       Point.new(x, y)
     end
-
   end
 
   class TopSide < HorizontalSide
-
     def y2
       @box.y1
     end
-
   end
 
   class BottomSide < HorizontalSide
-
     def y1
       @box.y2
     end
-
   end
 
   class LeftSide < VerticalSide
-
     def x2
       @box.x1
     end
-
   end
 
   class RightSide < VerticalSide
-
     def x1
       @box.x2
     end
-
   end
-
 end

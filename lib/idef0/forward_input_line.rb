@@ -3,9 +3,7 @@ require_relative 'labels'
 require_relative 'line'
 
 module IDEF0
-
   class ForwardInputLine < Line
-
     def self.make_line(source, target)
       return unless source.before?(target)
       source.right_side.each_anchor do |anchor|
@@ -63,7 +61,5 @@ module IDEF0
 #{label.to_svg}
 XML
     end
-
   end
-
 end

@@ -1,6 +1,0 @@
-sharing external concepts (they appear twice currently)
-unbundling
-Resize boxes based on text length (abstraction text vs label)
-Construct lines with anchors rather than targets?
-Work out what the issue is with inspection so we can remove the blanket override.
-Rename ProcessBox to ChildBox

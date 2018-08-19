@@ -1,7 +1,5 @@
 module IDEF0
-
   class BoundsExtension
-
     attr_reader :north, :south, :east, :west
 
     def initialize
@@ -23,7 +21,5 @@ module IDEF0
     def west=(value)
       @west = value if value > @west
     end
-
   end
-
 end

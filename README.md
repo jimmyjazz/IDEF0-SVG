@@ -22,6 +22,14 @@ There are some more samples in ... wait for it ... `samples`.
 
 The code itself is a few shell scripts in `bin` wrapped around some Ruby code in `lib` providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
 
+## Some things to do
+
+* All the `#TODO`s in the code
+* Some tests wouldn't go astray
+* Revisit the [building blocks](https://en.wikipedia.org/wiki/IDEF0#IDEF0_Building_blocks) and see what else we need to implement
+* Sharing external concepts (they appear twice currently)
+* Resizing of boxes based on text length (abstraction text vs label)
+
 ## License
 
 This software is released under the [MIT License](https://opensource.org/licenses/MIT).

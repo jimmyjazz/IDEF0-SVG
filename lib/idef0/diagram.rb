@@ -8,7 +8,6 @@ require_relative 'bounds'
 require_relative 'bounds_extension'
 
 module IDEF0
-
   def self.diagram(name)
     Diagram.new(name).tap do |diagram|
       yield(diagram)
@@ -20,7 +19,6 @@ module IDEF0
   end
 
   class Diagram < Box
-
     attr_reader :width, :height
 
     def initialize(name)
@@ -166,7 +164,5 @@ XML
     def generate_lines
       @lines.map(&:to_svg).join("\n")
     end
-
   end
-
 end

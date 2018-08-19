@@ -1,7 +1,5 @@
 module IDEF0
-
   class Verb
-
     PATTERN = "[a-z][^ ]*?(?: [a-z][^ ]*?)*"
 
     def self.parse(text)
@@ -9,7 +7,5 @@ module IDEF0
       raise(ArgumentError, "Invalid verb: #{text.inspect}") unless /^#{PATTERN}$/ === normalised_text
       normalised_text
     end
-
   end
-
 end

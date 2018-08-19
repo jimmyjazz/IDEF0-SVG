@@ -14,7 +14,6 @@ require_relative 'unsatisfied_guidance_line'
 require_relative 'unsatisfied_mechanism_line'
 
 module IDEF0
-
   INTERNAL_LINE_TYPES = [
     ForwardInputLine, ForwardGuidanceLine, ForwardMechanismLine,
     BackwardInputLine, BackwardGuidanceLine, BackwardMechanismLine
@@ -23,5 +22,4 @@ module IDEF0
   EXTERNAL_LINE_TYPES = [ExternalInputLine, ExternalOutputLine, ExternalGuidanceLine, ExternalMechanismLine]
 
   UNATTACHED_LINE_TYPES = [UnsatisfiedInputLine, UnsatisfiedOutputLine, UnsatisfiedGuidanceLine, UnsatisfiedMechanismLine]
-
 end

@@ -2,9 +2,7 @@ require_relative 'point'
 require_relative 'sides'
 
 module IDEF0
-
   class Box
-
     extend Forwardable
 
     attr_reader :name
@@ -12,7 +10,7 @@ module IDEF0
 
     def initialize(name)
       @name = name
-      @top_left = Point::ORIGIN
+      @top_left = Point.origin
       @top_side = TopSide.new(self)
       @bottom_side = BottomSide.new(self)
       @left_side = LeftSide.new(self)
@@ -71,7 +69,5 @@ module IDEF0
       sides.each { |side| side.layout(lines) }
       translate(0, top_side.margin)
     end
-
   end
-
 end
