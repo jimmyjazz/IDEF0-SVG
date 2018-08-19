@@ -26,6 +26,7 @@ module IDEF0
       if candidate_root_processes.count == 1
         candidate_root_processes.first
       else
+        # TODO: Magic values are magic
         new("__root__", candidate_root_processes)
       end
     end
