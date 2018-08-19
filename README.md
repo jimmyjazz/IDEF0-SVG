@@ -3,7 +3,7 @@ Produce [IDEF0](https://en.wikipedia.org/wiki/IDEF0) process diagrams from a sim
 
 The DSL is a list of statements of the form `Subject predicate Object`.
 
-Both `Subject` and `Object` are space-separated camel-cased nouns that denote Concepts:
+Both `Subject` and `Object` are space-separated and camel-cased, and identify one of the following types of Concept:
 
 * Function - an activity, process, or transformation
 * Input - the data or objects acted on by a Function
@@ -11,7 +11,7 @@ Both `Subject` and `Object` are space-separated camel-cased nouns that denote Co
 * Output - the result of performing a Function
 * Mechanism - the means by which an Function is performed
 
-A `predicate` defines the nature of the relationship between a Function (as `Subject`) and another Concept (as `Object`), and must be one of:
+A `predicate` is space-separated and lower-cased, and defines the nature of the relationship between a Function (as `Subject`) and another Concept (as `Object`), and must be one of:
 
 * `receives` - indicating an Input
 * `respects` - indicating a Control
@@ -26,7 +26,7 @@ Function receives Input
 Function respects Control
 Function produces Output
 Function requires Mechanism
-Function is composed of Nested Function
+Function is composed of Function
 ```
 
 There are some more samples in ... wait for it ... `samples`.
