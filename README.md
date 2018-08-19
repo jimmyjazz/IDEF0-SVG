@@ -1,13 +1,13 @@
 ## What's IDEF0-SVG
 Produces [IDEF0](https://en.wikipedia.org/wiki/IDEF0) (aka ICOM) process diagrams from a simple DSL.
 
-The DSL is a list of statements of the form `Function predicate Concept`.
+The DSL is a list of statements of the form: `Function predicate Concept`.
 
 `Function` names are space-separated and camel-cased, and identify an activity, process, or transformation to perform.
 
 `Concept` names are space-separated and camel-cased, and identify an instance of one of the following:
 
-* Function - another (or same) activity, process, or transformation
+* Function - an ctivity, process, or transformation
 * Input - the data or objects acted on by a Function
 * Control - the policies that govern the behaviour of a Function
 * Output - the result of performing a Function
