@@ -1,3 +1,4 @@
+## What's IDEF0-SVG
 Produce [IDEF0](https://en.wikipedia.org/wiki/IDEF0) process diagrams from a simple DSL.
 
 The DSL is a list of statements of the form `Subject predicate Object` where `Subject` and `Object` are both space-separated camel-cased nouns, and `predicate` is one of:
@@ -20,3 +21,7 @@ Process requires Mechanism
 There are some more samples in ... wait for it ... `samples`.
 
 The code itself is a few shell scripts in `bin` wrapped around some Ruby code in `lib` providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
+
+## License
+
+This software is released under the [MIT License](https://opensource.org/licenses/MIT).
