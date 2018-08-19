@@ -1,22 +1,24 @@
 ## What's IDEF0-SVG
 Produce [IDEF0](https://en.wikipedia.org/wiki/IDEF0) process diagrams from a simple DSL.
 
-The DSL is a list of statements of the form `Subject predicate Object`.
+The DSL is a list of statements of the form `Function predicate Concept`.
 
-Both `Subject` and `Object` are space-separated and camel-cased, and identify one of the following types of Concept:
+`Function` names are space-separated and camel-cased, and identify an activity, process, or transformation to perform.
 
-* Function - an activity, process, or transformation
+`Concept` names are space-separated and camel-cased, and identify an instance of one of the following:
+
+* Function - another (or same) activity, process, or transformation
 * Input - the data or objects acted on by a Function
 * Control - the policies that govern the behaviour of a Function
 * Output - the result of performing a Function
-* Mechanism - the means by which an Function is performed
+* Mechanism - the means by which a Function is performed
 
-A `predicate` is space-separated and lower-cased, and defines the nature of the relationship between a Function (as `Subject`) and another Concept (as `Object`), and must be one of:
+`predicate` defines the nature of `Concept` relative to `Function`, and must be one of:
 
-* `receives` - indicating an Input
-* `respects` - indicating a Control
-* `produces` - indicating an Output
-* `requires` - indicating a Mechanism
+* `receives` - an Input
+* `respects` - a Control
+* `produces` - an Output
+* `requires` - a Mechanism
 * `is composed of` - indicating a nested Function
 
 For example, a DSL representation of IDEF0 (aka ICOM) might look like:
