@@ -1,5 +1,5 @@
 ## What's IDEF0-SVG
-Produce [IDEF0](https://en.wikipedia.org/wiki/IDEF0) process diagrams from a simple DSL.
+Produces [IDEF0](https://en.wikipedia.org/wiki/IDEF0) (aka ICOM) process diagrams from a simple DSL.
 
 The DSL is a list of statements of the form `Function predicate Concept`.
 
@@ -21,7 +21,7 @@ The DSL is a list of statements of the form `Function predicate Concept`.
 * `requires` - a Mechanism
 * `is composed of` - indicating a nested Function
 
-For example, a DSL representation of IDEF0 (aka ICOM) might look like:
+For example, a DSL representation of IDEF0 might look like:
 
 ```
 Function receives Input
