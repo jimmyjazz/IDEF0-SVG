@@ -37,7 +37,7 @@ The code itself is a few shell scripts in `bin` wrapped around some Ruby code in
 
 ## Some things to do
 
-* All the `#TODO`s in the code
+* All the `# TODO`s in the code
 * Some tests wouldn't go astray
 * Revisit the [building blocks](https://en.wikipedia.org/wiki/IDEF0#IDEF0_Building_blocks) and see what else we need to implement
 * Sharing external concepts (they appear twice currently)
