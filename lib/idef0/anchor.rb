@@ -1,4 +1,4 @@
-require 'set'
+require_relative 'array_set'
 
 module IDEF0
   class Anchor
@@ -9,7 +9,7 @@ module IDEF0
       @side = side
       @name = name
       @sequence = 1
-      @lines = Set.new  # TODO: Why didn't I use an ArraySet here?
+      @lines = ArraySet.new
     end
 
     def attach(line)
