@@ -9,9 +9,9 @@ The DSL is a list of statements of the form: `Function predicate Concept`.
 
 * Function - an ctivity, process, or transformation
 * Input - the data or objects acted on by a Function
-* Control - the policies that govern the behaviour of a Function
+* Control - (aka Guidance) the policies that govern the behaviour of a Function
 * Output - the result of performing a Function
-* Mechanism - the means by which a Function is performed
+* Mechanism - (aka Enabler) the means by which a Function is performed
 
 `predicate` defines the nature of `Concept` relative to `Function`, and must be one of:
 
