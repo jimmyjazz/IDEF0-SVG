@@ -9,6 +9,9 @@ width='334pt' height='260pt'
 viewBox='0.0 0.0 334.0 260.0'
 >
 <style type='text/css'>
+  svg {
+    background-color: white;
+  }
   text {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
