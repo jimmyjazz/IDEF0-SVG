@@ -33,7 +33,7 @@ Function is composed of Function
 
 And can be rendered to:
 
-![](samples/idef0-concepts.svg)
+![IDEF0](samples/idef0-concepts.svg)
 
 There are some more samples in ... wait for it ... [`samples`](samples).
 
@@ -55,7 +55,7 @@ bin/schematic <samples/cook-pizza.idef0 >output.svg
 
 You can then open the `output.svg` file in your web browser or other SVG viewer/editor:
 
-![](samples/cook-pizza.svg)
+![Cook Pizza](samples/cook-pizza.svg)
 
 Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the `is composed of` predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
 
@@ -65,13 +65,15 @@ To render only the top level functions of a system:
 bin/decompose <"samples/operate bens burgers.idef0" >output.svg
 ```
 
-![](samples/operate%20bens%20burgers.svg)
+![Operate Ben's Burgers - decompose](samples/operate%20bens%20burgers%20-%20decompose.svg)
 
 Compare the output from the above command with the much harder to comprehend:
 
 ```
 bin/schematic <"samples/operate bens burgers.idef0" >output.svg
 ```
+
+![Operate Ben's Burgers - schematic](samples/operate%20bens%20burgers%20-%20schematic.svg)
 
 To see a "table of contents" view of an IDEF0 model, use the `toc` command:
 
@@ -90,6 +92,8 @@ Finally, to focus on a single function and just show all of its inputs, outputs,
 ```
 bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 ```
+
+![Operate Ben's Burgers - focus](samples/operate%20bens%20burgers%20-%20focus.svg)
 
 ## Some things to do
 
