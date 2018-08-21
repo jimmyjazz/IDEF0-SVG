@@ -1,5 +1,5 @@
 ## What's IDEF0-SVG
-Produces [IDEF0](https://en.wikipedia.org/wiki/IDEF0) (aka ICOM) process diagrams from a simple DSL.
+Produces [IDEF0](https://en.wikipedia.org/wiki/IDEF0) (aka ICOM) process diagrams as [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) from a simple [Domain-Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language).
 
 The code itself is a few shell scripts in [`bin`](bin) wrapped around some Ruby code in [`lib`](lib) providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
 
@@ -34,7 +34,7 @@ Function requires Mechanism
 Function is composed of Function
 ```
 
-And can be rendered to:
+You can then render it to a diagram:
 
 ![IDEF0](samples/idef0-concepts.svg)
 
@@ -46,12 +46,18 @@ To generate a complete schematic of a system described in the DSL:
 
 ```
 $ bin/schematic <samples/cook-pizza.idef0
+```
+
+This will output the SVG to the screen (which is not very useful):
+
+```
+$ bin/schematic <samples/cook-pizza.idef0
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 ...
 </svg>
 ```
 
-This will output the SVG to the screen. Redirect it to a file with:
+Instead, redirect it to a file:
 
 ```
 $ bin/schematic <samples/cook-pizza.idef0 >output.svg
