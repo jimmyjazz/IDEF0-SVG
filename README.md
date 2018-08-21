@@ -22,7 +22,7 @@ The DSL is a list of statements of the form: `Function predicate Concept`.
 * `respects` - a Control
 * `produces` - an Output
 * `requires` - a Mechanism
-* `is composed of` - indicating a nested Function
+* `is composed of` - a sub-Function
 
 For example, a DSL representation of IDEF0 might look like:
 
@@ -61,7 +61,7 @@ You can then open the `output.svg` file in your web browser or other SVG viewer/
 
 ![Cook Pizza](samples/cook-pizza.svg)
 
-Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the `is composed of` predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
+Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into sub-functions via the `is composed of` predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
 
 To render only the top level functions of a system:
 
