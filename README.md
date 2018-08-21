@@ -35,6 +35,48 @@ There are some more samples in ... wait for it ... `samples`.
 
 The code itself is a few shell scripts in `bin` wrapped around some Ruby code in `lib` providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
 
+## Usage
+
+To generate a complete schematic of a system described in the DSL:
+
+```
+bin/schematic <samples/cook-pizza.idef0
+```
+
+This will output the SVG to the screen. Redirect it to a file with:
+
+```
+bin/schematic <samples/cook-pizza.idef0 >output.svg
+```
+
+You can then open the output.svg file in your web browser or other SVG viewer/editor.
+
+Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the "is composed of" predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
+
+To render only the top level functions of a system:
+
+```
+bin/decompose <"samples/operate bens burgers.idef0" >output.svg
+```
+
+Compare the output from the above command with the much harder to comprehend:
+
+```
+bin/schematic <"samples/operate bens burgers.idef0" >output.svg
+```
+
+To see a "table of contents" view of an IDEF0 model, use the toc command:
+
+```
+bin/toc <"samples/operate bens burgers.idef0"
+```
+
+You can then take the name of one of the subfunctions and generate a diagram for it:
+
+```
+bin/decompose "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
+```
+
 ## Some things to do
 
 * All the `# TODO`s in the code
