@@ -44,13 +44,16 @@ The code itself is a few shell scripts in [`bin`](bin) wrapped around some Ruby 
 To generate a complete schematic of a system described in the DSL:
 
 ```
-bin/schematic <samples/cook-pizza.idef0
+$ bin/schematic <samples/cook-pizza.idef0
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+...
+</svg>
 ```
 
 This will output the SVG to the screen. Redirect it to a file with:
 
 ```
-bin/schematic <samples/cook-pizza.idef0 >output.svg
+$ bin/schematic <samples/cook-pizza.idef0 >output.svg
 ```
 
 You can then open the `output.svg` file in your web browser or other SVG viewer/editor:
@@ -62,7 +65,7 @@ Because IDEF0 diagrams can be nested, the DSL supports decomposition of function
 To render only the top level functions of a system:
 
 ```
-bin/decompose <"samples/operate bens burgers.idef0" >output.svg
+$ bin/decompose <"samples/operate bens burgers.idef0" >output.svg
 ```
 
 ![Operate Ben's Burgers - decompose](samples/operate%20bens%20burgers%20-%20decompose.svg)
@@ -70,7 +73,7 @@ bin/decompose <"samples/operate bens burgers.idef0" >output.svg
 Compare the output from the above command with the much harder to comprehend:
 
 ```
-bin/schematic <"samples/operate bens burgers.idef0" >output.svg
+$ bin/schematic <"samples/operate bens burgers.idef0" >output.svg
 ```
 
 ![Operate Ben's Burgers - schematic](samples/operate%20bens%20burgers%20-%20schematic.svg)
@@ -78,19 +81,35 @@ bin/schematic <"samples/operate bens burgers.idef0" >output.svg
 To see a "table of contents" view of an IDEF0 model, use the `toc` command:
 
 ```
-bin/toc <"samples/operate bens burgers.idef0"
+$ bin/toc <"samples/operate bens burgers.idef0"
+Operate Ben's Burgers
+  Oversee Business Operations
+  Expand The Business
+  Manage Local Restaurant
+    Manage Restaurant Staff
+    Order Supplies
+      Evaluate Suppliers
+      Select Supplier For Order
+      Generate Order Form
+      Submit Order
+      Track Orders
+    Increase Local Business
+    Keep Accounts
+    Report To Management
+  Provide Supplies
+  Serve Customers
 ```
 
 You can then take the name of one of the sub-functions and generate a diagram for it:
 
 ```
-bin/decompose "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
+$ bin/decompose "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 ```
 
 Finally, to focus on a single function and just show all of its inputs, outputs, controls and mechanisms, use the `focus` command:
 
 ```
-bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
+$ bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 ```
 
 ![Operate Ben's Burgers - focus](samples/operate%20bens%20burgers%20-%20focus.svg)
