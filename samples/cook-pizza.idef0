@@ -4,5 +4,10 @@ Cook Pizza respects Recipe
 Cook Pizza requires Chef
 Cook Pizza requires Kitchen
 Cook Pizza produces Pizza
-Cook Pizza receives Hungry Customer
-Cook Pizza produces Satisfied Customer
+Take Order produces Customer Order
+Take Order respects Menu
+Take Order requires Wait Staff
+Eat Pizza receives Pizza
+Eat Pizza receives Hungry Customer
+Eat Pizza produces Satisfied Customer
+Eat Pizza produces Mess

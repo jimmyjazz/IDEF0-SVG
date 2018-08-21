@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+<!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<svg xmlns='http://www.w3.org/2000/svg'
+xmlns:xlink='http://www.w3.org/1999/xlink'
+width='712pt' height='420pt'
+viewBox='0.0 0.0 712.0 420.0'
+>
+<style type='text/css'>
+  text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+  }
+</style>
+<g>
+  <rect x='160' y='80' width='100' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='210' y='110'>Take Order</text>
+
+<rect x='280' y='180' width='100' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='330' y='210'>Cook Pizza</text>
+
+<rect x='420' y='280' width='94' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='467' y='310'>Eat Pizza</text>
+
+  <path stroke='black' fill='none' d='M 260 110 L 310 110 C 315 110 320 115 320 120 L 320 180' />
+<polygon fill='black' stroke='black' points='320,180 317,174 323,174 320,180' />
+<text text-anchor='start' x='265' y='105'>Customer Order</text>
+
+<path stroke='black' fill='none' d='M 380 210 L 390 210 C 395 210 400 215 400 220 L 400 290 C 400 295 405 300 410 300 L 420 300' />
+<polygon fill='black' stroke='black' points='420,300 414,303 414,297 420,300' />
+<text text-anchor='start' x='385' y='205'>Pizza</text>
+
+<line x1='20' y1='210' x2='280' y2='210' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='280,210 274,213 274,207 280,210' />
+<text text-anchor='start' x='25' y='205'>Ingredients</text>
+
+<line x1='20' y1='320' x2='420' y2='320' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='420,320 414,323 414,317 420,320' />
+<text text-anchor='start' x='25' y='315'>Hungry Customer</text>
+
+<line x1='514' y1='320' x2='692' y2='320' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='692,320 686,323 686,317 692,320' />
+<text text-anchor='end' x='687' y='315'>Satisfied Customer</text>
+
+<line x1='514' y1='300' x2='692' y2='300' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='692,300 686,303 686,297 692,300' />
+<text text-anchor='end' x='687' y='295'>Mess</text>
+
+<line x1='210' y1='40' x2='210' y2='80' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='210,80 207,74 213,74 210,80' />
+<text text-anchor='middle' x='210' y='35'>Menu</text>
+
+<line x1='340' y1='40' x2='340' y2='180' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='340,180 337,174 343,174 340,180' />
+<text text-anchor='middle' x='340' y='35'>Recipe</text>
+
+<line x1='210' y1='380' x2='210' y2='140' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='210,140 207,146 213,146 210,140' />
+<text text-anchor='middle' x='210' y='395'>Wait Staff</text>
+
+<line x1='320' y1='360' x2='320' y2='240' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='320,240 317,246 323,246 320,240' />
+<text text-anchor='middle' x='320' y='375'>Chef</text>
+
+<line x1='340' y1='380' x2='340' y2='240' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='340,240 337,246 343,246 340,240' />
+<text text-anchor='middle' x='340' y='395'>Kitchen</text>
+
+</g>
+</svg>
