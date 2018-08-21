@@ -1,6 +1,9 @@
 ## What's IDEF0-SVG
 Produces [IDEF0](https://en.wikipedia.org/wiki/IDEF0) (aka ICOM) process diagrams from a simple DSL.
 
+The code itself is a few shell scripts in [`bin`](bin) wrapped around some Ruby code in [`lib`](lib) providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
+
+## The DSL
 The DSL is a list of statements of the form: `Function predicate Concept`.
 
 `Function` names are space-separated and camel-cased, and identify an activity, process, or transformation to perform.
@@ -36,8 +39,6 @@ And can be rendered to:
 ![IDEF0](samples/idef0-concepts.svg)
 
 There are some more samples in ... wait for it ... [`samples`](samples).
-
-The code itself is a few shell scripts in [`bin`](bin) wrapped around some Ruby code in [`lib`](lib) providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
 
 ## Usage
 
