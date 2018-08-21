@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+<!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<svg xmlns='http://www.w3.org/2000/svg'
+xmlns:xlink='http://www.w3.org/1999/xlink'
+width='334pt' height='260pt'
+viewBox='0.0 0.0 334.0 260.0'
+>
+<style type='text/css'>
+  text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+  }
+</style>
+<g>
+  <rect x='120' y='100' width='88' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='164' y='130'>Function</text>
+
+  <line x1='20' y1='130' x2='120' y2='130' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='120,130 114,133 114,127 120,130' />
+<text text-anchor='start' x='25' y='125'>Input</text>
+
+<line x1='208' y1='130' x2='314' y2='130' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='314,130 308,133 308,127 314,130' />
+<text text-anchor='end' x='309' y='125'>Output</text>
+
+<line x1='154' y1='60' x2='154' y2='100' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='154,100 151,94 157,94 154,100' />
+<text text-anchor='middle' x='154' y='55'>Control</text>
+
+<line x1='174' y1='40' x2='174' y2='100' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='174,100 171,94 177,94 174,100' />
+<text text-anchor='middle' x='174' y='35'>Guidance</text>
+
+<line x1='174' y1='200' x2='174' y2='160' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='174,160 171,166 177,166 174,160' />
+<text text-anchor='middle' x='174' y='215'>Mechanism</text>
+
+<line x1='154' y1='220' x2='154' y2='160' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='154,160 151,166 157,166 154,160' />
+<text text-anchor='middle' x='154' y='235'>Enabler</text>
+
+</g>
+</svg>
