@@ -10,7 +10,7 @@ The DSL is a list of statements of the form: `Function predicate Concept`.
 
 `Concept` names are space-separated and camel-cased, and identify an instance of one of the following:
 
-* Function - an ctivity, process, or transformation
+* Function - an activity, process, or transformation
 * Input - the data or objects acted on by a Function
 * Control - (aka Guidance) the policies that govern the behaviour of a Function
 * Output - the result of performing a Function
