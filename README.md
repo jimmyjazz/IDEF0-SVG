@@ -77,6 +77,12 @@ You can then take the name of one of the subfunctions and generate a diagram for
 bin/decompose "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 ```
 
+Finally, to focus on a single function and just show all of its inputs, outputs, controls and mechanisms, use the focus command:
+
+```
+bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
+```
+
 ## Some things to do
 
 * All the `# TODO`s in the code
