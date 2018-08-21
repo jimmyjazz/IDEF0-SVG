@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+<!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<svg xmlns='http://www.w3.org/2000/svg'
+xmlns:xlink='http://www.w3.org/1999/xlink'
+width='2752pt' height='1540pt'
+viewBox='0.0 0.0 2752.0 1540.0'
+>
+<style type='text/css'>
+  svg {
+    background-color: white;
+  }
+  text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+  }
+</style>
+<g>
+  <rect x='160' y='100' width='148' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='234' y='130'>Evaluate Suppliers</text>
+
+<rect x='328' y='220' width='202' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='429' y='250'>Oversee Business Operations</text>
+
+<rect x='550' y='340' width='178' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='639' y='370'>Increase Local Business</text>
+
+<rect x='748' y='440' width='178' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='837' y='470'>Manage Restaurant Staff</text>
+
+<rect x='946' y='560' width='136' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1014' y='590'>Provide Supplies</text>
+
+<rect x='1122' y='660' width='154' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1199' y='690'>Expand The Business</text>
+
+<rect x='1316' y='760' width='130' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1381' y='790'>Serve Customers</text>
+
+<rect x='1486' y='900' width='190' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1581' y='930'>Select Supplier For Order</text>
+
+<rect x='1696' y='1000' width='154' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1773' y='1030'>Generate Order Form</text>
+
+<rect x='1890' y='1100' width='112' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='1946' y='1130'>Submit Order</text>
+
+<rect x='2022' y='1200' width='112' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='2078' y='1230'>Track Orders</text>
+
+<rect x='2174' y='1300' width='118' height='80' fill='none' stroke='black' />
+<text text-anchor='middle' x='2233' y='1340'>Keep Accounts</text>
+
+<rect x='2352' y='1420' width='160' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='2432' y='1450'>Report To Management</text>
+
+  <path stroke='black' fill='none' d='M 1276 680 L 1286 680 C 1291 680 1296 675 1296 670 L 1296 210 C 1296 205 1291 200 1286 200 L 459 200 C 454 200 449 205 449 210 L 449 220' />
+<polygon fill='black' stroke='black' points='449,220 446,214 452,214 449,220' />
+<text text-anchor='end' x='1286' y='215'>Expansion Plans And New Ideas</text>
+
+<path stroke='black' fill='none' d='M 530 240 L 619 240 C 624 240 629 245 629 250 L 629 340' />
+<polygon fill='black' stroke='black' points='629,340 626,334 632,334 629,340' />
+<text text-anchor='start' x='535' y='235'>Communications To Local Managers</text>
+
+<path stroke='black' fill='none' d='M 1446 780 L 1456 780 C 1461 780 1466 775 1466 770 L 1466 330 C 1466 325 1461 320 1456 320 L 659 320 C 654 320 649 325 649 330 L 649 340' />
+<polygon fill='black' stroke='black' points='649,340 646,334 652,334 649,340' />
+<text text-anchor='end' x='1456' y='335'>Status Of Local Operations</text>
+
+<path stroke='black' fill='none' d='M 530 240 L 827 240 C 832 240 837 245 837 250 L 837 440' />
+<polygon fill='black' stroke='black' points='837,440 834,434 840,434 837,440' />
+<text text-anchor='start' x='535' y='235'>Communications To Local Managers</text>
+
+<path stroke='black' fill='none' d='M 2292 1340 L 2322 1340 C 2327 1340 2332 1335 2332 1330 L 2332 550 C 2332 545 2327 540 2322 540 L 1034 540 C 1029 540 1024 545 1024 550 L 1024 560' />
+<polygon fill='black' stroke='black' points='1024,560 1021,554 1027,554 1024,560' />
+<text text-anchor='end' x='2322' y='555'>Orders And Payments</text>
+
+<path stroke='black' fill='none' d='M 530 260 L 1179 260 C 1184 260 1189 265 1189 270 L 1189 660' />
+<polygon fill='black' stroke='black' points='1189,660 1186,654 1192,654 1189,660' />
+<text text-anchor='start' x='535' y='255'>Approvals And Commentary</text>
+
+<path stroke='black' fill='none' d='M 728 370 L 1371 370 C 1376 370 1381 375 1381 380 L 1381 760' />
+<polygon fill='black' stroke='black' points='1381,760 1378,754 1384,754 1381,760' />
+<text text-anchor='start' x='733' y='365'>Local Management Communications</text>
+
+<path stroke='black' fill='none' d='M 926 470 L 1371 470 C 1376 470 1381 475 1381 480 L 1381 760' />
+<polygon fill='black' stroke='black' points='1381,760 1378,754 1384,754 1381,760' />
+<text text-anchor='start' x='931' y='465'>Local Management Communications</text>
+
+<path stroke='black' fill='none' d='M 1082 600 L 1092 600 C 1097 600 1102 605 1102 610 L 1102 770 C 1102 775 1107 780 1112 780 L 1316 780' />
+<polygon fill='black' stroke='black' points='1316,780 1310,783 1310,777 1316,780' />
+<text text-anchor='start' x='1087' y='595'>Ingredients</text>
+
+<path stroke='black' fill='none' d='M 1276 700 L 1286 700 C 1291 700 1296 705 1296 710 L 1296 830 C 1296 835 1301 840 1306 840  L 1361 840 C 1366 840 1371 835 1371 830 L 1371 820' />
+<polygon fill='black' stroke='black' points='1371,820 1368,826 1374,826 1371,820' />
+<text text-anchor='start' x='1306' y='835'>New Facility</text>
+
+<path stroke='black' fill='none' d='M 308 130 L 1571 130 C 1576 130 1581 135 1581 140 L 1581 900' />
+<polygon fill='black' stroke='black' points='1581,900 1578,894 1584,894 1581,900' />
+<text text-anchor='start' x='313' y='125'>Approved Supplier List</text>
+
+<path stroke='black' fill='none' d='M 1446 780 L 1551 780 C 1556 780 1561 785 1561 790 L 1561 900' />
+<polygon fill='black' stroke='black' points='1561,900 1558,894 1564,894 1561,900' />
+<text text-anchor='start' x='1451' y='775'>Status Of Local Operations</text>
+
+<path stroke='black' fill='none' d='M 2292 1320 L 2302 1320 C 2307 1320 2312 1315 2312 1310 L 2312 890 C 2312 885 2307 880 2302 880 L 1611 880 C 1606 880 1601 885 1601 890 L 1601 900' />
+<polygon fill='black' stroke='black' points='1601,900 1598,894 1604,894 1601,900' />
+<text text-anchor='end' x='2302' y='895'>Available Funds</text>
+
+<path stroke='black' fill='none' d='M 1446 780 L 1773 780 C 1778 780 1783 785 1783 790 L 1783 1000' />
+<polygon fill='black' stroke='black' points='1783,1000 1780,994 1786,994 1783,1000' />
+<text text-anchor='start' x='1451' y='775'>Status Of Local Operations</text>
+
+<path stroke='black' fill='none' d='M 1676 930 L 1753 930 C 1758 930 1763 935 1763 940 L 1763 1000' />
+<polygon fill='black' stroke='black' points='1763,1000 1760,994 1766,994 1763,1000' />
+<text text-anchor='start' x='1681' y='925'>Selected Supplier</text>
+
+<path stroke='black' fill='none' d='M 1676 930 L 1936 930 C 1941 930 1946 935 1946 940 L 1946 1100' />
+<polygon fill='black' stroke='black' points='1946,1100 1943,1094 1949,1094 1946,1100' />
+<text text-anchor='start' x='1681' y='925'>Selected Supplier</text>
+
+<path stroke='black' fill='none' d='M 1850 1030 L 1860 1030 C 1865 1030 1870 1035 1870 1040 L 1870 1120 C 1870 1125 1875 1130 1880 1130 L 1890 1130' />
+<polygon fill='black' stroke='black' points='1890,1130 1884,1133 1884,1127 1890,1130' />
+<text text-anchor='start' x='1855' y='1025'>Completed Order Form</text>
+
+<path stroke='black' fill='none' d='M 1446 780 L 2078 780 C 2083 780 2088 785 2088 790 L 2088 1200' />
+<polygon fill='black' stroke='black' points='2088,1200 2085,1194 2091,1194 2088,1200' />
+<text text-anchor='start' x='1451' y='775'>Status Of Local Operations</text>
+
+<path stroke='black' fill='none' d='M 2002 1130 L 2058 1130 C 2063 1130 2068 1135 2068 1140 L 2068 1200' />
+<polygon fill='black' stroke='black' points='2068,1200 2065,1194 2071,1194 2068,1200' />
+<text text-anchor='start' x='2007' y='1125'>Orders</text>
+
+<path stroke='black' fill='none' d='M 1082 580 L 2243 580 C 2248 580 2253 585 2253 590 L 2253 1300' />
+<polygon fill='black' stroke='black' points='2253,1300 2250,1294 2256,1294 2253,1300' />
+<text text-anchor='start' x='1087' y='575'>Prices And Invoices</text>
+
+<path stroke='black' fill='none' d='M 1446 780 L 2223 780 C 2228 780 2233 785 2233 790 L 2233 1300' />
+<polygon fill='black' stroke='black' points='2233,1300 2230,1294 2236,1294 2233,1300' />
+<text text-anchor='start' x='1451' y='775'>Status Of Local Operations</text>
+
+<path stroke='black' fill='none' d='M 2002 1130 L 2203 1130 C 2208 1130 2213 1135 2213 1140 L 2213 1300' />
+<polygon fill='black' stroke='black' points='2213,1300 2210,1294 2216,1294 2213,1300' />
+<text text-anchor='start' x='2007' y='1125'>Orders</text>
+
+<path stroke='black' fill='none' d='M 530 240 L 2422 240 C 2427 240 2432 245 2432 250 L 2432 1420' />
+<polygon fill='black' stroke='black' points='2432,1420 2429,1414 2435,1414 2432,1420' />
+<text text-anchor='start' x='535' y='235'>Communications To Local Managers</text>
+
+<path stroke='black' fill='none' d='M 2134 1230 L 2144 1230 C 2149 1230 2154 1235 2154 1240 L 2154 1450 C 2154 1455 2159 1460 2164 1460 L 2352 1460' />
+<polygon fill='black' stroke='black' points='2352,1460 2346,1463 2346,1457 2352,1460' />
+<text text-anchor='start' x='2139' y='1225'>Tracking Records</text>
+
+<path stroke='black' fill='none' d='M 2292 1360 L 2302 1360 C 2307 1360 2312 1365 2312 1370 L 2312 1430 C 2312 1435 2317 1440 2322 1440 L 2352 1440' />
+<polygon fill='black' stroke='black' points='2352,1440 2346,1443 2346,1437 2352,1440' />
+<text text-anchor='start' x='2297' y='1355'>Status Information</text>
+
+<line x1='20' y1='800' x2='1316' y2='800' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='1316,800 1310,803 1310,797 1316,800' />
+<text text-anchor='start' x='25' y='795'>Hungry Customer</text>
+
+<line x1='1446' y1='800' x2='2732' y2='800' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='2732,800 2726,803 2726,797 2732,800' />
+<text text-anchor='end' x='2727' y='795'>Satisfied Customer</text>
+
+<line x1='2512' y1='1450' x2='2732' y2='1450' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='2732,1450 2726,1453 2726,1447 2732,1450' />
+<text text-anchor='end' x='2727' y='1445'>Management Communications</text>
+
+<line x1='234' y1='40' x2='234' y2='100' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='234,100 231,94 237,94 234,100' />
+<text text-anchor='middle' x='234' y='35'>Short Term Goals</text>
+
+<line x1='429' y1='60' x2='429' y2='220' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='429,220 426,214 432,214 429,220' />
+<text text-anchor='middle' x='429' y='55'>Communications With Top Management</text>
+
+<line x1='409' y1='40' x2='409' y2='220' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='409,220 406,214 412,214 409,220' />
+<text text-anchor='middle' x='409' y='35'>Business Plan</text>
+
+<line x1='1004' y1='40' x2='1004' y2='560' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='1004,560 1001,554 1007,554 1004,560' />
+<text text-anchor='middle' x='1004' y='35'>Prices Of Food And Supplies</text>
+
+<line x1='1209' y1='40' x2='1209' y2='660' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='1209,660 1206,654 1212,654 1209,660' />
+<text text-anchor='middle' x='1209' y='35'>Suggestions For Expansion</text>
+
+<line x1='1391' y1='1500' x2='1391' y2='820' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='1391,820 1388,826 1394,826 1391,820' />
+<text text-anchor='middle' x='1391' y='1515'>Original Facility</text>
+
+<line x1='2233' y1='1500' x2='2233' y2='1380' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='2233,1380 2230,1386 2236,1386 2233,1380' />
+<text text-anchor='middle' x='2233' y='1515'>Local Records Keeping System</text>
+
+</g>
+</svg>

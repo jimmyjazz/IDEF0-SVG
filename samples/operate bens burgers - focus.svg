@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" [
+<!ATTLIST svg xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<svg xmlns='http://www.w3.org/2000/svg'
+xmlns:xlink='http://www.w3.org/1999/xlink'
+width='386pt' height='260pt'
+viewBox='0.0 0.0 386.0 260.0'
+>
+<style type='text/css'>
+  svg {
+    background-color: white;
+  }
+  text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+  }
+</style>
+<g>
+  <rect x='42' y='120' width='124' height='60' fill='none' stroke='black' />
+<text text-anchor='middle' x='104' y='150'>Order Supplies</text>
+
+  <line x1='166' y1='140' x2='366' y2='140' stroke='black' />
+<polygon fill='black' stroke='black' points='366,140 360,143 360,137 366,140' />
+<text text-anchor='end' x='361' y='135'>Orders And Payments</text>
+
+<line x1='124' y1='60' x2='124' y2='120' stroke='black' />
+<polygon fill='black' stroke='black' points='124,120 121,114 127,114 124,120' />
+<text text-anchor='middle' x='124' y='55'>Status Of Local Operations</text>
+
+<line x1='104' y1='80' x2='104' y2='120' stroke='black' />
+<polygon fill='black' stroke='black' points='104,120 101,114 107,114 104,120' />
+<text text-anchor='middle' x='104' y='75'>Short Term Goals</text>
+
+<line x1='166' y1='160' x2='366' y2='160' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='366,160 360,163 360,157 366,160' />
+<text text-anchor='end' x='361' y='155'>Tracking Records</text>
+
+<line x1='84' y1='40' x2='84' y2='120' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='84,120 81,114 87,114 84,120' />
+<text text-anchor='middle' x='84' y='35'>Available Funds</text>
+
+<line x1='104' y1='220' x2='104' y2='180' stroke='black' stroke-dasharray='5,5' />
+<polygon fill='black' stroke='black' points='104,180 101,186 107,186 104,180' />
+<text text-anchor='middle' x='104' y='235'>Local Records Keeping System</text>
+
+</g>
+</svg>
