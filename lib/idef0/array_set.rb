@@ -1,6 +1,6 @@
 require 'forwardable'
 
-# TODO: Why did we want this and surely I could have used a Set under the covers?
+# A custom set that is ordered to give us a chance at manipulating the layout.
 module IDEF0
   class ArraySet
     extend Forwardable
