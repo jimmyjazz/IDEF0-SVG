@@ -1,0 +1,16 @@
+Operate Ben's Burgers
+  Oversee Business Operations
+  Expand The Business
+  Manage Local Restaurant
+    Manage Restaurant Staff
+    Order Supplies
+      Evaluate Suppliers
+      Select Supplier For Order
+      Generate Order Form
+      Submit Order
+      Track Orders
+    Increase Local Business
+    Keep Accounts
+    Report To Management
+  Provide Supplies
+  Serve Customers
