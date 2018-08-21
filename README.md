@@ -31,9 +31,13 @@ Function requires Mechanism
 Function is composed of Function
 ```
 
-There are some more samples in ... wait for it ... `samples`.
+And can be rendered to:
 
-The code itself is a few shell scripts in `bin` wrapped around some Ruby code in `lib` providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
+![](samples/idef0-concepts.svg)
+
+There are some more samples in ... wait for it ... [`samples`](samples).
+
+The code itself is a few shell scripts in [`bin`](bin) wrapped around some Ruby code in [`lib`](lib) providing DSL parsing, SVG generation, and an ad-hoc informally-specified bug-ridden slow implementation of half a constraint solver.
 
 ## Usage
 
@@ -49,7 +53,9 @@ This will output the SVG to the screen. Redirect it to a file with:
 bin/schematic <samples/cook-pizza.idef0 >output.svg
 ```
 
-You can then open the `output.svg` file in your web browser or other SVG viewer/editor.
+You can then open the `output.svg` file in your web browser or other SVG viewer/editor:
+
+![](samples/cook-pizza.svg)
 
 Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the `is composed of` predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
 
@@ -58,6 +64,8 @@ To render only the top level functions of a system:
 ```
 bin/decompose <"samples/operate bens burgers.idef0" >output.svg
 ```
+
+![](samples/operate%20bens%20burgers.svg)
 
 Compare the output from the above command with the much harder to comprehend:
 
