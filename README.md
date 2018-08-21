@@ -49,9 +49,9 @@ This will output the SVG to the screen. Redirect it to a file with:
 bin/schematic <samples/cook-pizza.idef0 >output.svg
 ```
 
-You can then open the output.svg file in your web browser or other SVG viewer/editor.
+You can then open the `output.svg` file in your web browser or other SVG viewer/editor.
 
-Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the "is composed of" predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
+Because IDEF0 diagrams can be nested, the DSL supports decomposition of functions into subfunctions via the `is composed of` predicate. The full schematic of such a model might be too large to comprehend on a single page, so the following commands can be used to make larger models easier to understand.
 
 To render only the top level functions of a system:
 
@@ -65,19 +65,19 @@ Compare the output from the above command with the much harder to comprehend:
 bin/schematic <"samples/operate bens burgers.idef0" >output.svg
 ```
 
-To see a "table of contents" view of an IDEF0 model, use the toc command:
+To see a "table of contents" view of an IDEF0 model, use the `toc` command:
 
 ```
 bin/toc <"samples/operate bens burgers.idef0"
 ```
 
-You can then take the name of one of the subfunctions and generate a diagram for it:
+You can then take the name of one of the sub-functions and generate a diagram for it:
 
 ```
 bin/decompose "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 ```
 
-Finally, to focus on a single function and just show all of its inputs, outputs, controls and mechanisms, use the focus command:
+Finally, to focus on a single function and just show all of its inputs, outputs, controls and mechanisms, use the `focus` command:
 
 ```
 bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
@@ -87,7 +87,6 @@ bin/focus "Order Supplies" <"samples/operate bens burgers.idef0" >output.svg
 
 * All the `# TODO`s in the code
 * Some tests wouldn't go astray
-* Composition (`is composed of`) is b0rked
 * Revisit the [building blocks](https://en.wikipedia.org/wiki/IDEF0#IDEF0_Building_blocks) and see what else we need to implement
 * Sharing external concepts (they appear twice currently)
 * Resizing of boxes based on text length (abstraction text vs label)
