@@ -51,7 +51,6 @@ $ bin/schematic <samples/cook-pizza.idef0
 This will output the SVG to the screen (which is not very useful):
 
 ```
-$ bin/schematic <samples/cook-pizza.idef0
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 ...
 </svg>
