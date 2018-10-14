@@ -24,9 +24,9 @@ module IDEF0
     def anchor_precedence(side)
       case side
       when @target.top_side
-        [-@source.sequence]
+        [-@source.sequence, -source_anchor.sequence]
       when @source.right_side
-        [-@target.sequence]
+        [-@target.sequence, source_anchor.sequence]
       else
         super
       end
